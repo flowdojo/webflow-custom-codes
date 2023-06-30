@@ -1,0 +1,39 @@
+.ui-widget.ui-widget-content {
+  height: 20px !important;
+}
+
+.ui-slider-horizontal .ui-slider-range-min {
+  background-color: #835dff !important;
+  background-image: linear-gradient(270deg, #5142fb, #368ff9);
+}
+
+.ui-slider .ui-slider-handle {
+  border-radius: 100% !important;
+  width: 30px !important;
+  height: 30px !important;
+  border: none !important;
+  outline: none !important;
+  background-image: linear-gradient(#8e85fa, #0edeeb) !important;
+}
+
+.ui-slider-horizontal .ui-slider-range {
+  border-radius: 30px !important;
+}
+
+.ui-widget.ui-widget-content {
+  border-radius: 30px !important;
+}
+
+.range-value {
+  margin-left: 0 !important;
+  color: #6c6c73 !important;
+}
+
+.calculator-slider {
+  margin-bottom: 25px;
+}
+
+.calculator-slider h5 {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
