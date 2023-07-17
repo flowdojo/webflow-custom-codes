@@ -1,0 +1,13 @@
+1. install the packages as devDependency - 
+    - gulp
+    - gulp-rename
+    - gulp-uglify
+
+    -> npm i -dev gulp gulp-rename gulp-uglify
+
+2. Place all your scripts inside the src folder.
+
+
+3. Then create a gulpfile.js file and create the minifyJS() function and default export it.
+
+4. Then Run this command "npx gulp" to start the minification process
