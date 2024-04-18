@@ -42,7 +42,9 @@ function questionClickListener() {
 				onComplete : () => {
 					allQuestionsWrapper.style.display = "none"
 					mainChatWrapper.style.display = "block"
-
+          gsap.to(mainChatWrapper, {
+						opacity : 1
+					})
 				}
 			})
 			/** Init Main Chat screen */
