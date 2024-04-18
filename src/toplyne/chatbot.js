@@ -254,7 +254,7 @@ function counterController() {
 }
 
 
-export function addMainChatCloseListener() {
+ function addMainChatCloseListener() {
 	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
 	console.log({ closeIcon });
@@ -262,7 +262,7 @@ export function addMainChatCloseListener() {
 	closeIcon.addEventListener("click", handleCloseChat)
 }
 
-export function removeMainChatCloseListener() {
+ function removeMainChatCloseListener() {
 	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
 	console.log({ closeIcon });
@@ -341,7 +341,7 @@ function handleCloseChat() {
   }
   
   
-  export async function makeAPIRequestAndShowResult(text) {
+   async function makeAPIRequestAndShowResult(text) {
     await setBotPositionAndShowLoader()
     addHideClass(mainChatWrapper.querySelector(".choices"))
     const { error, data, message } = await makeAPIRequest(text)
@@ -370,7 +370,7 @@ function handleCloseChat() {
   
     removeMainChatCloseListener()
     addMainChatCloseListener()
-    
+
     scrollChatPartially(scrollValue)
   
   }
