@@ -275,10 +275,9 @@ function counterController() {
 
 function handleCloseChat() {
 	const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
-	const elementsToShow = gsap.utils.toArray([...allQuestions, allQuestionsWrapper])
+	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
+	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
-	console.log("clicked ");
-	console.log({ elementsToShow });
 
 
 	gsap.to(mainChatWrapper, {
