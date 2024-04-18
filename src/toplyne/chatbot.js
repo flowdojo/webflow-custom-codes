@@ -17,11 +17,6 @@ const init = async () => {
 	handleMouseMovement()
 	questionClickListener()
 
-	/**
-	 * DELETE THIS
-	 */
-
-	await makeAPIRequestAndShowResult("What are Toplyne Agents?")
 }
 
 
