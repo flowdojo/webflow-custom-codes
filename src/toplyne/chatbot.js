@@ -27,7 +27,7 @@ function questionClickListener() {
 
 	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 	allBoxes.forEach((box, index) => {
-		box.querySelector(".try-now-button").addEventListener('click', () => {
+		box.querySelector(".try-now-button").addEventListener('click', async () => {
 			/**  */
 			const otherQuestions = allBoxes.filter((_, i) => i !== index)
 			const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
@@ -43,7 +43,7 @@ function questionClickListener() {
 				}
 			})
 			/** Init Main Chat screen */
-			initMainChatScreen(box)
+			await initMainChatScreen(box)
 
 		})
 	})
