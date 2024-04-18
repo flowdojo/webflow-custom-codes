@@ -252,7 +252,7 @@ function counterController() {
 
 
  async function initMainChatScreen(lastClickedQuestion) {
-    const { left, top, right } = getPositionOfElement(lastClickedQuestion)
+    const { top, right } = getPositionOfElement(lastClickedQuestion)
   
     const firstQuestion = mainChatWrapper.querySelector(".first-question")
   
@@ -267,12 +267,14 @@ function counterController() {
       top: 0,
       right: 0,
       duration: 1.2,
-      ease: "sine.inOut"
+      ease: "sine.inOut",
+      onComplete : async () => {
+        addChatInputListener()
+      
+        await makeAPIRequestAndShowResult(questionText)
+  
+      }
     })
-  
-    addChatInputListener()
-  
-    await makeAPIRequestAndShowResult(questionText)
   
   }
   
