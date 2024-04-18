@@ -279,8 +279,9 @@ function counterController() {
   }
   
   
-   async function makeAPIRequestAndShowResult(text) {
+  export async function makeAPIRequestAndShowResult(text) {
     await setBotPositionAndShowLoader()
+    addHideClass(mainChatWrapper.querySelector(".choices"))
     const { error, data, message } = await makeAPIRequest(text)
     if (error) {
       handleError(message)
