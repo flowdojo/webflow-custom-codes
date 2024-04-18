@@ -16,6 +16,9 @@ const init = async () => {
 	handleResize()
 	handleMouseMovement()
 	questionClickListener()
+  addMainChatCloseListener()
+	addChatInputListener()
+
 
 }
 
@@ -251,6 +254,67 @@ function counterController() {
 }
 
 
+export function addMainChatCloseListener() {
+	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+
+	console.log({ closeIcon });
+
+	closeIcon.addEventListener("click", handleCloseChat)
+}
+
+export function removeMainChatCloseListener() {
+	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+
+	console.log({ closeIcon });
+
+	closeIcon.removeEventListener("click", handleCloseChat)
+}
+
+
+
+
+function handleCloseChat() {
+	const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
+	const elementsToShow = gsap.utils.toArray([...allQuestions, allQuestionsWrapper])
+
+	console.log("clicked ");
+	console.log({ elementsToShow });
+
+
+	gsap.to(mainChatWrapper, {
+		opacity: 0,
+		onComplete: () => {
+
+			/** delete existing chats and hide the choices */
+			const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
+
+			console.log({ existingChatItems });
+			existingChatItems.forEach(item => {
+				if (item.classList.contains("first-question")) return
+				item.remove()
+			})
+
+			addHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
+
+			mainChatWrapper.style.display = "none"
+			allQuestionsWrapper.style.display = "block"
+			gsap.fromTo(elementsToShow, {
+				opacity: 0
+			}, {
+				opacity: 1
+			})
+
+			
+		}
+	})
+}
+
+
+/** 
+ * Main Chat Screen
+ */
+
+
  async function initMainChatScreen(lastClickedQuestion) {
     const { top, right } = getPositionOfElement(lastClickedQuestion)
   
@@ -269,8 +333,6 @@ function counterController() {
       duration: 1.2,
       ease: "sine.inOut",
       onComplete : async () => {
-        addChatInputListener()
-      
         await makeAPIRequestAndShowResult(questionText)
   
       }
@@ -306,7 +368,9 @@ function counterController() {
       <p>${text}</p>
     </div>`
   
-  
+    removeMainChatCloseListener()
+    addMainChatCloseListener()
+    
     scrollChatPartially(scrollValue)
   
   }
@@ -326,13 +390,13 @@ function counterController() {
         })
       }
       removeHideClass(choicesDiv);
-  
+      removeHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
       showChoicesAndInputBox()
       resolve()
     })
   
   }
-  addChatInputListener()
+  
   
   function addChatInputListener() {
     const inputElement = mainChatWrapper.querySelector(".chat-input")
