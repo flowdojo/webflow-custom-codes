@@ -279,7 +279,6 @@ function handleCloseChat() {
 	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
 	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
-	resetValues()
 
 
 	gsap.to(mainChatWrapper, {
@@ -305,17 +304,22 @@ function handleCloseChat() {
 				opacity: 1
 			})
 
+	  resetValues()
+
+
 			
 		}
 	})
+
+
 }
 
 function resetValues() {
 
 	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
 
-	botIcon.style.left = 70
-	botIcon.style.top = -40
+	botIcon.style.left = "65px"
+	botIcon.style.top = "-10px"
 
 	counter.updateCount(0)
 	reverseController.update(false)
@@ -323,7 +327,7 @@ function resetValues() {
 	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 	allBoxes.forEach(removeActiveClass)
 
-  
+
 	const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
 	chatScreenBot.style.left = -6
 	chatScreenBot.style.top = 0
