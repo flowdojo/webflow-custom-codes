@@ -279,6 +279,7 @@ function handleCloseChat() {
 	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
 	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
+	resetValues()
 
 
 	gsap.to(mainChatWrapper, {
@@ -307,6 +308,25 @@ function handleCloseChat() {
 			
 		}
 	})
+}
+
+function resetValues() {
+
+	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
+
+	botIcon.style.left = 70
+	botIcon.style.top = -40
+
+	counter.updateCount(0)
+	reverseController.update(false)
+
+	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+	allBoxes.forEach(removeActiveClass)
+
+  
+	const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
+	chatScreenBot.style.left = -6
+	chatScreenBot.style.top = 0
 }
 
 /** 
@@ -423,6 +443,7 @@ function renderChoices(choices) {
 
 
   })
+
 
   const inputArrowSubmitBtn = mainChatWrapper.querySelector(".chat-input-wrap img")
   inputArrowSubmitBtn.addEventListener("click", async function() {
@@ -613,7 +634,7 @@ function getTopValueForBot() {
     console.log("item height ", item.offsetHeight);
     totalHeight += item.offsetHeight + 30
   })
-  return totalHeight - allChatItems.length * 5 + 20
+  return totalHeight - allChatItems.length * 5 + 60
 }
 
 
@@ -622,6 +643,7 @@ function handleError(errMessage) {
 }
 
 async function makeAPIRequest(text) {
+  /** text refers to the question that was typed or the question that was selected */
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/userID/interact?logs=off`;
 
