@@ -848,12 +848,20 @@ function addIntersectionObserver() {
   observer.observe(target)
 }
 
+let timeoutId;
 
 function hideSecondaryChatbotCompletely() {
   const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
   secondaryChatbotContainer.classList.remove("is-open")
 
-  const tl = gsap.timeline()
+  const tl = gsap.timeline({
+    onComplete: () => {
+      timeoutId = setTimeout(() => {
+        secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
+      },1000)
+    }
+  })
+
   tl.to(chatbotIconWrapper, {
     top: 0,
     opacity: 0,
@@ -862,12 +870,12 @@ function hideSecondaryChatbotCompletely() {
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
     width: 0
   }, 'start')
-  
+
   handleCloseSecondaryChat()
 }
 
 async function showSecondaryChatInput() {
-
+  clearTimeout(timeoutId)
   const tl = gsap.timeline()
 
   removeHideClass(secondaryChatbotContainer.querySelector(".secondary-chatbot-wrapper"))
@@ -881,6 +889,8 @@ async function showSecondaryChatInput() {
 
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
   secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
+
+
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
