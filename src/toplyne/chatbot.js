@@ -10,14 +10,14 @@ const mainChatWrapper = document.querySelector(".main-chat")
 const reverseController = shouldReverseController()
 
 const init = async () => {
-	// set first question as active initially
-	// setActiveClass([...allQuestionsWrapper.querySelectorAll(".question-box")][0])
-	botMovementControl.start(); // To start the movement
-	handleResize()
-	handleMouseMovement()
-	questionClickListener()
+  // set first question as active initially
+  // setActiveClass([...allQuestionsWrapper.querySelectorAll(".question-box")][0])
+  botMovementControl.start(); // To start the movement
+  handleResize()
+  handleMouseMovement()
+  questionClickListener()
 
-	addChatInputListener()
+  addChatInputListener()
 
 }
 
@@ -27,94 +27,94 @@ init()
 
 function questionClickListener() {
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
-	allBoxes.forEach((box, index) => {
-		box.querySelector(".try-now-button").addEventListener('click', () => {
-			/**  */
-			const otherQuestions = allBoxes.filter((_, i) => i !== index)
-			const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
-			const elementsToHide = gsap.utils.toArray([chatBoxTitle, ...otherQuestions])
-			botMovementControl.stop()
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  allBoxes.forEach((box, index) => {
+    box.querySelector(".try-now-button").addEventListener('click', () => {
+      /**  */
+      const otherQuestions = allBoxes.filter((_, i) => i !== index)
+      const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
+      const elementsToHide = gsap.utils.toArray([chatBoxTitle, ...otherQuestions])
+      botMovementControl.stop()
 
-			gsap.to(elementsToHide, {
-				opacity: 0,
-				onComplete: () => {
-					allQuestionsWrapper.style.display = "none"
-					mainChatWrapper.style.display = "block"
-					gsap.to(mainChatWrapper, {
-						opacity : 1
-					})
-				}
-			})
-			/** Init Main Chat screen */
+      gsap.to(elementsToHide, {
+        opacity: 0,
+        onComplete: () => {
+          allQuestionsWrapper.style.display = "none"
+          mainChatWrapper.style.display = "block"
+          gsap.to(mainChatWrapper, {
+            opacity: 1
+          })
+        }
+      })
+      /** Init Main Chat screen */
 
-			initMainChatScreen(box)
+      initMainChatScreen(box)
 
-		})
-	})
+    })
+  })
 }
 
 
 
 function createBotIconMovement() {
-	let intervalId; // Encapsulated within the closure
+  let intervalId; // Encapsulated within the closure
 
-	const start = () => {
+  const start = () => {
 
-		const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+    const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
-		intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
 
-			/**
-			 * if no active question is present, mark first one as active
-			*/
-			const activeQuestionIndex = getActiveQuestionIndex()
-			if (activeQuestionIndex < 0) {
-				setActiveClass(allBoxes[0])
-			}
+      /**
+       * if no active question is present, mark first one as active
+      */
+      const activeQuestionIndex = getActiveQuestionIndex()
+      if (activeQuestionIndex < 0) {
+        setActiveClass(allBoxes[0])
+      }
 
-			const count = counter.getCount(); // gives the index of the next question (towards which the logo will move)
-			// console.log({ count });
-			const targetQuestionBox = allBoxes[count];
+      const count = counter.getCount(); // gives the index of the next question (towards which the logo will move)
+      // console.log({ count });
+      const targetQuestionBox = allBoxes[count];
 
 
-			const lastActiveQuestionIndex = getActiveQuestionIndex()
+      const lastActiveQuestionIndex = getActiveQuestionIndex()
 
-			// animate the logo
-			gsapAnim = animateBotLogo(targetQuestionBox, lastActiveQuestionIndex)
+      // animate the logo
+      gsapAnim = animateBotLogo(targetQuestionBox, lastActiveQuestionIndex)
 
-			allBoxes.forEach(removeActiveClass);
+      allBoxes.forEach(removeActiveClass);
 
-			setActiveClass(targetQuestionBox);
+      setActiveClass(targetQuestionBox);
 
-			let newShouldReverse = updateShouldReverse(count, allBoxes.length, reverseController.get());
-			reverseController.update(newShouldReverse)
-			const newCount = getNewCountValue(count, reverseController.get());
+      let newShouldReverse = updateShouldReverse(count, allBoxes.length, reverseController.get());
+      reverseController.update(newShouldReverse)
+      const newCount = getNewCountValue(count, reverseController.get());
 
-			counter.updateCount(newCount)
+      counter.updateCount(newCount)
 
-		}, 2000);
-	};
+    }, 2000);
+  };
 
-	const stop = () => {
+  const stop = () => {
 
-		clearInterval(intervalId);
-		if (gsapAnim) {
-			gsapAnim.kill()
-			gsapAnim.invalidate()
-		}
+    clearInterval(intervalId);
+    if (gsapAnim) {
+      gsapAnim.kill()
+      gsapAnim.invalidate()
+    }
 
-		// const botIcon = document.querySelector(".chatbot-icon");
-		// gsapAnim = gsap.to(botIcon, {
+    // const botIcon = document.querySelector(".chatbot-icon");
+    // gsapAnim = gsap.to(botIcon, {
 
-		// })
-	};
+    // })
+  };
 
-	return { start, stop };
+  return { start, stop };
 }
 
 function handleResize() {
-	window.addEventListener('resize', repositionBotLogo)
+  window.addEventListener('resize', repositionBotLogo)
 }
 
 
@@ -122,215 +122,215 @@ function handleResize() {
 
 function animateBotLogo(targetQuestionBox, lastActiveQuestionIndex) {
 
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
 
-	// the target top and left position
-	const { top, left } = getPositionOfElement(targetQuestionBox);
-
-
-	const isMovingTowardsLeft = isMovingLeft(lastActiveQuestionIndex, counter.getCount())
-	// console.log({ isMovingTowardsLeft });
+  // the target top and left position
+  const { top, left } = getPositionOfElement(targetQuestionBox);
 
 
-	const isMovingUp = getIsMovingUp(lastActiveQuestionIndex, counter.getCount())
+  const isMovingTowardsLeft = isMovingLeft(lastActiveQuestionIndex, counter.getCount())
+  // console.log({ isMovingTowardsLeft });
 
 
-	const tempTop = isMovingUp ? top - 60 : top - 45
-	const rotateZ = isMovingTowardsLeft ? -360 : 360
-	// const rotateZ = 360
+  const isMovingUp = getIsMovingUp(lastActiveQuestionIndex, counter.getCount())
 
-	const tl = gsap.timeline()
-	tl.set(botIcon, { rotateZ: 0 })
-	tl.to(botIcon, {
-		left: left - 40,
-		rotateZ,
-		duration: 0.5,
-	}, "0")
-	tl.to(botIcon, {
-		top: tempTop,
-		// ease : CustomEase.create("custom", "M0,0 C0.364,0.647 0.516,3, 1, 0.989 "),
-		// rotateZ : 360,
-	}, "0")
-		.to(botIcon, {
-			y: isMovingUp ? 0 : -20,
-			top: top + (targetQuestionBox.offsetHeight / 2) - 30,
-			ease: "Bounce.easeOut"
-		}, "0.3")
-	// .to(botIcon, {
-	// 	y : isMovingUp ? 0 : -20,
-	// 	ease : Bounce.easeOut
-	// }, "0.6")
-	// top: top + (targetQuestionBox.offsetHeight / 2) - 20,
-	// CustomEase.create("custom", "M0,0 C0.364,0.647 0.505,1.81 1,1 ")
-	return tl
+
+  const tempTop = isMovingUp ? top - 60 : top - 45
+  const rotateZ = isMovingTowardsLeft ? -360 : 360
+  // const rotateZ = 360
+
+  const tl = gsap.timeline()
+  tl.set(botIcon, { rotateZ: 0 })
+  tl.to(botIcon, {
+    left: left - 40,
+    rotateZ,
+    duration: 0.5,
+  }, "0")
+  tl.to(botIcon, {
+    top: tempTop,
+    // ease : CustomEase.create("custom", "M0,0 C0.364,0.647 0.516,3, 1, 0.989 "),
+    // rotateZ : 360,
+  }, "0")
+    .to(botIcon, {
+      y: isMovingUp ? 0 : -20,
+      top: top + (targetQuestionBox.offsetHeight / 2) - 30,
+      ease: "Bounce.easeOut"
+    }, "0.3")
+  // .to(botIcon, {
+  // 	y : isMovingUp ? 0 : -20,
+  // 	ease : Bounce.easeOut
+  // }, "0.6")
+  // top: top + (targetQuestionBox.offsetHeight / 2) - 20,
+  // CustomEase.create("custom", "M0,0 C0.364,0.647 0.505,1.81 1,1 ")
+  return tl
 }
 
 function handleMouseMovement() {
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
-	allBoxes.forEach((questionBox, index) => {
-		questionBox.addEventListener('mouseenter', () => {
-			botMovementControl.stop()
+  allBoxes.forEach((questionBox, index) => {
+    questionBox.addEventListener('mouseenter', () => {
+      botMovementControl.stop()
 
-			const newCount = getNewCountValue(index, reverseController.get())
-			counter.updateCount(newCount)
+      const newCount = getNewCountValue(index, reverseController.get())
+      counter.updateCount(newCount)
 
-			// if hovered on already active element, we do nothing
-			if (questionBox.classList.contains("active")) return
+      // if hovered on already active element, we do nothing
+      if (questionBox.classList.contains("active")) return
 
-			let count = counter.getCount()
-			console.log({ count });
+      let count = counter.getCount()
+      console.log({ count });
 
-			/**
-			 * If hovered directly on the last question on page, load, 
-			 * then, we need to set reverse to true
-			*/
-			const currentReverseValue = reverseController.get()
-			if (index === 4 && !currentReverseValue) {
-				count = 3
-				reverseController.update(true)
-			}
-			if (index === 0) {
-				count = 1
-				reverseController.update(false)
+      /**
+       * If hovered directly on the last question on page, load, 
+       * then, we need to set reverse to true
+      */
+      const currentReverseValue = reverseController.get()
+      if (index === 4 && !currentReverseValue) {
+        count = 3
+        reverseController.update(true)
+      }
+      if (index === 0) {
+        count = 1
+        reverseController.update(false)
 
-			}
+      }
 
-			counter.updateCount(count)
+      counter.updateCount(count)
 
-			const activeQuestionIndex = getActiveQuestionIndex()
-			if (activeQuestionIndex < 0) {
-				setActiveClass(allBoxes[0])
-			}
+      const activeQuestionIndex = getActiveQuestionIndex()
+      if (activeQuestionIndex < 0) {
+        setActiveClass(allBoxes[0])
+      }
 
-			const lastActiveQuestionIndex = getActiveQuestionIndex()
+      const lastActiveQuestionIndex = getActiveQuestionIndex()
 
 
-			animateBotLogo(questionBox, lastActiveQuestionIndex)
-			allBoxes.forEach(removeActiveClass)
-			setActiveClass(questionBox)
-		})
+      animateBotLogo(questionBox, lastActiveQuestionIndex)
+      allBoxes.forEach(removeActiveClass)
+      setActiveClass(questionBox)
+    })
 
-		questionBox.addEventListener('mouseleave', () => {
+    questionBox.addEventListener('mouseleave', () => {
 
-			if (gsapAnim) {
-				gsapAnim.invalidate()
-				gsapAnim.kill()
-			}
+      if (gsapAnim) {
+        gsapAnim.invalidate()
+        gsapAnim.kill()
+      }
 
-			console.log("mouse left");
-			botMovementControl.stop()
+      console.log("mouse left");
+      botMovementControl.stop()
 
-			botMovementControl.start()
+      botMovementControl.start()
 
-		})
+    })
 
-	})
+  })
 }
 
 function repositionBotLogo() {
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon")
-	const currentActiveQuestionBox = allQuestionsWrapper.querySelector(".question-box.active")
-	const { left } = getPositionOfElement(currentActiveQuestionBox)
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon")
+  const currentActiveQuestionBox = allQuestionsWrapper.querySelector(".question-box.active")
+  const { left } = getPositionOfElement(currentActiveQuestionBox)
 
-	botIcon.style.left = `${left - 40}px`
-	// botIcon.style.top = `${top + (currentActiveQuestionBox.offsetHeight / 2) - 20}px`
+  botIcon.style.left = `${left - 40}px`
+  // botIcon.style.top = `${top + (currentActiveQuestionBox.offsetHeight / 2) - 20}px`
 }
 
 
 function counterController() {
-	let count = 0;
+  let count = 0;
 
-	const getCount = () => {
-		return count
-	}
-	const updateCount = (newCount) => {
-		count = newCount
-	}
+  const getCount = () => {
+    return count
+  }
+  const updateCount = (newCount) => {
+    count = newCount
+  }
 
-	return {
-		getCount,
-		updateCount
-	}
+  return {
+    getCount,
+    updateCount
+  }
 }
 
- function addMainChatCloseListener() {
-	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+function addMainChatCloseListener() {
+  const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
-	console.log({ closeIcon });
+  console.log({ closeIcon });
 
-	closeIcon.addEventListener("click", handleCloseChat)
+  closeIcon.addEventListener("click", handleCloseChat)
 }
 
- function removeMainChatCloseListener() {
-	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+function removeMainChatCloseListener() {
+  const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
-	console.log({ closeIcon });
+  console.log({ closeIcon });
 
-	closeIcon.removeEventListener("click", handleCloseChat)
+  closeIcon.removeEventListener("click", handleCloseChat)
 }
 
 
 
 
 function handleCloseChat() {
-	const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
-	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
-	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
+  const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
+  const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
+  const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
 
 
-	gsap.to(mainChatWrapper, {
-		opacity: 0,
-		onComplete: () => {
+  gsap.to(mainChatWrapper, {
+    opacity: 0,
+    onComplete: () => {
 
-			/** delete existing chats and hide the choices */
-			const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
+      /** delete existing chats and hide the choices */
+      const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
 
-			console.log({ existingChatItems });
-			existingChatItems.forEach(item => {
-				if (item.classList.contains("first-question")) return
-				item.remove()
-			})
+      console.log({ existingChatItems });
+      existingChatItems.forEach(item => {
+        if (item.classList.contains("first-question")) return
+        item.remove()
+      })
 
-			addHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
+      addHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
 
-			mainChatWrapper.style.display = "none"
-			allQuestionsWrapper.style.display = "block"
-			gsap.fromTo(elementsToShow, {
-				opacity: 0
-			}, {
-				opacity: 1
-			})
+      mainChatWrapper.style.display = "none"
+      allQuestionsWrapper.style.display = "block"
+      gsap.fromTo(elementsToShow, {
+        opacity: 0
+      }, {
+        opacity: 1
+      })
 
-	  resetValues()
+      resetValues()
 
 
-			
-		}
-	})
+
+    }
+  })
 
 
 }
 
 function resetValues() {
 
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
 
-	botIcon.style.left = "65px"
-	botIcon.style.top = "-10px"
+  botIcon.style.left = "65px"
+  botIcon.style.top = "-10px"
 
-	counter.updateCount(0)
-	reverseController.update(false)
+  counter.updateCount(0)
+  reverseController.update(false)
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
-	allBoxes.forEach(removeActiveClass)
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  allBoxes.forEach(removeActiveClass)
 
 
-	const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
-	chatScreenBot.style.left = -6
-	chatScreenBot.style.top = 0
+  const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
+  chatScreenBot.style.left = -6
+  chatScreenBot.style.top = 0
 }
 
 /** 
@@ -338,9 +338,9 @@ function resetValues() {
  */
 
 
- async function initMainChatScreen(lastClickedQuestion) {
+async function initMainChatScreen(lastClickedQuestion) {
 
-  
+
   const { left, top, right } = getPositionOfElement(lastClickedQuestion)
 
   const firstQuestion = mainChatWrapper.querySelector(".first-question")
@@ -357,7 +357,7 @@ function resetValues() {
     right: 0,
     duration: 1.2,
     ease: "sine.inOut",
-    onComplete : async () => {
+    onComplete: async () => {
 
       await makeAPIRequestAndShowResult(questionText)
 
@@ -368,7 +368,7 @@ function resetValues() {
 }
 
 
- async function makeAPIRequestAndShowResult(text) {
+async function makeAPIRequestAndShowResult(text) {
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
   const { error, data, message } = await makeAPIRequest(text)
@@ -425,7 +425,7 @@ function renderChoices(choices) {
 
 }
 
- function addChatInputListener() {
+function addChatInputListener() {
   const inputElement = mainChatWrapper.querySelector(".chat-input")
 
   const handleSubmitEvent = async (userInput) => {
@@ -450,7 +450,7 @@ function renderChoices(choices) {
 
 
   const inputArrowSubmitBtn = mainChatWrapper.querySelector(".chat-input-wrap img")
-  inputArrowSubmitBtn.addEventListener("click", async function() {
+  inputArrowSubmitBtn.addEventListener("click", async function () {
     const inputTextValue = inputElement.value
     if (!inputTextValue) return
     await handleSubmitEvent(inputTextValue)
@@ -557,10 +557,10 @@ function revealUserInput(element) {
 }
 
 
- function addHideClass(element) {
+function addHideClass(element) {
   element.classList.add("hide")
 }
- function removeHideClass(element) {
+function removeHideClass(element) {
   element.classList.remove("hide")
 }
 
@@ -713,96 +713,96 @@ function extractDataFromResponse(data) {
  * UTILS
  */
 
- function getPositionOfElement(element, container) {
+function getPositionOfElement(element, container) {
   const containerRect = container ?? document.querySelector(".chat-screen-wrapper").getBoundingClientRect()
   const { top, bottom, left, right } = element.getBoundingClientRect()
   // console.log({ top, bottom, left, right });
   // console.log({ top : containerRect.top, bottom : containerRect.bottom, left : containerRect.left, right : containerRect.right });
   return {
-      top: Math.abs(top - containerRect.top),
-      bottom: Math.abs(bottom - containerRect.bottom),
-      left: Math.abs(left - containerRect.left),
-      right: Math.abs(right - containerRect.right)
+    top: Math.abs(top - containerRect.top),
+    bottom: Math.abs(bottom - containerRect.bottom),
+    left: Math.abs(left - containerRect.left),
+    right: Math.abs(right - containerRect.right)
   }
 }
 
 
- function updateShouldReverse(count, allBoxesLength, lastReverseValue) {
+function updateShouldReverse(count, allBoxesLength, lastReverseValue) {
   if (count >= allBoxesLength - 1) {
-      return true; // Reverse when at the last element
+    return true; // Reverse when at the last element
   } else if (count <= 0) {
-      return false; // Don't reverse when at the first element
+    return false; // Don't reverse when at the first element
   }
   return lastReverseValue;
 }
 
- function getNewCountValue(count, shouldReverse) {
+function getNewCountValue(count, shouldReverse) {
   if (shouldReverse)
-      return count - 1
+    return count - 1
   else
-      return count + 1
+    return count + 1
 }
 
- function removeActiveClass(element) {
+function removeActiveClass(element) {
   element.classList.remove("active")
 }
 
- function setActiveClass(element) {
+function setActiveClass(element) {
   element.classList.add("active")
 }
 
- function getActiveQuestionIndex() {
+function getActiveQuestionIndex() {
   const allQuestionsWrapper = document.querySelector(".all-questions-wrapper")
   const allQuestions = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
   return allQuestions.findIndex(el => el.classList.contains("active"))
 }
 
- function lastActiveQuestionTracker() {
+function lastActiveQuestionTracker() {
   let index = 0;
   const setIndex = (newIndex) => {
-      index = newIndex
+    index = newIndex
   }
 
   const getIndex = () => {
-      return index
+    return index
   }
 
   return {
-      setIndex,
-      getIndex
+    setIndex,
+    getIndex
   }
 }
 
- function shouldReverseController() {
+function shouldReverseController() {
   let shouldReverse = false
 
   const update = (value) => {
-      shouldReverse = value
+    shouldReverse = value
   }
 
   const get = () => {
-      return shouldReverse
+    return shouldReverse
   }
 
-  return  {
-      update,
-      get
+  return {
+    update,
+    get
   }
 }
 
- function getIsMovingUp(lastIndex, targetIndex) {
+function getIsMovingUp(lastIndex, targetIndex) {
   return targetIndex < lastIndex
 }
 
- function isMovingLeft(lastElementIndex, targetElementIndex) {
+function isMovingLeft(lastElementIndex, targetElementIndex) {
   const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
-  const { left : lastElementLeftValue } = getPositionOfElement(allBoxes[lastElementIndex])
-  const { left : targetElementLeftValue } = getPositionOfElement(allBoxes[targetElementIndex])
+  const { left: lastElementLeftValue } = getPositionOfElement(allBoxes[lastElementIndex])
+  const { left: targetElementLeftValue } = getPositionOfElement(allBoxes[targetElementIndex])
 
   return targetElementLeftValue < lastElementLeftValue
-  
+
 }
 
 
@@ -852,18 +852,19 @@ function addIntersectionObserver() {
 function hideSecondaryChatbotCompletely() {
   const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
   secondaryChatbotContainer.classList.remove("is-open")
-  secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
 
   const tl = gsap.timeline()
   tl.to(chatbotIconWrapper, {
-    top : 0,
-    opacity : 0,
-    onComplete : () => {
+    top: 0,
+    opacity: 0,
+    onComplete: () => {
       chatbotIconWrapper.style.display = "none"
+      secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
+
     }
   })
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width : 0
+    width: 0
   }, 'start')
   handleCloseSecondaryChat()
 }
@@ -886,13 +887,13 @@ async function showSecondaryChatInput() {
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
-    onComplete : () => {
+    onComplete: () => {
       chatbotIconWrapper.style.display = "flex"
     }
   }, 'start')
   tl.to(inputWrapper, {
     scale: 1,
-    width : 500,
+    width: 500,
   }, 'start')
   tl.to(inputWrapper.querySelector("input"), {
     opacity: 1
@@ -1132,10 +1133,10 @@ function handleCloseSecondaryChat() {
     item.remove()
   })
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    top : 0
+    top: 0
   })
 
-  
+
 
   secondaryChatbotContainer.classList.remove("is-open")
 }
