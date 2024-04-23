@@ -857,15 +857,12 @@ function hideSecondaryChatbotCompletely() {
   tl.to(chatbotIconWrapper, {
     top: 0,
     opacity: 0,
-    onComplete: () => {
-      chatbotIconWrapper.style.display = "none"
-      secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-
-    }
+    
   })
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
     width: 0
   }, 'start')
+  
   handleCloseSecondaryChat()
 }
 
