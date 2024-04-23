@@ -852,6 +852,7 @@ function addIntersectionObserver() {
 function hideSecondaryChatbotCompletely() {
   const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
   secondaryChatbotContainer.classList.remove("is-open")
+  secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
 
   const tl = gsap.timeline()
   tl.to(chatbotIconWrapper, {
@@ -881,6 +882,7 @@ async function showSecondaryChatInput() {
   await repositionSecondaryChatBot()
 
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
+  secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
