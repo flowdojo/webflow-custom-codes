@@ -858,7 +858,7 @@ function hideSecondaryChatbotCompletely() {
     onComplete: () => {
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-      },1000)
+      },800)
     }
   })
 
@@ -866,7 +866,7 @@ function hideSecondaryChatbotCompletely() {
     top: 0,
     opacity: 0,
     
-  })
+  },"start")
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
     width: 0
   }, 'start')
