@@ -804,3 +804,347 @@ function extractDataFromResponse(data) {
   return targetElementLeftValue < lastElementLeftValue
   
 }
+
+
+
+/**
+ * SECONDARY CHATBOT FUNCTIONALITY
+*/
+
+const secondaryChatbotContainer = document.querySelector(".secondary-chatbot")
+let isSecondaryChatClosed = true
+
+
+
+addSecondaryChatInputListener()
+
+addCloseSecondaryChatClickListener()
+
+addIntersectionObserver()
+
+
+function addIntersectionObserver() {
+  let options = {
+    rootMargin: "0px",
+    threshold: 1.0,
+  };
+
+  let target = document.querySelector(".home-section")
+
+  let observer = new IntersectionObserver(callback, options);
+
+  function callback(enteries, observer) {
+    enteries.forEach(entry => {
+      if (!entry.isIntersecting) {
+        console.log("show secondary bot");
+        showSecondaryChatInput()
+      } else {
+        console.log("hiding secondary bot");
+        hideSecondaryChatbotCompletely()
+      }
+    })
+  }
+
+  observer.observe(target)
+}
+
+
+function hideSecondaryChatbotCompletely() {
+  const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
+  secondaryChatbotContainer.classList.remove("is-open")
+
+  const tl = gsap.timeline()
+  tl.to(chatbotIconWrapper, {
+    top : 0,
+    opacity : 0,
+    onComplete : () => {
+      chatbotIconWrapper.style.display = "none"
+    }
+  })
+  tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
+    width : 0
+  }, 'start')
+  handleCloseSecondaryChat()
+}
+
+async function showSecondaryChatInput() {
+
+  const tl = gsap.timeline()
+
+  removeHideClass(secondaryChatbotContainer.querySelector(".secondary-chatbot-wrapper"))
+  const inputWrapper = secondaryChatbotContainer.querySelector(".input-wrapper")
+  const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
+  const iconWrapper = secondaryChatbotContainer.querySelector(".input-wrapper span")
+
+
+  isSecondaryChatClosed = true
+  await repositionSecondaryChatBot()
+
+  secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
+
+  tl.to(chatbotIconWrapper, {
+    opacity: 1,
+    onComplete : () => {
+      chatbotIconWrapper.style.display = "flex"
+    }
+  }, 'start')
+  tl.to(inputWrapper, {
+    scale: 1,
+    width : 500,
+  }, 'start')
+  tl.to(inputWrapper.querySelector("input"), {
+    opacity: 1
+  }, 0.8)
+  tl.to(iconWrapper, {
+    right: 10,
+    scale: 1,
+  }, 0.5)
+
+  return tl
+}
+
+
+
+async function handleAPIResponse(resp) {
+  if (resp.error) {
+    // show error message
+    return
+  }
+
+  const { textToShow, choices } = extractDataFromResponse(resp.data)
+  await hideSecondaryChatBotLoader()
+  renderSecondaryChatResult(textToShow)
+
+  if (Array.isArray(choices) && choices.length) {
+    renderSecondaryChatChoices(choices)
+  }
+
+}
+
+
+function hideSecondaryChatBotLoader() {
+  return new Promise(resolve => {
+    const botIcon = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
+
+    gsap.to(botIcon.querySelector('.bot-loader'), {
+      opacity: 0,
+      onComplete: () => {
+        removeHideClass(botIcon)
+        resolve()
+      }
+    })
+  })
+}
+
+function showSecondaryChatBotLoader() {
+  return new Promise(resolve => {
+    const botIcon = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
+
+    gsap.to(botIcon.querySelector('.bot-loader'), {
+      opacity: 1,
+      onComplete: () => {
+        removeHideClass(botIcon)
+        resolve()
+      }
+    })
+
+  })
+}
+
+function renderSecondaryChatResult(text) {
+
+  const scrollValue = getSecondaryChatBotIconNewPosition()
+
+  secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box">
+    <p>${text}</p>
+  </div>`
+
+  scrollSecondaryChatPartially(scrollValue)
+
+  // enable the input
+  const inputElement = secondaryChatbotContainer.querySelector("input")
+
+  inputElement.disabled = false
+
+  // removeMainChatCloseListener()
+  // addMainChatCloseListener()
+
+}
+
+
+function renderSecondaryChatChoices(choices) {
+  const choicesDiv = secondaryChatbotContainer.querySelector(".choices")
+  removeHideClass(choicesDiv)
+  choicesDiv.innerHTML = ""
+
+
+  if (!isSecondaryChatClosed) {
+    addHideClass(choicesDiv)
+    return
+  }
+
+  choices.forEach(choice => {
+    choicesDiv.innerHTML += `<div class='choice'>${choice}</div>`
+  })
+
+
+  gsap.fromTo(choicesDiv.querySelectorAll(".choice"), {
+    opacity: 0,
+    y: 10,
+  }, {
+    opacity: 1,
+    stagger: 0.1,
+    y: 0,
+  })
+
+  addClickListenerToChoices()
+
+}
+
+
+function scrollSecondaryChatPartially(value) {
+  const chatScreen = secondaryChatbotContainer.querySelector(".chats")
+  chatScreen.scrollTo({
+    top: value,
+    behavior: "smooth",
+  })
+}
+
+
+function repositionSecondaryChatBot() {
+  return new Promise(resolve => {
+    const newPos = getSecondaryChatBotIconNewPosition()
+
+    const botIcon = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
+
+    gsap.to(botIcon, {
+      top: newPos,
+      onComplete: resolve
+    })
+
+  })
+}
+
+
+function getSecondaryChatBotIconNewPosition() {
+  let totalHeight = 0;
+  const allChatItems = secondaryChatbotContainer.querySelectorAll(".chat-item")
+
+  allChatItems.forEach(item => {
+    totalHeight += item.offsetHeight + 36
+  })
+
+  console.log({ totalHeight });
+  return totalHeight
+}
+
+
+function addClickListenerToChoices() {
+  const choices = secondaryChatbotContainer.querySelectorAll(".choices .choice")
+  choices.forEach(choice => {
+    choice.addEventListener("click", async function () {
+      const text = choice.innerText;
+
+      await handleUserInteraction(text)
+
+
+    })
+  })
+}
+
+
+function addSecondaryChatInputListener() {
+  const inputElement = secondaryChatbotContainer.querySelector("input")
+  const inputArrowSubmitBtn = secondaryChatbotContainer.querySelector(".input-wrapper span>img")
+
+  inputElement.addEventListener("keypress", async function (e) {
+    const keyPressed = (e.keyCode ? e.keyCode : e.which)
+
+    if (keyPressed === 13) {
+      const inputTextValue = inputElement.value
+      if (!inputTextValue) return
+      inputElement.value = ""
+      secondaryChatbotContainer.classList.add("is-open")
+      await handleUserInteraction(inputTextValue)
+    }
+
+
+  })
+
+  inputArrowSubmitBtn.addEventListener("click", async function () {
+    const inputTextValue = inputElement.value
+    if (!inputTextValue) return
+    inputElement.value = ""
+    secondaryChatbotContainer.classList.add("is-open")
+    await handleUserInteraction(inputTextValue)
+  })
+}
+
+
+
+
+
+
+async function handleUserInteraction(text) {
+  const inputElement = secondaryChatbotContainer.querySelector("input")
+
+  inputElement.disabled = true
+
+  addHideClass(secondaryChatbotContainer.querySelector(".choices"))
+
+
+  appendUserInputToChatScreen(text)
+
+
+
+  await repositionSecondaryChatBot()
+  showSecondaryChatBotLoader()
+
+  const scrollValue = getSecondaryChatBotIconNewPosition()
+  scrollSecondaryChatPartially(scrollValue)
+
+
+  const resp = await makeAPIRequest(text)
+
+  await handleAPIResponse(resp)
+}
+
+
+function addCloseSecondaryChatClickListener() {
+  const closeIcon = secondaryChatbotContainer.querySelector(".close-chat")
+
+  closeIcon.addEventListener("click", handleCloseSecondaryChat)
+
+}
+
+
+function handleCloseSecondaryChat() {
+  isSecondaryChatClosed = true
+
+  const allChatItems = secondaryChatbotContainer.querySelectorAll(".chats .chat-item")
+
+  secondaryChatbotContainer.querySelector(".choices").innerHTML = ""
+
+  addHideClass(secondaryChatbotContainer.querySelector(".choices"))
+  allChatItems.forEach(item => {
+    item.remove()
+  })
+  gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
+    top : 0
+  })
+
+  
+
+  secondaryChatbotContainer.classList.remove("is-open")
+}
+
+function appendUserInputToChatScreen(text) {
+  const allChatsDiv = secondaryChatbotContainer.querySelector(".chats")
+
+  const responseDiv = document.createElement("div")
+  responseDiv.classList.add("chat-item")
+  responseDiv.classList.add("question-box")
+  responseDiv.innerHTML = `<h4 class='question-box-question'>${text}</h4>`
+
+  allChatsDiv.append(responseDiv)
+}
