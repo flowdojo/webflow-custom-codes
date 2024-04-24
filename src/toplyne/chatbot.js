@@ -386,7 +386,7 @@ async function makeAPIRequestAndShowResult(text) {
     await hideLoader()
     renderSuccessOutput(textToShow)
     await renderChoices(choices)
-    addClickListenerToChoices()
+    addClickListenerToMainChatChoices()
 
   }
 
@@ -466,7 +466,7 @@ function addChatInputListener() {
 
 }
 
-function addClickListenerToChoices() {
+function addClickListenerToMainChatChoices() {
 
   console.log("addClickListenerToChoices");
   console.log({ mainChatWrapper });
@@ -1019,7 +1019,7 @@ function renderSecondaryChatChoices(choices) {
     y: 0,
   })
 
-  addClickListenerToChoices()
+  addClickListenerToSecondaryChatBotChoices()
 
 }
 
@@ -1061,7 +1061,7 @@ function getSecondaryChatBotIconNewPosition() {
 }
 
 
-function addClickListenerToChoices() {
+function addClickListenerToSecondaryChatBotChoices() {
   const choices = secondaryChatbotContainer.querySelectorAll(".choices .choice")
   choices.forEach(choice => {
     choice.addEventListener("click", async function () {
