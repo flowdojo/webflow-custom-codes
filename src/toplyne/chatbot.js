@@ -286,13 +286,13 @@ function counterController() {
 	}
 }
 
-export function addMainChatCloseListener() {
+ function addMainChatCloseListener() {
 	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
 	closeIcon.addEventListener("click", handleCloseChat)
 }
 
-export function removeMainChatCloseListener() {
+ function removeMainChatCloseListener() {
 	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
 	closeIcon.removeEventListener("click", handleCloseChat)
