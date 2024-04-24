@@ -870,21 +870,25 @@ function hideSecondaryChatbotCompletely() {
     onComplete: () => {
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-      },800)
+      },300)
     }
   })
+
+  
 
   tl.to(chatbotIconWrapper, {
     top: 0,
     opacity: 0,
-    
-  },"start")
+    duration : 0.3,
+  },"<")
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width: 0
-  }, 'start')
-
+    width: 0,
+    duration : 0.3,
+  },"<")
+  console.log(tl.totalDuration());
   handleCloseSecondaryChat()
 }
+
 
 async function showSecondaryChatInput() {
   clearTimeout(timeoutId)
@@ -902,25 +906,27 @@ async function showSecondaryChatInput() {
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
   secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
 
-
-
   tl.to(chatbotIconWrapper, {
     opacity: 1,
+    duration : 0.3,
     onComplete: () => {
       chatbotIconWrapper.style.display = "flex"
     }
   }, 'start')
   tl.to(inputWrapper, {
     scale: 1,
+    duration : 0.5,
     width: 500,
   }, 'start')
   tl.to(inputWrapper.querySelector("input"), {
-    opacity: 1
-  }, 0.8)
+    opacity: 1,
+    duration : 0.3
+  },"<")
   tl.to(iconWrapper, {
     right: 10,
     scale: 1,
-  }, 0.5)
+    duration : 0.3
+  }, "<")
 
   return tl
 }
