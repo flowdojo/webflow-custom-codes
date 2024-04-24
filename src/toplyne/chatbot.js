@@ -467,7 +467,12 @@ function addChatInputListener() {
 }
 
 function addClickListenerToChoices() {
+
+  console.log("addClickListenerToChoices");
+  console.log({ mainChatWrapper });
   const choices = mainChatWrapper.querySelectorAll(".choices .choice")
+
+  console.log({ choices });
   choices.forEach(choice => choice.addEventListener("click", async function () {
 
     const choiceText = choice.innerText;
