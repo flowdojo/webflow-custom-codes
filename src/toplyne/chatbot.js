@@ -870,7 +870,7 @@ function hideSecondaryChatbotCompletely() {
     onComplete: () => {
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-      },300)
+      },100)
     }
   })
 
