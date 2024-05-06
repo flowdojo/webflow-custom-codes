@@ -375,7 +375,7 @@ async function initMainChatScreen(lastClickedQuestion) {
 }
 
 
-export async function makeAPIRequestAndShowResult(text, type="text") {
+async function makeAPIRequestAndShowResult(text, type="text") {
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
   const { error, data, message } = await makeAPIRequest(text, type)
