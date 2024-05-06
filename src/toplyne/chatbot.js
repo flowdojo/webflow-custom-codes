@@ -1072,13 +1072,13 @@ function getSecondaryChatBotIconNewPosition() {
 
   allChatItems.forEach(item => {
     if (item.classList.contains("negative-margin")) {
-      negativeMarginResponses ++ 
+      negativeMarginResponses++ 
     }
 
     totalHeight += item.offsetHeight + 36
   })
 
-  return totalHeight - (negativeMarginResponses * 16)
+  return totalHeight - (negativeMarginResponses * 20)
 }
 
 
