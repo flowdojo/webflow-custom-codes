@@ -654,7 +654,7 @@ function handleError(errMessage) {
   console.error({ error: errMessage });
 }
 
-export async function makeAPIRequest(text, type) {
+async function makeAPIRequest(text, type) {
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/userID/interact?logs=off`;
 
@@ -706,7 +706,7 @@ function getLastChatItem() {
 
 }
 
-export function extractDataFromResponse(data) {
+function extractDataFromResponse(data) {
   const messagePayloads = data.filter(item => item.type === "text")
   
   const textsToShow = messagePayloads.map(item => item.payload.message)
