@@ -399,7 +399,7 @@ function renderSuccessOutput(allTexts) {
   const scrollValue = getTopValueForBot()
 
   allTexts.forEach(text => {
-    mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box">
+    mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box ${index > 0 ? "negative-margin" : ""}">
     <p>${text}</p>
   </div>`
   })
@@ -642,13 +642,10 @@ function getTopValueForBot() {
   let totalHeight = 0;
   const allChatItems = mainChatWrapper.querySelectorAll(".chat-item")
 
-  console.log({ allChatItems });
-  console.log({ allChatItems });
   allChatItems.forEach(item => {
-    console.log("item height ", item.offsetHeight);
     totalHeight += item.offsetHeight + 30
   })
-  return totalHeight - allChatItems.length * 5 + 60
+  return totalHeight - allChatItems.length * 5 + 60 - (negativeMarginResponses * 16)
 }
 
 
@@ -990,11 +987,11 @@ function renderSecondaryChatResult(allTexts) {
 
   const scrollValue = getSecondaryChatBotIconNewPosition()
 
-  allTexts.forEach(text => {
-      secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box">
-      <p>${text}</p>
-    </div>`
-  })
+  allTexts.forEach((text, index) => {
+    secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box ${index > 0 ? "negative-margin" : ""}">
+    <p>${text}</p>
+  </div>`
+})
   
 
   scrollSecondaryChatPartially(scrollValue)
@@ -1020,7 +1017,7 @@ function renderSecondaryChatChoices(choices) {
   }
 
   choices.forEach(choice => {
-    choicesDiv.innerHTML += `<div class='choice'  fd-choice-type='${choice.type}'>${choice}</div>`
+    choicesDiv.innerHTML += `<div class='choice'  fd-choice-type='${choice.type}'>${choice.name}</div>`
   })
 
 
@@ -1065,13 +1062,17 @@ function repositionSecondaryChatBot() {
 function getSecondaryChatBotIconNewPosition() {
   let totalHeight = 0;
   const allChatItems = secondaryChatbotContainer.querySelectorAll(".chat-item")
+  let negativeMarginResponses = 0
 
   allChatItems.forEach(item => {
+    if (item.classList.contains("negative-margin")) {
+      negativeMarginResponses ++ 
+    }
+
     totalHeight += item.offsetHeight + 36
   })
 
-  console.log({ totalHeight });
-  return totalHeight
+  return totalHeight - (negativeMarginResponses * 16)
 }
 
 
