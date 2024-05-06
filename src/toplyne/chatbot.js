@@ -1075,10 +1075,8 @@ function getSecondaryChatBotIconNewPosition() {
       negativeMarginResponses ++ 
     }
 
-    totalHeight += item.offsetHeight + 80
+    totalHeight += item.offsetHeight + 36
   })
-  console.log("totalHeight ", totalHeight);
-  console.log("totalHeight with negative margin  ", totalHeight - (negativeMarginResponses * 16));
 
   return totalHeight - (negativeMarginResponses * 16)
 }
