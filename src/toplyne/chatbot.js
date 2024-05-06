@@ -398,7 +398,7 @@ async function makeAPIRequestAndShowResult(text, type="text") {
 function renderSuccessOutput(allTexts) {
   const scrollValue = getTopValueForBot()
 
-  allTexts.forEach(text => {
+  allTexts.forEach((text, index) => {
     mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box ${index > 0 ? "negative-margin" : ""}">
     <p>${text}</p>
   </div>`
@@ -645,7 +645,7 @@ function getTopValueForBot() {
 
   allChatItems.forEach(item => {
     totalHeight += item.offsetHeight + 30
-    
+
     if (item.classList.contains("negative-margin")) {
       negativeMarginResponses ++ 
     }
