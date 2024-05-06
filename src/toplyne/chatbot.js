@@ -1078,7 +1078,7 @@ function getSecondaryChatBotIconNewPosition() {
     totalHeight += item.offsetHeight + 36
   })
 
-  return totalHeight - (negativeMarginResponses * 20)
+  return totalHeight + 22 - (negativeMarginResponses * 20)
 }
 
 
