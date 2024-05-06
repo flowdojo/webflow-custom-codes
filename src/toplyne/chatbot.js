@@ -641,9 +641,15 @@ function showLoader() {
 function getTopValueForBot() {
   let totalHeight = 0;
   const allChatItems = mainChatWrapper.querySelectorAll(".chat-item")
+  let negativeMarginResponses = 0
 
   allChatItems.forEach(item => {
     totalHeight += item.offsetHeight + 30
+    
+    if (item.classList.contains("negative-margin")) {
+      negativeMarginResponses ++ 
+    }
+
   })
   return totalHeight - allChatItems.length * 5 + 60 - (negativeMarginResponses * 16)
 }
