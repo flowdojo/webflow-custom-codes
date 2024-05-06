@@ -1068,6 +1068,8 @@ function repositionSecondaryChatBot() {
 function getSecondaryChatBotIconNewPosition() {
   let totalHeight = 0;
   const allChatItems = secondaryChatbotContainer.querySelectorAll(".chat-item")
+
+  if (!allChatItems?.length) return -8
   let negativeMarginResponses = 0
 
   allChatItems.forEach(item => {
@@ -1078,7 +1080,7 @@ function getSecondaryChatBotIconNewPosition() {
     totalHeight += item.offsetHeight + 36
   })
 
-  return totalHeight + 22 - (negativeMarginResponses * 20)
+  return totalHeight + 28 - (negativeMarginResponses * 20)
 }
 
 
