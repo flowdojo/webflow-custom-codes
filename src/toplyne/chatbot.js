@@ -395,12 +395,14 @@ async function makeAPIRequestAndShowResult(text, type="text") {
 
 
 
-function renderSuccessOutput(text) {
+function renderSuccessOutput(allTexts) {
   const scrollValue = getTopValueForBot()
 
-  mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box">
+  allTexts.forEach(text => {
+    mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box">
     <p>${text}</p>
   </div>`
+  })
 
   removeMainChatCloseListener()
   addMainChatCloseListener()
@@ -944,9 +946,9 @@ async function handleAPIResponse(resp) {
     return
   }
 
-  const { textToShow, choices } = extractDataFromResponse(resp.data)
+  const { textsToShow , choices } = extractDataFromResponse(resp.data)
   await hideSecondaryChatBotLoader()
-  renderSecondaryChatResult(textToShow)
+  renderSecondaryChatResult(textsToShow)
 
   if (Array.isArray(choices) && choices.length) {
     renderSecondaryChatChoices(choices)
@@ -984,13 +986,16 @@ function showSecondaryChatBotLoader() {
   })
 }
 
-function renderSecondaryChatResult(text) {
+function renderSecondaryChatResult(allTexts) {
 
   const scrollValue = getSecondaryChatBotIconNewPosition()
 
-  secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box">
-    <p>${text}</p>
-  </div>`
+  allTexts.forEach(text => {
+      secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box">
+      <p>${text}</p>
+    </div>`
+  })
+  
 
   scrollSecondaryChatPartially(scrollValue)
 
@@ -999,10 +1004,8 @@ function renderSecondaryChatResult(text) {
 
   inputElement.disabled = false
 
-  // removeMainChatCloseListener()
-  // addMainChatCloseListener()
-
 }
+
 
 
 function renderSecondaryChatChoices(choices) {
@@ -1017,7 +1020,7 @@ function renderSecondaryChatChoices(choices) {
   }
 
   choices.forEach(choice => {
-    choicesDiv.innerHTML += `<div class='choice'>${choice}</div>`
+    choicesDiv.innerHTML += `<div class='choice'  fd-choice-type='${choice.type}'>${choice}</div>`
   })
 
 
@@ -1077,8 +1080,8 @@ function addClickListenerToSecondaryChatBotChoices() {
   choices.forEach(choice => {
     choice.addEventListener("click", async function () {
       const text = choice.innerText;
-
-      await handleUserInteraction(text)
+      const type = choice.getAttribute("fd-choice-type") 
+      await handleUserInteraction(text, type)
 
 
     })
@@ -1118,7 +1121,7 @@ function addSecondaryChatInputListener() {
 
 
 
-async function handleUserInteraction(text) {
+async function handleUserInteraction(text, type="text") {
   const inputElement = secondaryChatbotContainer.querySelector("input")
 
   inputElement.disabled = true
@@ -1137,7 +1140,7 @@ async function handleUserInteraction(text) {
   scrollSecondaryChatPartially(scrollValue)
 
 
-  const resp = await makeAPIRequest(text)
+  const resp = await makeAPIRequest(text, type)
 
   await handleAPIResponse(resp)
 }
