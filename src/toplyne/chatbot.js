@@ -375,16 +375,16 @@ async function initMainChatScreen(lastClickedQuestion) {
 }
 
 
-async function makeAPIRequestAndShowResult(text) {
+export async function makeAPIRequestAndShowResult(text, type="text") {
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
-  const { error, data, message } = await makeAPIRequest(text)
+  const { error, data, message } = await makeAPIRequest(text, type)
   if (error) {
     handleError(message)
   } else {
-    const { textToShow, choices } = extractDataFromResponse(data)
+    const { textsToShow, choices } = extractDataFromResponse(data)
     await hideLoader()
-    renderSuccessOutput(textToShow)
+    renderSuccessOutput(textsToShow)
     await renderChoices(choices)
     addClickListenerToMainChatChoices()
 
@@ -421,7 +421,7 @@ function renderChoices(choices) {
 
     if (choices && choices.length) {
       choices.forEach(choice => {
-        choicesDiv.innerHTML += `<span class="choice">${choice}</span>`
+        choicesDiv.innerHTML += `<span class="choice" fd-choice-type='${choice.type}' >${choice.name}</span>`
       })
     }
     removeHideClass(choicesDiv);
@@ -467,19 +467,15 @@ function addChatInputListener() {
 }
 
 function addClickListenerToMainChatChoices() {
-
-  console.log("addClickListenerToChoices");
-  console.log({ mainChatWrapper });
   const choices = mainChatWrapper.querySelectorAll(".choices .choice")
-
-  console.log({ choices });
   choices.forEach(choice => choice.addEventListener("click", async function () {
 
     const choiceText = choice.innerText;
-
+    const type = choice.getAttribute("fd-choice-type")
+    
     hideChoicesAndInput()
     await addUserInputToChatScreen(choiceText)
-    await makeAPIRequestAndShowResult(choiceText)
+    await makeAPIRequestAndShowResult(choiceText, type)
   }))
 }
 
@@ -658,8 +654,7 @@ function handleError(errMessage) {
   console.error({ error: errMessage });
 }
 
-async function makeAPIRequest(text) {
-  /** text refers to the question that was typed or the question that was selected */
+export async function makeAPIRequest(text, type) {
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/userID/interact?logs=off`;
 
@@ -673,7 +668,7 @@ async function makeAPIRequest(text) {
       Authorization: API_KEY
     },
     body: JSON.stringify({
-      action: { type: 'text', payload: `${text}` },
+      action: { type: type, payload: `${text}` },
       config: {
         tts: false,
         stripSSML: true,
@@ -687,6 +682,8 @@ async function makeAPIRequest(text) {
     const resp = await fetch(API_ENDPOINT, options)
 
     const data = await resp.json()
+
+    console.log({ data });
 
     return {
       error: false,
@@ -709,16 +706,24 @@ function getLastChatItem() {
 
 }
 
-function extractDataFromResponse(data) {
-  const textToShow = data.find(item => item.type === "text").payload.message
-  const choices = data.find(item => item.type === "choice")?.payload?.buttons?.map(btn => btn.name)
+export function extractDataFromResponse(data) {
+  const messagePayloads = data.filter(item => item.type === "text")
+  
+  const textsToShow = messagePayloads.map(item => item.payload.message)
+  console.log({ textsToShow });
+
+  const choices = data.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
+    return {
+      name : btn.name,
+      type : btn.request.type
+    }
+  })
 
   return {
-    textToShow,
+    textsToShow,
     choices
   }
 }
-
 
 
 /**
