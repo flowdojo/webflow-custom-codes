@@ -347,13 +347,13 @@ function handleCloseChat() {
 
 async function initMainChatScreen(lastClickedQuestion) {
 
-
+  
   const { left, top, right } = getPositionOfElement(lastClickedQuestion)
 
   const firstQuestion = mainChatWrapper.querySelector(".first-question")
 
   const questionText = lastClickedQuestion.querySelector('h4').innerText
-
+  const type = lastClickedQuestion.getAttribute("fd-choice-type")
   firstQuestion.querySelector("h4").innerText = `${questionText}`;
 
   gsap.fromTo(firstQuestion, {
@@ -364,9 +364,9 @@ async function initMainChatScreen(lastClickedQuestion) {
     right: 0,
     duration: 1.2,
     ease: "sine.inOut",
-    onComplete: async () => {
+    onComplete : async () => {
 
-      await makeAPIRequestAndShowResult(questionText)
+      await makeAPIRequestAndShowResult(questionText, type)
 
     }
   })
