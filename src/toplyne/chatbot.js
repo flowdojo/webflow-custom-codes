@@ -103,7 +103,6 @@ function createBotIconMovement() {
 			}
 
 			const count = counter.getCount(); // gives the index of the next question (towards which the logo will move)
-			// console.log({ count });
 			const targetQuestionBox = allBoxes[count];
 
 
@@ -158,7 +157,6 @@ function animateBotLogo(targetQuestionBox, lastActiveQuestionIndex) {
 
 
 	const isMovingTowardsLeft = isMovingLeft(lastActiveQuestionIndex, counter.getCount())
-	// console.log({ isMovingTowardsLeft });
 
 
 	const isMovingUp = getIsMovingUp(lastActiveQuestionIndex, counter.getCount())
@@ -209,7 +207,6 @@ function handleMouseMovement() {
 			if (questionBox.classList.contains("active")) return
 
 			let count = counter.getCount()
-			console.log({ count });
 
 			/**
 			 * If hovered directly on the last question on page, load, 
@@ -250,7 +247,6 @@ function handleMouseMovement() {
 
 			if (isChatScreenVisible) return
 
-			console.log("mouse left");
 			botMovementControl.start()
 
 		})
@@ -304,6 +300,7 @@ function handleCloseChat() {
 	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
 	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
+  stateHeaders.reset()
 
 	gsap.to(mainChatWrapper, {
 		opacity: 0,
@@ -312,7 +309,6 @@ function handleCloseChat() {
 			/** delete existing chats and hide the choices */
 			const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
 
-			console.log({ existingChatItems });
 			existingChatItems.forEach(item => {
 				if (item.classList.contains("first-question")) return
 				item.remove()
@@ -505,7 +501,6 @@ function showChoicesAndInputBox() {
   const allChoices = mainChatWrapper.querySelectorAll(".choices .choice")
   const chatInput = mainChatWrapper.querySelector(".chat-input-wrap")
 
-  console.log({ allChoices, chatInput });
   removeHideClass(chatInput)
   const elementsToShow = gsap.utils.toArray([allChoices, chatInput])
   gsap.fromTo(elementsToShow, {
@@ -521,7 +516,6 @@ function showChoicesAndInputBox() {
 
 async function addUserInputToChatScreen(userInputText) {
 
-  console.log("started ");
   const chats = mainChatWrapper.querySelector(".chats")
 
   const elementToAdd = `<div class="chat-item question-box user-input">
@@ -534,7 +528,6 @@ async function addUserInputToChatScreen(userInputText) {
   scrollToChatEnding()
   await revealUserInput(lastChatElement)
 
-  console.log("coomplete ");
 }
 
 
@@ -617,7 +610,6 @@ function scrollChatPartially(value) {
 function hideLoader() {
   return new Promise(resolve => {
     const botLoader = mainChatWrapper.querySelector(".chats .chatbot-icon-wrapper").querySelector(".bot-loader")
-    console.log({ botLoader });
 
     gsap.to(botLoader, {
       opacity: 0,
@@ -635,7 +627,6 @@ function showLoader() {
   // return new Promise(resolve => {
   //   botLoader.style.display = "block"
   //   const botLoader = mainChatWrapper.querySelector(".chats .chatbot-icon-wrapper").querySelector(".bot-loader")
-  //   console.log({ botLoader });
 
   //   gsap.to(botLoader, {
   //     opacity: 1,
@@ -648,7 +639,6 @@ function showLoader() {
 
   const botLoader = mainChatWrapper.querySelector(".chats .chatbot-icon-wrapper").querySelector(".bot-loader")
   botLoader.style.display = "block"
-  console.log({ botLoader });
 
   gsap.to(botLoader, {
     opacity: 1,
@@ -783,8 +773,6 @@ function extractNewHeadersState(data) {
 function getPositionOfElement(element, container) {
   const containerRect = container ?? document.querySelector(".chat-screen-wrapper").getBoundingClientRect()
   const { top, bottom, left, right } = element.getBoundingClientRect()
-  // console.log({ top, bottom, left, right });
-  // console.log({ top : containerRect.top, bottom : containerRect.bottom, left : containerRect.left, right : containerRect.right });
   return {
     top: Math.abs(top - containerRect.top),
     bottom: Math.abs(bottom - containerRect.bottom),
@@ -1026,6 +1014,8 @@ function stateHeadersController() {
     "targetContextDiagramID": "645d72103c0ff6475d60535e"
   }
 
+  const originalState = state
+
   const updateStateObject = (newStatebject) => {
     state = newStatebject
   }
@@ -1034,9 +1024,14 @@ function stateHeadersController() {
     return state
   }
 
+  const reset = () => {
+    state = originalState
+  }
+
   return {
     updateStateObject,
-    getStateObject
+    getStateObject,
+    reset
   }
   
 }
@@ -1072,10 +1067,8 @@ function addIntersectionObserver() {
   function callback(enteries, observer) {
     enteries.forEach(entry => {
       if (!entry.isIntersecting) {
-        console.log("show secondary bot");
         showSecondaryChatInput()
       } else {
-        console.log("hiding secondary bot");
         hideSecondaryChatbotCompletely()
       }
     })
@@ -1109,7 +1102,6 @@ function hideSecondaryChatbotCompletely() {
     width: 0,
     duration : 0.3,
   },"<")
-  console.log(tl.totalDuration());
   handleCloseSecondaryChat()
 }
 
