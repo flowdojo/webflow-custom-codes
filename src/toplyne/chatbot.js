@@ -1,5 +1,160 @@
 
 
+
+
+const originalHeaderState = {
+  "stack": [
+      {
+          "nodeID": null,
+          "diagramID": "65df5123b93dbe8b0c12a50c",
+          "storage": {
+              "isBase": true
+          },
+          "commands": [
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "How Toplyne works",
+                      "mappings": []
+                  },
+                  "nextID": "6607cc17d941d800072a99a8",
+                  "platform": "webchat",
+                  "diagramID": "6607cc1749492bb252793752"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "Data Integrations",
+                      "mappings": []
+                  },
+                  "nextID": "660578bdb6c432000767152b",
+                  "platform": "webchat",
+                  "diagramID": "660578bd8f9edd738637cb76"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "Who is Toplyne for?",
+                      "mappings": []
+                  },
+                  "nextID": "6602531d4bfb85000769a496",
+                  "platform": "webchat",
+                  "diagramID": "6602531d108534cf07f198e0"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "AI Agents",
+                      "mappings": []
+                  },
+                  "nextID": "660249434bfb85000769a452",
+                  "platform": "webchat",
+                  "diagramID": "66024943108534cf07f198df"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "None",
+                      "mappings": []
+                  },
+                  "nextID": "660146ff885333e2ccb4eaa3",
+                  "platform": "webchat",
+                  "diagramID": "66013495406f31a9a5a77fc3"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "Pricing",
+                      "mappings": []
+                  },
+                  "nextID": "6601255705b0b8d4468df447",
+                  "platform": "webchat",
+                  "diagramID": "65e0adf383b083b8cd7b6b53"
+              },
+              {
+                  "type": "jump",
+                  "event": {
+                      "type": "intent",
+                      "intent": "Free Plan",
+                      "mappings": []
+                  },
+                  "nextID": "660549ee2982bd47086015d6",
+                  "platform": "webchat",
+                  "diagramID": "65e0adf383b083b8cd7b6b53"
+              }
+          ],
+          "variables": {}
+      },
+      {
+          "nodeID": "65fe7e992597343257a6f319",
+          "diagramID": "645d72103c0ff6475d60535e",
+          "storage": {
+              "output": [
+                  {
+                      "children": [
+                          {
+                              "text": "Hey, let's get started 🚀"
+                          }
+                      ]
+                  },
+                  {
+                      "children": [
+                          {
+                              "text": ""
+                          }
+                      ]
+                  },
+                  {
+                      "children": [
+                          {
+                              "text": "What can I help you with?"
+                          }
+                      ]
+                  }
+              ]
+          },
+          "commands": [],
+          "variables": {}
+      }
+  ],
+  "turn": {},
+  "storage": {},
+  "variables": {
+      "Email": "0",
+      "Skill_PerformanceM": "0",
+      "Skill_Growth": "0",
+      "Skill_Marketingops": "0",
+      "sessions": 1,
+      "user_id": "0",
+      "timestamp": 1715016823,
+      "platform": "0",
+      "locale": "0",
+      "counter": "0",
+      "sentiment": "0",
+      "intent_confidence": "0",
+      "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
+      "last_event": null,
+      "last_utterance": "0",
+      "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
+      "vf_chunks": 0,
+      "Audience_Testing": "External",
+      "_memory_": [
+          {
+              "role": "assistant",
+              "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
+          }
+      ]
+  },
+  "previousContextDiagramID": "645d72103c0ff6475d60535e",
+  "targetContextDiagramID": "645d72103c0ff6475d60535e"
+}
+
 let gsapJumpingAnim;
 
 const botMovementControl = createBotIconMovement();
@@ -367,10 +522,10 @@ async function initMainChatScreen(lastClickedQuestion) {
 }
 
 
-async function makeAPIRequestAndShowResult(text, type="text") {
+async function makeAPIRequestAndShowResult(text, type="text", isSecondaryChatbot = false) {
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
-  const { error, data, message } = await makeAPIRequest(text, type)
+  const { error, data, message } = await makeAPIRequest(text, type, isSecondaryChatbot)
   if (error) {
     handleError(message)
   } else {
@@ -669,13 +824,14 @@ function handleError(errMessage) {
   console.error({ error: errMessage });
 }
 
-async function makeAPIRequest(text, type) {
+async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/interact/65df5123b93dbe8b0c12a50c`;
 
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
 
-  const stateObject = stateHeaders.getStateObject()
+  const stateObject = isSecondaryChatbot ? secondaryChatStateHeaders.getStateObject() : stateHeaders.getStateObject()
+
 
   const request = type !== "text" ? {
     type : type,
@@ -709,8 +865,6 @@ async function makeAPIRequest(text, type) {
       state : {
         ...stateObject
       }
-
-      
     })
   };
 
@@ -720,7 +874,12 @@ async function makeAPIRequest(text, type) {
     const data = await resp.json()
 
     const newHeadersState = extractNewHeadersState(data)
-    stateHeaders.updateStateObject(newHeadersState)
+
+    if (isSecondaryChatbot) {
+      stateHeaders.updateStateObject(newHeadersState)
+    } else {
+      secondaryChatStateHeaders.updateStateObject(newHeadersState)
+    }
 
     return {
       error: false,
@@ -731,9 +890,7 @@ async function makeAPIRequest(text, type) {
       error: true,
       message: error?.response?.data?.message || error.message
     }
-
   }
-
 }
 
 
@@ -860,161 +1017,12 @@ function isMovingLeft(lastElementIndex, targetElementIndex) {
 
 }
 
-function stateHeadersController() {
-  let state = {
-    "stack": [
-        {
-            "nodeID": null,
-            "diagramID": "65df5123b93dbe8b0c12a50c",
-            "storage": {
-                "isBase": true
-            },
-            "commands": [
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "How Toplyne works",
-                        "mappings": []
-                    },
-                    "nextID": "6607cc17d941d800072a99a8",
-                    "platform": "webchat",
-                    "diagramID": "6607cc1749492bb252793752"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "Data Integrations",
-                        "mappings": []
-                    },
-                    "nextID": "660578bdb6c432000767152b",
-                    "platform": "webchat",
-                    "diagramID": "660578bd8f9edd738637cb76"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "Who is Toplyne for?",
-                        "mappings": []
-                    },
-                    "nextID": "6602531d4bfb85000769a496",
-                    "platform": "webchat",
-                    "diagramID": "6602531d108534cf07f198e0"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "AI Agents",
-                        "mappings": []
-                    },
-                    "nextID": "660249434bfb85000769a452",
-                    "platform": "webchat",
-                    "diagramID": "66024943108534cf07f198df"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "None",
-                        "mappings": []
-                    },
-                    "nextID": "660146ff885333e2ccb4eaa3",
-                    "platform": "webchat",
-                    "diagramID": "66013495406f31a9a5a77fc3"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "Pricing",
-                        "mappings": []
-                    },
-                    "nextID": "6601255705b0b8d4468df447",
-                    "platform": "webchat",
-                    "diagramID": "65e0adf383b083b8cd7b6b53"
-                },
-                {
-                    "type": "jump",
-                    "event": {
-                        "type": "intent",
-                        "intent": "Free Plan",
-                        "mappings": []
-                    },
-                    "nextID": "660549ee2982bd47086015d6",
-                    "platform": "webchat",
-                    "diagramID": "65e0adf383b083b8cd7b6b53"
-                }
-            ],
-            "variables": {}
-        },
-        {
-            "nodeID": "65fe7e992597343257a6f319",
-            "diagramID": "645d72103c0ff6475d60535e",
-            "storage": {
-                "output": [
-                    {
-                        "children": [
-                            {
-                                "text": "Hey, let's get started 🚀"
-                            }
-                        ]
-                    },
-                    {
-                        "children": [
-                            {
-                                "text": ""
-                            }
-                        ]
-                    },
-                    {
-                        "children": [
-                            {
-                                "text": "What can I help you with?"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "commands": [],
-            "variables": {}
-        }
-    ],
-    "turn": {},
-    "storage": {},
-    "variables": {
-        "Email": "0",
-        "Skill_PerformanceM": "0",
-        "Skill_Growth": "0",
-        "Skill_Marketingops": "0",
-        "sessions": 1,
-        "user_id": "0",
-        "timestamp": 1715016823,
-        "platform": "0",
-        "locale": "0",
-        "counter": "0",
-        "sentiment": "0",
-        "intent_confidence": "0",
-        "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
-        "last_event": null,
-        "last_utterance": "0",
-        "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
-        "vf_chunks": 0,
-        "Audience_Testing": "External",
-        "_memory_": [
-            {
-                "role": "assistant",
-                "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
-            }
-        ]
-    },
-    "previousContextDiagramID": "645d72103c0ff6475d60535e",
-    "targetContextDiagramID": "645d72103c0ff6475d60535e"
-  }
 
-  const originalState = state
+
+
+
+function stateHeadersController() {
+  let state = originalHeaderState
 
   const updateStateObject = (newStatebject) => {
     state = newStatebject
@@ -1025,7 +1033,7 @@ function stateHeadersController() {
   }
 
   const reset = () => {
-    state = originalState
+    state = originalHeaderState
   }
 
   return {
@@ -1044,6 +1052,7 @@ function stateHeadersController() {
 
 const secondaryChatbotContainer = document.querySelector(".secondary-chatbot")
 let isSecondaryChatClosed = true
+const secondaryChatStateHeaders = secondaryChatStateHeadersController()
 
 
 
@@ -1239,6 +1248,28 @@ function renderSecondaryChatResult(allResponses) {
 
 }
 
+function secondaryChatStateHeadersController() {
+  let state = originalHeaderState
+
+  const updateStateObject = (newStatebject) => {
+    state = newStatebject
+  }
+
+  const getStateObject = () => {
+    return state
+  }
+
+  const reset = () => {
+    state = originalHeaderState
+  }
+
+  return {
+    updateStateObject,
+    getStateObject,
+    reset
+  }
+  
+}
 
 
 function renderSecondaryChatChoices(choices) {
@@ -1379,7 +1410,7 @@ async function handleUserInteraction(text, type="text") {
   scrollSecondaryChatPartially(scrollValue)
 
 
-  const resp = await makeAPIRequest(text, type)
+  const resp = await makeAPIRequest(text, type, true)
 
   await handleAPIResponse(resp)
 }
@@ -1395,6 +1426,7 @@ function addCloseSecondaryChatClickListener() {
 
 function handleCloseSecondaryChat() {
   isSecondaryChatClosed = true
+  secondaryChatStateHeaders.reset()
 
   const allChatItems = secondaryChatbotContainer.querySelectorAll(".chats .chat-item")
 
