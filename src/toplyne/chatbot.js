@@ -90,8 +90,6 @@ function createBotIconMovement() {
 
 	const start = () => {
 
-		resetBotPosition()
-
 		const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
 		intervalId = setInterval(() => {
@@ -305,8 +303,6 @@ function handleCloseChat() {
 	const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
 	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
 	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
-
-	
 
 
 	gsap.to(mainChatWrapper, {
@@ -733,7 +729,8 @@ async function makeAPIRequest(text, type) {
 
     const data = await resp.json()
 
-    console.log({ data });
+    const newHeadersState = extractNewHeadersState(data)
+    stateHeaders.updateStateObject(newHeadersState)
 
     return {
       error: false,
@@ -778,6 +775,10 @@ function extractDataFromResponse(data) {
 /**
  * UTILS
  */
+
+function extractNewHeadersState(data) {
+  return data?.state
+}
 
 function getPositionOfElement(element, container) {
   const containerRect = container ?? document.querySelector(".chat-screen-wrapper").getBoundingClientRect()
