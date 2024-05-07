@@ -6,7 +6,7 @@ const botMovementControl = createBotIconMovement();
 const counter = counterController()
 const allQuestionsWrapper = document.querySelector(".all-questions-wrapper")
 const mainChatWrapper = document.querySelector(".main-chat")
-
+const stateHeaders = stateHeadersController()
 const reverseController = shouldReverseController()
 let isChatScreenVisible; // for the herosection chat screen
 
@@ -382,9 +382,11 @@ async function makeAPIRequestAndShowResult(text, type="text") {
   if (error) {
     handleError(message)
   } else {
-    const { textsToShow, choices } = extractDataFromResponse(data)
+    const { responsesToShow, choices } = extractDataFromResponse(data)
+
     await hideLoader()
-    renderSuccessOutput(textsToShow)
+    renderSuccessOutput(responsesToShow)
+
     await renderChoices(choices)
     addClickListenerToMainChatChoices()
 
@@ -394,20 +396,32 @@ async function makeAPIRequestAndShowResult(text, type="text") {
 
 
 
-function renderSuccessOutput(allTexts) {
+function renderSuccessOutput(allResponses) {
   const scrollValue = getTopValueForBot()
 
-  allTexts.forEach((text, index) => {
-    const paragraphs = text.split("\n")
-
+  allResponses.forEach((response, index) => {
     const tempDiv = document.createElement("div")
-    paragraphs.forEach(paragraph => {
-      if (paragraph.trim() !== '') {
-        const p = document.createElement('p');
-        p.textContent = paragraph.trim();
-        tempDiv.appendChild(p);
-      }
-    })
+
+    if (response.type === "text") {
+      const text = response.payload.message
+      const paragraphs = text.split("\n")
+
+      paragraphs.forEach(paragraph => {
+        if (paragraph.trim() !== '') {
+          const p = document.createElement('p');
+          p.textContent = paragraph.trim();
+          tempDiv.appendChild(p);
+        }
+      })
+    }
+
+    if (response.type === "visual") {
+      const imgLink = response.payload.image;
+      const img = document.createElement("img")
+      img.setAttribute("src", imgLink)
+
+      tempDiv.appendChild(img)
+    }
 
     mainChatWrapper.querySelector(".chat-wrapper .chats").innerHTML += `<div class="chat-item response-box ${index > 0 ? "negative-margin" : ""}">
     <p>${tempDiv.innerHTML}</p>
@@ -674,6 +688,20 @@ async function makeAPIRequest(text, type) {
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/interact/65df5123b93dbe8b0c12a50c`;
 
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
+
+  const stateObject = stateHeaders.getStateObject()
+
+  const request = type !== "text" ? {
+    type : type,
+    payload : {
+      label : `${text}`
+    }
+  } : {
+    type : "text",
+    payload : `${text}`
+  }
+
+
   const options = {
     method: 'POST',
     headers: {
@@ -683,165 +711,20 @@ async function makeAPIRequest(text, type) {
       Authorization: API_KEY
     },
     body: JSON.stringify({
-      action: { type: type, payload: `${text}` },
+      request,
+
       config: {
-        tts: false,
-        stripSSML: true,
-        stopAll: true,
-        excludeTypes: ['block', 'debug', 'flow']
-      },
-      state : {
-        "stack": [
-            {
-                "nodeID": null,
-                "diagramID": "65df5123b93dbe8b0c12a50c",
-                "storage": {
-                    "isBase": true
-                },
-                "commands": [
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "How Toplyne works",
-                            "mappings": []
-                        },
-                        "nextID": "6607cc17d941d800072a99a8",
-                        "platform": "webchat",
-                        "diagramID": "6607cc1749492bb252793752"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "Data Integrations",
-                            "mappings": []
-                        },
-                        "nextID": "660578bdb6c432000767152b",
-                        "platform": "webchat",
-                        "diagramID": "660578bd8f9edd738637cb76"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "Who is Toplyne for?",
-                            "mappings": []
-                        },
-                        "nextID": "6602531d4bfb85000769a496",
-                        "platform": "webchat",
-                        "diagramID": "6602531d108534cf07f198e0"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "AI Agents",
-                            "mappings": []
-                        },
-                        "nextID": "660249434bfb85000769a452",
-                        "platform": "webchat",
-                        "diagramID": "66024943108534cf07f198df"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "None",
-                            "mappings": []
-                        },
-                        "nextID": "660146ff885333e2ccb4eaa3",
-                        "platform": "webchat",
-                        "diagramID": "66013495406f31a9a5a77fc3"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "Pricing",
-                            "mappings": []
-                        },
-                        "nextID": "6601255705b0b8d4468df447",
-                        "platform": "webchat",
-                        "diagramID": "65e0adf383b083b8cd7b6b53"
-                    },
-                    {
-                        "type": "jump",
-                        "event": {
-                            "type": "intent",
-                            "intent": "Free Plan",
-                            "mappings": []
-                        },
-                        "nextID": "660549ee2982bd47086015d6",
-                        "platform": "webchat",
-                        "diagramID": "65e0adf383b083b8cd7b6b53"
-                    }
-                ],
-                "variables": {}
-            },
-            {
-                "nodeID": "65fe7e992597343257a6f319",
-                "diagramID": "645d72103c0ff6475d60535e",
-                "storage": {
-                    "output": [
-                        {
-                            "children": [
-                                {
-                                    "text": "Hey, let's get started 🚀"
-                                }
-                            ]
-                        },
-                        {
-                            "children": [
-                                {
-                                    "text": ""
-                                }
-                            ]
-                        },
-                        {
-                            "children": [
-                                {
-                                    "text": "What can I help you with?"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "commands": [],
-                "variables": {}
-            }
+        "excludeTypes": [
+          "speak"
         ],
-        "turn": {},
-        "storage": {},
-        "variables": {
-            "Email": "0",
-            "Skill_PerformanceM": "0",
-            "Skill_Growth": "0",
-            "Skill_Marketingops": "0",
-            "sessions": 1,
-            "user_id": "0",
-            "timestamp": 1715016823,
-            "platform": "0",
-            "locale": "0",
-            "counter": "0",
-            "sentiment": "0",
-            "intent_confidence": "0",
-            "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
-            "last_event": null,
-            "last_utterance": "0",
-            "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
-            "vf_chunks": 0,
-            "Audience_Testing": "External",
-            "_memory_": [
-                {
-                    "role": "assistant",
-                    "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
-                }
-            ]
-        },
-        "previousContextDiagramID": "645d72103c0ff6475d60535e",
-        "targetContextDiagramID": "645d72103c0ff6475d60535e"
+        "tts": true
+      },
+      
+      state : {
+        ...stateObject
       }
+
+      
     })
   };
 
@@ -874,9 +757,9 @@ function getLastChatItem() {
 }
 
 function extractDataFromResponse(data) {
-  const messagePayloads = data.trace.filter(item => item.type === "text")
+  const responsesToShow = data.trace.filter(item => item.type === "text" || item.type === "visual")
   
-  const textsToShow = messagePayloads.map(item => item.payload.message)
+  // const textsToShow = messagePayloads.map(item => item.payload.message)
 
   const choices = data.trace.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
     return {
@@ -886,7 +769,7 @@ function extractDataFromResponse(data) {
   })
 
   return {
-    textsToShow,
+    responsesToShow,
     choices
   }
 }
@@ -986,6 +869,175 @@ function isMovingLeft(lastElementIndex, targetElementIndex) {
 
   return targetElementLeftValue < lastElementLeftValue
 
+}
+
+function stateHeadersController() {
+  let state = {
+    "stack": [
+        {
+            "nodeID": null,
+            "diagramID": "65df5123b93dbe8b0c12a50c",
+            "storage": {
+                "isBase": true
+            },
+            "commands": [
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "How Toplyne works",
+                        "mappings": []
+                    },
+                    "nextID": "6607cc17d941d800072a99a8",
+                    "platform": "webchat",
+                    "diagramID": "6607cc1749492bb252793752"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "Data Integrations",
+                        "mappings": []
+                    },
+                    "nextID": "660578bdb6c432000767152b",
+                    "platform": "webchat",
+                    "diagramID": "660578bd8f9edd738637cb76"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "Who is Toplyne for?",
+                        "mappings": []
+                    },
+                    "nextID": "6602531d4bfb85000769a496",
+                    "platform": "webchat",
+                    "diagramID": "6602531d108534cf07f198e0"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "AI Agents",
+                        "mappings": []
+                    },
+                    "nextID": "660249434bfb85000769a452",
+                    "platform": "webchat",
+                    "diagramID": "66024943108534cf07f198df"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "None",
+                        "mappings": []
+                    },
+                    "nextID": "660146ff885333e2ccb4eaa3",
+                    "platform": "webchat",
+                    "diagramID": "66013495406f31a9a5a77fc3"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "Pricing",
+                        "mappings": []
+                    },
+                    "nextID": "6601255705b0b8d4468df447",
+                    "platform": "webchat",
+                    "diagramID": "65e0adf383b083b8cd7b6b53"
+                },
+                {
+                    "type": "jump",
+                    "event": {
+                        "type": "intent",
+                        "intent": "Free Plan",
+                        "mappings": []
+                    },
+                    "nextID": "660549ee2982bd47086015d6",
+                    "platform": "webchat",
+                    "diagramID": "65e0adf383b083b8cd7b6b53"
+                }
+            ],
+            "variables": {}
+        },
+        {
+            "nodeID": "65fe7e992597343257a6f319",
+            "diagramID": "645d72103c0ff6475d60535e",
+            "storage": {
+                "output": [
+                    {
+                        "children": [
+                            {
+                                "text": "Hey, let's get started 🚀"
+                            }
+                        ]
+                    },
+                    {
+                        "children": [
+                            {
+                                "text": ""
+                            }
+                        ]
+                    },
+                    {
+                        "children": [
+                            {
+                                "text": "What can I help you with?"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "commands": [],
+            "variables": {}
+        }
+    ],
+    "turn": {},
+    "storage": {},
+    "variables": {
+        "Email": "0",
+        "Skill_PerformanceM": "0",
+        "Skill_Growth": "0",
+        "Skill_Marketingops": "0",
+        "sessions": 1,
+        "user_id": "0",
+        "timestamp": 1715016823,
+        "platform": "0",
+        "locale": "0",
+        "counter": "0",
+        "sentiment": "0",
+        "intent_confidence": "0",
+        "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
+        "last_event": null,
+        "last_utterance": "0",
+        "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
+        "vf_chunks": 0,
+        "Audience_Testing": "External",
+        "_memory_": [
+            {
+                "role": "assistant",
+                "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
+            }
+        ]
+    },
+    "previousContextDiagramID": "645d72103c0ff6475d60535e",
+    "targetContextDiagramID": "645d72103c0ff6475d60535e"
+  }
+
+  const updateStateObject = (newStatebject) => {
+    state = newStatebject
+  }
+
+  const getStateObject = () => {
+    return state
+  }
+
+  return {
+    updateStateObject,
+    getStateObject
+  }
+  
 }
 
 
@@ -1110,9 +1162,9 @@ async function handleAPIResponse(resp) {
     return
   }
 
-  const { textsToShow , choices } = extractDataFromResponse(resp.data)
+  const { responsesToShow , choices } = extractDataFromResponse(resp.data)
   await hideSecondaryChatBotLoader()
-  renderSecondaryChatResult(textsToShow)
+  renderSecondaryChatResult(responsesToShow)
 
   if (Array.isArray(choices) && choices.length) {
     renderSecondaryChatChoices(choices)
@@ -1150,21 +1202,34 @@ function showSecondaryChatBotLoader() {
   })
 }
 
-function renderSecondaryChatResult(allTexts) {
+function renderSecondaryChatResult(allResponses) {
 
   const scrollValue = getSecondaryChatBotIconNewPosition()
 
-  allTexts.forEach((text, index) => {
-    const paragraphs = text.split("\n")
-
+  allResponses.forEach((response, index) => {
     const tempDiv = document.createElement("div")
-    paragraphs.forEach(paragraph => {
-      if (paragraph.trim() !== '') {
-        const p = document.createElement('p');
-        p.textContent = paragraph.trim();
-        tempDiv.appendChild(p);
-      }
-    })
+
+
+    if (response.type === "text") {
+      const text = response.payload.message
+      const paragraphs = text.split("\n")
+
+      paragraphs.forEach(paragraph => {
+        if (paragraph.trim() !== '') {
+          const p = document.createElement('p');
+          p.textContent = paragraph.trim();
+          tempDiv.appendChild(p);
+        }
+      })
+    }
+
+    if (response.type === "visual") {
+      const imgLink = response.payload.image;
+      const img = document.createElement("img")
+      img.setAttribute("src", imgLink)
+
+      tempDiv.appendChild(img)
+    }
 
     secondaryChatbotContainer.querySelector(".chats").innerHTML += `<div class="chat-item response-box ${index > 0 ? "negative-margin" : ""}">
       <p>${tempDiv.innerHTML}</p>
