@@ -876,9 +876,9 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
     const newHeadersState = extractNewHeadersState(data)
 
     if (isSecondaryChatbot) {
-      stateHeaders.updateStateObject(newHeadersState)
-    } else {
       secondaryChatStateHeaders.updateStateObject(newHeadersState)
+    } else {
+      stateHeaders.updateStateObject(newHeadersState)
     }
 
     return {
