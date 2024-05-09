@@ -1069,7 +1069,7 @@ function addIntersectionObserver() {
     threshold: 1.0,
   };
 
-  let target = document.querySelector(".home-section")
+  let target = document.querySelector("[fd-code='home-section']")
 
   let observer = new IntersectionObserver(callback, options);
 
@@ -1095,7 +1095,7 @@ function hideSecondaryChatbotCompletely() {
   const tl = gsap.timeline({
     onComplete: () => {
       timeoutId = setTimeout(() => {
-        secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
+        secondaryChatbotContainer.style.visibility = "hidden"
       },100)
     }
   })
@@ -1129,7 +1129,7 @@ async function showSecondaryChatInput() {
   await repositionSecondaryChatBot()
 
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
-  secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
+  secondaryChatbotContainer.style.visibility = "visible"
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
