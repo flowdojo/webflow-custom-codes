@@ -1066,7 +1066,6 @@ function addScrollListener() {
   let isSecondaryChatVisible = false;
 
   document.addEventListener("scroll", () => {
-    console.log(window.scrollY);
     if (window.scrollY > 800) {
       if (isSecondaryChatVisible) return
       showSecondaryChatInput()
@@ -1090,7 +1089,6 @@ function hideSecondaryChatbotCompletely() {
 
   const tl = gsap.timeline({
     onComplete: () => {
-      console.log("complete");
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
       },300)
@@ -1129,7 +1127,8 @@ async function showSecondaryChatInput() {
   await repositionSecondaryChatBot()
 
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
-  secondaryChatbotContainer.style.visibility = "visible"
+  secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
+
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
