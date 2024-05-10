@@ -1437,7 +1437,7 @@ function handleCloseSecondaryChat() {
     item.remove()
   })
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    top: 0
+    top: '-8px'
   })
 
 
