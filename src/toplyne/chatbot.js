@@ -1129,7 +1129,9 @@ async function showSecondaryChatInput() {
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
   secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
   secondaryChatbotContainer.style.visibility = "visible"
-
+  gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
+    top: "-8px",
+  })
   tl.to(chatbotIconWrapper, {
     opacity: 1,
     duration : 0.3,
@@ -1435,8 +1437,10 @@ function handleCloseSecondaryChat() {
   allChatItems.forEach(item => {
     item.remove()
   })
+  
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    top: '-8px'
+    top: "-8px",
+    duration : 0.3
   })
 
 
