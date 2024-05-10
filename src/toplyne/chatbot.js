@@ -1060,58 +1060,58 @@ addSecondaryChatInputListener()
 
 addCloseSecondaryChatClickListener()
 
-addIntersectionObserver()
+addScrollListener()
+
+function addScrollListener() {
+  let isSecondaryChatVisible = false;
+
+  document.addEventListener("scroll", () => {
+    console.log(window.scrollY);
+    if (window.scrollY > 800) {
+      if (isSecondaryChatVisible) return
+      showSecondaryChatInput()
+      isSecondaryChatVisible = true
+    } else {
+      if (!isSecondaryChatVisible) return
+      hideSecondaryChatbotCompletely()
+      isSecondaryChatVisible = false
+    }
+  })
 
 
-function addIntersectionObserver() {
-  let options = {
-    rootMargin: "0px",
-    threshold: 1.0,
-  };
-
-  let target = document.querySelector("[fd-code='home-section']")
-
-  let observer = new IntersectionObserver(callback, options);
-
-  function callback(enteries, observer) {
-    enteries.forEach(entry => {
-      if (!entry.isIntersecting) {
-        showSecondaryChatInput()
-      } else {
-        hideSecondaryChatbotCompletely()
-      }
-    })
-  }
-
-  observer.observe(target)
 }
 
 let timeoutId;
 
 function hideSecondaryChatbotCompletely() {
+  clearTimeout(timeoutId)
   const chatbotIconWrapper = secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper")
   secondaryChatbotContainer.classList.remove("is-open")
 
   const tl = gsap.timeline({
     onComplete: () => {
+      console.log("complete");
       timeoutId = setTimeout(() => {
-        secondaryChatbotContainer.style.visibility = "hidden"
-      },100)
+        secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
+      },300)
     }
   })
 
   
 
+  
+  tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
+    width: 0,
+    duration : 0.3,
+    delay : 0.3
+  })
   tl.to(chatbotIconWrapper, {
     top: 0,
     opacity: 0,
     duration : 0.3,
-  },"<")
-  tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width: 0,
-    duration : 0.3,
-  },"<")
+  }, "<")
   handleCloseSecondaryChat()
+  
 }
 
 
