@@ -1091,7 +1091,7 @@ function hideSecondaryChatbotCompletely() {
     onComplete: () => {
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-      },300)
+      },50)
     }
   })
 
@@ -1128,7 +1128,7 @@ async function showSecondaryChatInput() {
 
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
   secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
-
+  secondaryChatbotContainer.style.visibility = "visible"
 
   tl.to(chatbotIconWrapper, {
     opacity: 1,
