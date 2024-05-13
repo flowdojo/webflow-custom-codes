@@ -1070,12 +1070,14 @@ function addScrollListener() {
   let isSecondaryChatVisible = false;
 
   document.addEventListener("scroll", () => {
-    if (window.scrollY > 800) {
+    if (window.scrollY > 700) {
       if (isSecondaryChatVisible) return
       showSecondaryChatInput()
       isSecondaryChatVisible = true
     } else {
-      if (!isSecondaryChatVisible) return
+      const isChatWindowOpened = secondaryChatbotContainer.classList.contains("is-open")
+
+      if (!isSecondaryChatVisible || isChatWindowOpened) return
       hideSecondaryChatbotCompletely()
       isSecondaryChatVisible = false
     }
@@ -1083,6 +1085,7 @@ function addScrollListener() {
 
 
 }
+
 
 let timeoutId;
 
