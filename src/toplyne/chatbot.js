@@ -4,152 +4,152 @@
 
 const originalHeaderState = {
   "stack": [
-      {
-          "nodeID": null,
-          "diagramID": "65df5123b93dbe8b0c12a50c",
-          "storage": {
-              "isBase": true
-          },
-          "commands": [
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "How Toplyne works",
-                      "mappings": []
-                  },
-                  "nextID": "6607cc17d941d800072a99a8",
-                  "platform": "webchat",
-                  "diagramID": "6607cc1749492bb252793752"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "Data Integrations",
-                      "mappings": []
-                  },
-                  "nextID": "660578bdb6c432000767152b",
-                  "platform": "webchat",
-                  "diagramID": "660578bd8f9edd738637cb76"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "Who is Toplyne for?",
-                      "mappings": []
-                  },
-                  "nextID": "6602531d4bfb85000769a496",
-                  "platform": "webchat",
-                  "diagramID": "6602531d108534cf07f198e0"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "AI Agents",
-                      "mappings": []
-                  },
-                  "nextID": "660249434bfb85000769a452",
-                  "platform": "webchat",
-                  "diagramID": "66024943108534cf07f198df"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "None",
-                      "mappings": []
-                  },
-                  "nextID": "660146ff885333e2ccb4eaa3",
-                  "platform": "webchat",
-                  "diagramID": "66013495406f31a9a5a77fc3"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "Pricing",
-                      "mappings": []
-                  },
-                  "nextID": "6601255705b0b8d4468df447",
-                  "platform": "webchat",
-                  "diagramID": "65e0adf383b083b8cd7b6b53"
-              },
-              {
-                  "type": "jump",
-                  "event": {
-                      "type": "intent",
-                      "intent": "Free Plan",
-                      "mappings": []
-                  },
-                  "nextID": "660549ee2982bd47086015d6",
-                  "platform": "webchat",
-                  "diagramID": "65e0adf383b083b8cd7b6b53"
-              }
-          ],
-          "variables": {}
+    {
+      "nodeID": null,
+      "diagramID": "65df5123b93dbe8b0c12a50c",
+      "storage": {
+        "isBase": true
       },
-      {
-          "nodeID": "65fe7e992597343257a6f319",
-          "diagramID": "645d72103c0ff6475d60535e",
-          "storage": {
-              "output": [
-                  {
-                      "children": [
-                          {
-                              "text": "Hey, let's get started 🚀"
-                          }
-                      ]
-                  },
-                  {
-                      "children": [
-                          {
-                              "text": ""
-                          }
-                      ]
-                  },
-                  {
-                      "children": [
-                          {
-                              "text": "What can I help you with?"
-                          }
-                      ]
-                  }
-              ]
+      "commands": [
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "How Toplyne works",
+            "mappings": []
           },
-          "commands": [],
-          "variables": {}
-      }
+          "nextID": "6607cc17d941d800072a99a8",
+          "platform": "webchat",
+          "diagramID": "6607cc1749492bb252793752"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "Data Integrations",
+            "mappings": []
+          },
+          "nextID": "660578bdb6c432000767152b",
+          "platform": "webchat",
+          "diagramID": "660578bd8f9edd738637cb76"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "Who is Toplyne for?",
+            "mappings": []
+          },
+          "nextID": "6602531d4bfb85000769a496",
+          "platform": "webchat",
+          "diagramID": "6602531d108534cf07f198e0"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "AI Agents",
+            "mappings": []
+          },
+          "nextID": "660249434bfb85000769a452",
+          "platform": "webchat",
+          "diagramID": "66024943108534cf07f198df"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "None",
+            "mappings": []
+          },
+          "nextID": "660146ff885333e2ccb4eaa3",
+          "platform": "webchat",
+          "diagramID": "66013495406f31a9a5a77fc3"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "Pricing",
+            "mappings": []
+          },
+          "nextID": "6601255705b0b8d4468df447",
+          "platform": "webchat",
+          "diagramID": "65e0adf383b083b8cd7b6b53"
+        },
+        {
+          "type": "jump",
+          "event": {
+            "type": "intent",
+            "intent": "Free Plan",
+            "mappings": []
+          },
+          "nextID": "660549ee2982bd47086015d6",
+          "platform": "webchat",
+          "diagramID": "65e0adf383b083b8cd7b6b53"
+        }
+      ],
+      "variables": {}
+    },
+    {
+      "nodeID": "65fe7e992597343257a6f319",
+      "diagramID": "645d72103c0ff6475d60535e",
+      "storage": {
+        "output": [
+          {
+            "children": [
+              {
+                "text": "Hey, let's get started 🚀"
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "text": "What can I help you with?"
+              }
+            ]
+          }
+        ]
+      },
+      "commands": [],
+      "variables": {}
+    }
   ],
   "turn": {},
   "storage": {},
   "variables": {
-      "Email": "0",
-      "Skill_PerformanceM": "0",
-      "Skill_Growth": "0",
-      "Skill_Marketingops": "0",
-      "sessions": 1,
-      "user_id": "0",
-      "timestamp": 1715016823,
-      "platform": "0",
-      "locale": "0",
-      "counter": "0",
-      "sentiment": "0",
-      "intent_confidence": "0",
-      "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
-      "last_event": null,
-      "last_utterance": "0",
-      "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
-      "vf_chunks": 0,
-      "Audience_Testing": "External",
-      "_memory_": [
-          {
-              "role": "assistant",
-              "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
-          }
-      ]
+    "Email": "0",
+    "Skill_PerformanceM": "0",
+    "Skill_Growth": "0",
+    "Skill_Marketingops": "0",
+    "sessions": 1,
+    "user_id": "0",
+    "timestamp": 1715016823,
+    "platform": "0",
+    "locale": "0",
+    "counter": "0",
+    "sentiment": "0",
+    "intent_confidence": "0",
+    "last_response": "Hey, let's get started 🚀\n\nWhat can I help you with?",
+    "last_event": null,
+    "last_utterance": "0",
+    "vf_memory": "assistant: Hey, let's get started 🚀\n\nWhat can I help you with?",
+    "vf_chunks": 0,
+    "Audience_Testing": "External",
+    "_memory_": [
+      {
+        "role": "assistant",
+        "content": "Hey, let's get started 🚀\n\nWhat can I help you with?"
+      }
+    ]
   },
   "previousContextDiagramID": "645d72103c0ff6475d60535e",
   "targetContextDiagramID": "645d72103c0ff6475d60535e"
@@ -166,13 +166,13 @@ const reverseController = shouldReverseController()
 let isChatScreenVisible; // for the herosection chat screen
 
 const init = async () => {
-	// set first question as active initially
-	// setActiveClass([...allQuestionsWrapper.querySelectorAll(".question-box")][0])
-	botMovementControl.start(); // To start the movement
-	handleResize()
-	handleMouseMovement()
-	questionClickListener()
-	addChatInputListener()
+  // set first question as active initially
+  // setActiveClass([...allQuestionsWrapper.querySelectorAll(".question-box")][0])
+  botMovementControl.start(); // To start the movement
+  handleResize()
+  handleMouseMovement()
+  questionClickListener()
+  addChatInputListener()
 
 }
 
@@ -182,122 +182,122 @@ init()
 
 function questionClickListener() {
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
-	allBoxes.forEach((box, index) => {
-		box.querySelector(".try-now-button").addEventListener('click', () => {
-			/**  */
-			isChatScreenVisible = true
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  allBoxes.forEach((box, index) => {
+    box.querySelector(".try-now-button").addEventListener('click', () => {
+      /**  */
+      isChatScreenVisible = true
 
-			const otherQuestions = allBoxes.filter((_, i) => i !== index)
-			const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
-			const elementsToHide = gsap.utils.toArray([chatBoxTitle, ...otherQuestions])
-			botMovementControl.stop()
+      const otherQuestions = allBoxes.filter((_, i) => i !== index)
+      const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
+      const elementsToHide = gsap.utils.toArray([chatBoxTitle, ...otherQuestions])
+      botMovementControl.stop()
 
-			gsap.to(elementsToHide, {
-				opacity: 0,
-				onComplete: () => {
-					allQuestionsWrapper.style.display = "none"
-					mainChatWrapper.style.display = "block"
-					gsap.to(mainChatWrapper, {
-						opacity : 1
-					})
-				}
-			})
+      gsap.to(elementsToHide, {
+        opacity: 0,
+        onComplete: () => {
+          allQuestionsWrapper.style.display = "none"
+          mainChatWrapper.style.display = "block"
+          gsap.to(mainChatWrapper, {
+            opacity: 1
+          })
+        }
+      })
 
 
 
-			/** Init Main Chat screen */
+      /** Init Main Chat screen */
 
-			initMainChatScreen(box)
+      initMainChatScreen(box)
 
-		})
-	})
+    })
+  })
 }
 
 
 function resetBotPosition() {
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
 
-	botIcon.style.left = "65px"
-	botIcon.style.top = "-10px"
+  botIcon.style.left = "65px"
+  botIcon.style.top = "-10px"
 }
 
 function resetValues() {
 
-	resetBotPosition()
+  resetBotPosition()
 
-	counter.updateCount(0)
-	reverseController.update(false)
+  counter.updateCount(0)
+  reverseController.update(false)
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
-	allBoxes.forEach(removeActiveClass)
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  allBoxes.forEach(removeActiveClass)
 
 
-	const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
-	chatScreenBot.style.left = -6
-	chatScreenBot.style.top = 0
+  const chatScreenBot = mainChatWrapper.querySelector(".chatbot-icon-wrapper")
+  chatScreenBot.style.left = -6
+  chatScreenBot.style.top = 0
 
 }
 
 
 function createBotIconMovement() {
-	let intervalId; // Encapsulated within the closure
+  let intervalId; // Encapsulated within the closure
 
-	const start = () => {
+  const start = () => {
 
-		const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+    const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
-		intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
 
-			/**
-			 * if no active question is present, mark first one as active
-			*/
-			const activeQuestionIndex = getActiveQuestionIndex()
-			if (activeQuestionIndex < 0) {
-				setActiveClass(allBoxes[0])
-			}
+      /**
+       * if no active question is present, mark first one as active
+      */
+      const activeQuestionIndex = getActiveQuestionIndex()
+      if (activeQuestionIndex < 0) {
+        setActiveClass(allBoxes[0])
+      }
 
-			const count = counter.getCount(); // gives the index of the next question (towards which the logo will move)
-			const targetQuestionBox = allBoxes[count];
+      const count = counter.getCount(); // gives the index of the next question (towards which the logo will move)
+      const targetQuestionBox = allBoxes[count];
 
 
-			const lastActiveQuestionIndex = getActiveQuestionIndex()
+      const lastActiveQuestionIndex = getActiveQuestionIndex()
 
-			// animate the logo
-			gsapJumpingAnim = animateBotLogo(targetQuestionBox, lastActiveQuestionIndex)
+      // animate the logo
+      gsapJumpingAnim = animateBotLogo(targetQuestionBox, lastActiveQuestionIndex)
 
-			allBoxes.forEach(removeActiveClass);
+      allBoxes.forEach(removeActiveClass);
 
-			setActiveClass(targetQuestionBox);
+      setActiveClass(targetQuestionBox);
 
-			let newShouldReverse = updateShouldReverse(count, allBoxes.length, reverseController.get());
-			reverseController.update(newShouldReverse)
-			const newCount = getNewCountValue(count, reverseController.get());
+      let newShouldReverse = updateShouldReverse(count, allBoxes.length, reverseController.get());
+      reverseController.update(newShouldReverse)
+      const newCount = getNewCountValue(count, reverseController.get());
 
-			counter.updateCount(newCount)
+      counter.updateCount(newCount)
 
-		}, 2000);
-	};
+    }, 2000);
+  };
 
-	const stop = () => {
+  const stop = () => {
 
-		clearInterval(intervalId);
-		if (gsapJumpingAnim) {
-			gsapJumpingAnim.kill()
-			gsapJumpingAnim.invalidate()
-		}
+    clearInterval(intervalId);
+    if (gsapJumpingAnim) {
+      gsapJumpingAnim.kill()
+      gsapJumpingAnim.invalidate()
+    }
 
-		// const botIcon = document.querySelector(".chatbot-icon");
-		// gsapAnim = gsap.to(botIcon, {
+    // const botIcon = document.querySelector(".chatbot-icon");
+    // gsapAnim = gsap.to(botIcon, {
 
-		// })
-	};
+    // })
+  };
 
-	return { start, stop };
+  return { start, stop };
 }
 
 function handleResize() {
-	window.addEventListener('resize', repositionBotLogo)
+  window.addEventListener('resize', repositionBotLogo)
 }
 
 
@@ -305,186 +305,177 @@ function handleResize() {
 
 function animateBotLogo(targetQuestionBox, lastActiveQuestionIndex) {
 
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon");
 
-	// the target top and left position
-	const { top, left } = getPositionOfElement(targetQuestionBox);
-
-
-	const isMovingTowardsLeft = isMovingLeft(lastActiveQuestionIndex, counter.getCount())
+  // the target top and left position
+  const { top, left } = getPositionOfElement(targetQuestionBox);
 
 
-	const isMovingUp = getIsMovingUp(lastActiveQuestionIndex, counter.getCount())
+  const isMovingTowardsLeft = isMovingLeft(lastActiveQuestionIndex, counter.getCount())
 
 
-	const tempTop = isMovingUp ? top - 60 : top - 45
-	const rotateZ = isMovingTowardsLeft ? -360 : 360
-	// const rotateZ = 360
+  const isMovingUp = getIsMovingUp(lastActiveQuestionIndex, counter.getCount())
 
-	const tl = gsap.timeline()
-	tl.set(botIcon, { rotateZ: 0 })
-	tl.to(botIcon, {
-		left: left - 40,
-		rotateZ,
-		duration: 0.5,
-	}, "0")
-	tl.to(botIcon, {
-		top: tempTop,
-		// ease : CustomEase.create("custom", "M0,0 C0.364,0.647 0.516,3, 1, 0.989 "),
-		// rotateZ : 360,
-	}, "0")
-		.to(botIcon, {
-			y: isMovingUp ? 0 : -20,
-			top: top + (targetQuestionBox.offsetHeight / 2) - 30,
-			ease: "Bounce.easeOut"
-		}, "0.3")
-	// .to(botIcon, {
-	// 	y : isMovingUp ? 0 : -20,
-	// 	ease : Bounce.easeOut
-	// }, "0.6")
-	// top: top + (targetQuestionBox.offsetHeight / 2) - 20,
-	// CustomEase.create("custom", "M0,0 C0.364,0.647 0.505,1.81 1,1 ")
-	return tl
+
+  const tempTop = isMovingUp ? top - 60 : top - 45
+  const rotateZ = isMovingTowardsLeft ? -360 : 360
+  // const rotateZ = 360
+
+  const tl = gsap.timeline()
+  tl.set(botIcon, { rotateZ: 0 })
+  tl.to(botIcon, {
+    left: left - 40,
+    rotateZ,
+    duration: 0.5,
+  }, "0")
+  tl.to(botIcon, {
+    top: tempTop,
+    // ease : CustomEase.create("custom", "M0,0 C0.364,0.647 0.516,3, 1, 0.989 "),
+    // rotateZ : 360,
+  }, "0")
+    .to(botIcon, {
+      y: isMovingUp ? 0 : -20,
+      top: top + (targetQuestionBox.offsetHeight / 2) - 30,
+      ease: "Bounce.easeOut"
+    }, "0.3")
+  // .to(botIcon, {
+  // 	y : isMovingUp ? 0 : -20,
+  // 	ease : Bounce.easeOut
+  // }, "0.6")
+  // top: top + (targetQuestionBox.offsetHeight / 2) - 20,
+  // CustomEase.create("custom", "M0,0 C0.364,0.647 0.505,1.81 1,1 ")
+  return tl
 }
 
 function handleMouseMovement() {
 
-	const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
+  const allBoxes = [...allQuestionsWrapper.querySelectorAll(".question-box")];
 
-	allBoxes.forEach((questionBox, index) => {
-		questionBox.addEventListener('mouseenter', () => {
-			botMovementControl.stop()
+  allBoxes.forEach((questionBox, index) => {
+    questionBox.addEventListener('mouseenter', () => {
+      botMovementControl.stop()
 
-			const newCount = getNewCountValue(index, reverseController.get())
-			counter.updateCount(newCount)
+      const newCount = getNewCountValue(index, reverseController.get())
+      counter.updateCount(newCount)
 
-			// if hovered on already active element, we do nothing
-			if (questionBox.classList.contains("active")) return
+      // if hovered on already active element, we do nothing
+      if (questionBox.classList.contains("active")) return
 
-			let count = counter.getCount()
+      let count = counter.getCount()
 
-			/**
-			 * If hovered directly on the last question on page, load, 
-			 * then, we need to set reverse to true
-			*/
-			const currentReverseValue = reverseController.get()
-			if (index === 4 && !currentReverseValue) {
-				count = 3
-				reverseController.update(true)
-			}
-			if (index === 0) {
-				count = 1
-				reverseController.update(false)
+      /**
+       * If hovered directly on the last question on page, load, 
+       * then, we need to set reverse to true
+      */
+      const currentReverseValue = reverseController.get()
+      if (index === 4 && !currentReverseValue) {
+        count = 3
+        reverseController.update(true)
+      }
+      if (index === 0) {
+        count = 1
+        reverseController.update(false)
 
-			}
+      }
 
-			counter.updateCount(count)
+      counter.updateCount(count)
 
-			const activeQuestionIndex = getActiveQuestionIndex()
-			if (activeQuestionIndex < 0) {
-				setActiveClass(allBoxes[0])
-			}
+      const activeQuestionIndex = getActiveQuestionIndex()
+      if (activeQuestionIndex < 0) {
+        setActiveClass(allBoxes[0])
+      }
 
-			const lastActiveQuestionIndex = getActiveQuestionIndex()
+      const lastActiveQuestionIndex = getActiveQuestionIndex()
 
 
-			animateBotLogo(questionBox, lastActiveQuestionIndex)
-			allBoxes.forEach(removeActiveClass)
-			setActiveClass(questionBox)
-		})
+      animateBotLogo(questionBox, lastActiveQuestionIndex)
+      allBoxes.forEach(removeActiveClass)
+      setActiveClass(questionBox)
+    })
 
-		questionBox.addEventListener('mouseleave', () => {
+    questionBox.addEventListener('mouseleave', () => {
 
-			if (gsapJumpingAnim) {
-				gsapJumpingAnim.invalidate()
-				gsapJumpingAnim.kill()
-			}
+      if (gsapJumpingAnim) {
+        gsapJumpingAnim.invalidate()
+        gsapJumpingAnim.kill()
+      }
 
-			if (isChatScreenVisible) return
+      if (isChatScreenVisible) return
 
-			botMovementControl.start()
+      botMovementControl.start()
 
-		})
+    })
 
-	})
+  })
 }
 
 function repositionBotLogo() {
-	const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon")
-	const currentActiveQuestionBox = allQuestionsWrapper.querySelector(".question-box.active")
-	const { left } = getPositionOfElement(currentActiveQuestionBox)
+  const botIcon = allQuestionsWrapper.querySelector(".chatbot-icon")
+  const currentActiveQuestionBox = allQuestionsWrapper.querySelector(".question-box.active")
+  const { left } = getPositionOfElement(currentActiveQuestionBox)
 
-	botIcon.style.left = `${left - 40}px`
-	// botIcon.style.top = `${top + (currentActiveQuestionBox.offsetHeight / 2) - 20}px`
+  botIcon.style.left = `${left - 40}px`
+  // botIcon.style.top = `${top + (currentActiveQuestionBox.offsetHeight / 2) - 20}px`
 }
 
 
 function counterController() {
-	let count = 0;
+  let count = 0;
 
-	const getCount = () => {
-		return count
-	}
-	const updateCount = (newCount) => {
-		count = newCount
-	}
+  const getCount = () => {
+    return count
+  }
+  const updateCount = (newCount) => {
+    count = newCount
+  }
 
-	return {
-		getCount,
-		updateCount
-	}
+  return {
+    getCount,
+    updateCount
+  }
 }
 
- function addMainChatCloseListener() {
-	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+function addMainChatCloseListener() {
+  const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
-	closeIcon.addEventListener("click", handleCloseChat)
+  closeIcon.addEventListener("click", handleCloseChat)
 }
 
- function removeMainChatCloseListener() {
-	const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
+function removeMainChatCloseListener() {
+  const closeIcon = mainChatWrapper.querySelector(".close-main-chat")
 
-	closeIcon.removeEventListener("click", handleCloseChat)
+  closeIcon.removeEventListener("click", handleCloseChat)
 }
 
 
 
 
 function handleCloseChat() {
-	const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
-	const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
-	const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
+  const allQuestions = allQuestionsWrapper.querySelectorAll(".question-box")
+  const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
+  const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
   stateHeaders.reset()
 
-	gsap.to(mainChatWrapper, {
-		opacity: 0,
-		onComplete: () => {
+  gsap.to(mainChatWrapper, {
+    opacity: 0,
+    onComplete: () => {
 
-			/** delete existing chats and hide the choices */
-			const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
+      addHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
 
-			existingChatItems.forEach(item => {
-				if (item.classList.contains("first-question")) return
-				item.remove()
-			})
+      mainChatWrapper.style.display = "none"
+      allQuestionsWrapper.style.display = "block"
+      gsap.fromTo(elementsToShow, {
+        opacity: 0
+      }, {
+        opacity: 1
+      })
+      isChatScreenVisible = false
+      resetValues()
+      botMovementControl.start()
 
-
-			addHideClass(mainChatWrapper.querySelector(".suggestions-and-input"))
-
-			mainChatWrapper.style.display = "none"
-			allQuestionsWrapper.style.display = "block"
-			gsap.fromTo(elementsToShow, {
-				opacity: 0
-			}, {
-				opacity: 1
-			})
-			isChatScreenVisible = false
-			resetValues()
-			botMovementControl.start()
-			
-		}
-	})
+    }
+  })
 }
 
 /** 
@@ -493,11 +484,23 @@ function handleCloseChat() {
 
 
 async function initMainChatScreen(lastClickedQuestion) {
+  const firstQuestion = mainChatWrapper.querySelector(".first-question")
 
-  
+  /**
+  * Check if there are existing chat itesms present
+  */
+  if (existingChatItems.length > 1) {
+
+
+    await addUserInputToChatScreen(questionText)
+    const scrollValue = getTopValueForBot()
+    scrollChatPartially(scrollValue)
+    await makeAPIRequestAndShowResult(questionText)
+    return
+  }
+
   const { left, top, right } = getPositionOfElement(lastClickedQuestion)
 
-  const firstQuestion = mainChatWrapper.querySelector(".first-question")
 
   const questionText = lastClickedQuestion.querySelector('h4').innerText
   const type = lastClickedQuestion.getAttribute("fd-choice-type")
@@ -511,7 +514,7 @@ async function initMainChatScreen(lastClickedQuestion) {
     right: 0,
     duration: 1.2,
     ease: "sine.inOut",
-    onComplete : async () => {
+    onComplete: async () => {
 
       await makeAPIRequestAndShowResult(questionText, type)
 
@@ -522,7 +525,7 @@ async function initMainChatScreen(lastClickedQuestion) {
 }
 
 
-async function makeAPIRequestAndShowResult(text, type="text", isSecondaryChatbot = false) {
+async function makeAPIRequestAndShowResult(text, type = "text", isSecondaryChatbot = false) {
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
   const { error, data, message } = await makeAPIRequest(text, type, isSecondaryChatbot)
@@ -645,7 +648,7 @@ function addClickListenerToMainChatChoices() {
 
     const choiceText = choice.innerText;
     const type = choice.getAttribute("fd-choice-type")
-    
+
     hideChoicesAndInput()
     await addUserInputToChatScreen(choiceText)
     await makeAPIRequestAndShowResult(choiceText, type)
@@ -812,7 +815,7 @@ function getTopValueForBot() {
     totalHeight += item.offsetHeight + 30
 
     if (item.classList.contains("negative-margin")) {
-      negativeMarginResponses ++ 
+      negativeMarginResponses++
     }
 
   })
@@ -834,13 +837,13 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
 
 
   const request = type !== "text" ? {
-    type : type,
-    payload : {
-      label : `${text}`
+    type: type,
+    payload: {
+      label: `${text}`
     }
   } : {
-    type : "text",
-    payload : `${text}`
+    type: "text",
+    payload: `${text}`
   }
 
 
@@ -861,8 +864,8 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
         ],
         "tts": true
       },
-      
-      state : {
+
+      state: {
         ...stateObject
       }
     })
@@ -902,13 +905,13 @@ function getLastChatItem() {
 
 function extractDataFromResponse(data) {
   const responsesToShow = data.trace.filter(item => item.type === "text" || item.type === "visual")
-  
+
   // const textsToShow = messagePayloads.map(item => item.payload.message)
 
   const choices = data.trace.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
     return {
-      name : btn.name,
-      type : btn.request.type
+      name: btn.name,
+      type: btn.request.type
     }
   })
 
@@ -1041,7 +1044,7 @@ function stateHeadersController() {
     getStateObject,
     reset
   }
-  
+
 }
 
 
@@ -1091,25 +1094,25 @@ function hideSecondaryChatbotCompletely() {
     onComplete: () => {
       timeoutId = setTimeout(() => {
         secondaryChatbotContainer.querySelector(".input-container").style.visibility = "hidden"
-      },50)
+      }, 50)
     }
   })
 
-  
 
-  
+
+
   tl.to(secondaryChatbotContainer.querySelector(".input-wrapper"), {
     width: 0,
-    duration : 0.3,
-    delay : 0.3
+    duration: 0.3,
+    delay: 0.3
   })
   tl.to(chatbotIconWrapper, {
     top: 0,
     opacity: 0,
-    duration : 0.3,
+    duration: 0.3,
   }, "<")
   handleCloseSecondaryChat()
-  
+
 }
 
 
@@ -1134,24 +1137,24 @@ async function showSecondaryChatInput() {
   })
   tl.to(chatbotIconWrapper, {
     opacity: 1,
-    duration : 0.3,
+    duration: 0.3,
     onComplete: () => {
       chatbotIconWrapper.style.display = "flex"
     }
   }, 'start')
   tl.to(inputWrapper, {
     scale: 1,
-    duration : 0.5,
+    duration: 0.5,
     width: 500,
   }, 'start')
   tl.to(inputWrapper.querySelector("input"), {
     opacity: 1,
-    duration : 0.3
-  },"<")
+    duration: 0.3
+  }, "<")
   tl.to(iconWrapper, {
     right: 10,
     scale: 1,
-    duration : 0.3
+    duration: 0.3
   }, "<")
 
   return tl
@@ -1165,7 +1168,7 @@ async function handleAPIResponse(resp) {
     return
   }
 
-  const { responsesToShow , choices } = extractDataFromResponse(resp.data)
+  const { responsesToShow, choices } = extractDataFromResponse(resp.data)
   await hideSecondaryChatBotLoader()
   renderSecondaryChatResult(responsesToShow)
 
@@ -1238,7 +1241,7 @@ function renderSecondaryChatResult(allResponses) {
       <p>${tempDiv.innerHTML}</p>
     </div>`
   })
-  
+
 
   scrollSecondaryChatPartially(scrollValue)
 
@@ -1269,7 +1272,7 @@ function secondaryChatStateHeadersController() {
     getStateObject,
     reset
   }
-  
+
 }
 
 
@@ -1336,7 +1339,7 @@ function getSecondaryChatBotIconNewPosition() {
 
   allChatItems.forEach(item => {
     if (item.classList.contains("negative-margin")) {
-      negativeMarginResponses++ 
+      negativeMarginResponses++
     }
 
     totalHeight += item.offsetHeight + 36
@@ -1351,7 +1354,7 @@ function addClickListenerToSecondaryChatBotChoices() {
   choices.forEach(choice => {
     choice.addEventListener("click", async function () {
       const text = choice.innerText;
-      const type = choice.getAttribute("fd-choice-type") 
+      const type = choice.getAttribute("fd-choice-type")
       await handleUserInteraction(text, type)
 
 
@@ -1392,7 +1395,7 @@ function addSecondaryChatInputListener() {
 
 
 
-async function handleUserInteraction(text, type="text") {
+async function handleUserInteraction(text, type = "text") {
   const inputElement = secondaryChatbotContainer.querySelector("input")
 
   inputElement.disabled = true
@@ -1437,10 +1440,10 @@ function handleCloseSecondaryChat() {
   allChatItems.forEach(item => {
     item.remove()
   })
-  
+
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     top: "-8px",
-    duration : 0.3
+    duration: 0.3
   })
 
 
