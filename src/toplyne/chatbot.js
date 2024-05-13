@@ -1451,6 +1451,8 @@ function addInputFocusListener() {
 
 
 function handleCloseSecondaryChat() {
+  secondaryChatbotContainer.classList.remove("is-open")
+
   isSecondaryChatClosed = true
   secondaryChatStateHeaders.reset()
 
@@ -1459,9 +1461,6 @@ function handleCloseSecondaryChat() {
     duration: 0.3
   })
 
-
-
-  secondaryChatbotContainer.classList.remove("is-open")
 }
 
 function appendUserInputToChatScreen(text) {
