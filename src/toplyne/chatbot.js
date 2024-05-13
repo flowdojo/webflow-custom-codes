@@ -484,26 +484,26 @@ function handleCloseChat() {
 
 
 async function initMainChatScreen(lastClickedQuestion) {
-  const firstQuestion = mainChatWrapper.querySelector(".first-question")
   const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
-
-  /**
-  * Check if there are existing chat itesms present
-  */
-  if (existingChatItems.length > 1) {
-
-
-    await addUserInputToChatScreen(questionText)
-    const scrollValue = getTopValueForBot()
-    scrollChatPartially(scrollValue)
-    await makeAPIRequestAndShowResult(questionText)
-    return
-  }
-
-  const { left, top, right } = getPositionOfElement(lastClickedQuestion)
-
-
   const questionText = lastClickedQuestion.querySelector('h4').innerText
+  
+  /**
+   * Check if there are existing chat itesms present
+  */
+ if (existingChatItems.length > 1) {
+   
+   
+   await addUserInputToChatScreen(questionText)
+   const scrollValue = getTopValueForBot()
+   scrollChatPartially(scrollValue)
+   await makeAPIRequestAndShowResult(questionText)
+   return
+  }
+  
+  const { left, top, right } = getPositionOfElement(lastClickedQuestion)
+  
+  
+  const firstQuestion = mainChatWrapper.querySelector(".first-question")
   const type = lastClickedQuestion.getAttribute("fd-choice-type")
   firstQuestion.querySelector("h4").innerText = `${questionText}`;
 
@@ -1443,7 +1443,7 @@ function addInputFocusListener() {
 
 		input.addEventListener("blur", () => {
 			input.parentNode.style.borderColor = "#DAE3E8";
-			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
+			input.parentElement.querySelector("svg path").style.fill = "#DAE3E8"
 		})
 	})
 
