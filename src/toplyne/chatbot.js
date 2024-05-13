@@ -1436,15 +1436,6 @@ function handleCloseSecondaryChat() {
   isSecondaryChatClosed = true
   secondaryChatStateHeaders.reset()
 
-  const allChatItems = secondaryChatbotContainer.querySelectorAll(".chats .chat-item")
-
-  secondaryChatbotContainer.querySelector(".choices").innerHTML = ""
-
-  addHideClass(secondaryChatbotContainer.querySelector(".choices"))
-  allChatItems.forEach(item => {
-    item.remove()
-  })
-
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     top: "-8px",
     duration: 0.3
