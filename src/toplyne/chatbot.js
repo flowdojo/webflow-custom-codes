@@ -1443,7 +1443,7 @@ function addInputFocusListener() {
 
 		input.addEventListener("blur", () => {
 			input.parentNode.style.borderColor = "#DAE3E8";
-			input.parentElement.querySelector("svg path").style.fill = "#DAE3E8"
+			input.parentElement.querySelector("svg path").style.fill = "#666D80"
 		})
 	})
 
