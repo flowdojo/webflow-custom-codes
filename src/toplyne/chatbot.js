@@ -173,7 +173,7 @@ const init = async () => {
   handleMouseMovement()
   questionClickListener()
   addChatInputListener()
-
+  addInputFocusListener()
 }
 
 
@@ -1428,6 +1428,24 @@ function addCloseSecondaryChatClickListener() {
   const closeIcon = secondaryChatbotContainer.querySelector(".close-chat")
 
   closeIcon.addEventListener("click", handleCloseSecondaryChat)
+
+}
+
+function addInputFocusListener() {
+	const mainBotInput = document.querySelector(".chat-input-wrap input")
+	const secondaryChatInput = document.querySelector(".secondary-chatbot-wrapper input");
+
+	[mainBotInput, secondaryChatInput].forEach(input => {
+		input.addEventListener("focus", () => {
+			input.parentElement.style.borderColor = "#1553F0";
+			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
+		})
+
+		input.addEventListener("blur", () => {
+			input.parentElement.style.borderColor = "#DAE3E8";
+			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
+		})
+	})
 
 }
 
