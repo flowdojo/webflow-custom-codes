@@ -1437,12 +1437,12 @@ function addInputFocusListener() {
 
 	[mainBotInput, secondaryChatInput].forEach(input => {
 		input.addEventListener("focus", () => {
-			input.parentElement.style.borderColor = "#1553F0";
+			input.parentNode.style.borderColor = "#1553F0";
 			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
 		})
 
 		input.addEventListener("blur", () => {
-			input.parentElement.style.borderColor = "#DAE3E8";
+			input.parentNode.style.borderColor = "#DAE3E8";
 			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
 		})
 	})
