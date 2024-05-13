@@ -633,7 +633,7 @@ function addChatInputListener() {
   })
 
 
-  const inputArrowSubmitBtn = mainChatWrapper.querySelector(".chat-input-wrap img")
+  const inputArrowSubmitBtn = mainChatWrapper.querySelector(".chat-input-wrap svg")
   inputArrowSubmitBtn.addEventListener("click", async function () {
     const inputTextValue = inputElement.value
     if (!inputTextValue) return
@@ -1369,7 +1369,7 @@ function addClickListenerToSecondaryChatBotChoices() {
 
 function addSecondaryChatInputListener() {
   const inputElement = secondaryChatbotContainer.querySelector("input")
-  const inputArrowSubmitBtn = secondaryChatbotContainer.querySelector(".input-wrapper span>img")
+  const inputArrowSubmitBtn = secondaryChatbotContainer.querySelector(".input-wrapper span>svg")
 
   inputElement.addEventListener("keypress", async function (e) {
     const keyPressed = (e.keyCode ? e.keyCode : e.which)
