@@ -485,6 +485,7 @@ function handleCloseChat() {
 
 async function initMainChatScreen(lastClickedQuestion) {
   const firstQuestion = mainChatWrapper.querySelector(".first-question")
+  const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
 
   /**
   * Check if there are existing chat itesms present
