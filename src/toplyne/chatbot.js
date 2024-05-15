@@ -455,8 +455,6 @@ function handleCloseChat() {
   const chatBoxTitle = allQuestionsWrapper.querySelector("h4")
   const elementsToShow = gsap.utils.toArray([...allQuestions, chatBoxTitle, allQuestionsWrapper])
 
-  stateHeaders.reset()
-
   gsap.to(mainChatWrapper, {
     opacity: 0,
     onComplete: () => {
@@ -525,11 +523,18 @@ async function initMainChatScreen(lastClickedQuestion) {
 
 }
 
+async function makeAPIRequestAndShowResult(text, type="text") {
 
-async function makeAPIRequestAndShowResult(text, type = "text", isSecondaryChatbot = false) {
+  /** Append this selected question to the secondary chatbot too and disable the input field */
+  appendUserInputToChatScreen(text)
+  const inputElement = secondaryChatbotContainer.querySelector("input")
+
+  inputElement.disabled = true
+
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
-  const { error, data, message } = await makeAPIRequest(text, type, isSecondaryChatbot)
+  const { error, data, message } = await makeAPIRequest(text, type)
+
   if (error) {
     handleError(message)
   } else {
@@ -537,10 +542,16 @@ async function makeAPIRequestAndShowResult(text, type = "text", isSecondaryChatb
 
     await hideLoader()
     renderSuccessOutput(responsesToShow)
-
+    
     await renderChoices(choices)
     addClickListenerToMainChatChoices()
-
+    
+    /** Append this reponse and choices to the secondary chatbot too */
+    renderSecondaryChatResult(responsesToShow)
+    if (Array.isArray(choices) && choices.length) {
+      renderSecondaryChatChoices(choices)
+    }
+    inputElement.disabled = false
   }
 
 }
@@ -828,26 +839,23 @@ function handleError(errMessage) {
   console.error({ error: errMessage });
 }
 
-async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
+async function makeAPIRequest(text, type) {
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/interact/65df5123b93dbe8b0c12a50c`;
-
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
 
-  const stateObject = isSecondaryChatbot ? secondaryChatStateHeaders.getStateObject() : stateHeaders.getStateObject()
 
+  const stateObject = stateHeaders.getStateObject()
 
   const request = type !== "text" ? {
-    type: type,
-    payload: {
-      label: `${text}`
+    type : type,
+    payload : {
+      label : `${text}`
     }
   } : {
-    type: "text",
-    payload: `${text}`
+    type : "text",
+    payload : `${text}`
   }
-
-
   const options = {
     method: 'POST',
     headers: {
@@ -865,10 +873,12 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
         ],
         "tts": true
       },
-
-      state: {
+      
+      state : {
         ...stateObject
       }
+
+      
     })
   };
 
@@ -878,13 +888,8 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
     const data = await resp.json()
 
     const newHeadersState = extractNewHeadersState(data)
-
-    if (isSecondaryChatbot) {
-      secondaryChatStateHeaders.updateStateObject(newHeadersState)
-    } else {
-      stateHeaders.updateStateObject(newHeadersState)
-    }
-
+    stateHeaders.updateStateObject(newHeadersState)
+    
     return {
       error: false,
       data
@@ -894,7 +899,9 @@ async function makeAPIRequest(text, type, isSecondaryChatbot = false) {
       error: true,
       message: error?.response?.data?.message || error.message
     }
+
   }
+
 }
 
 
@@ -1056,8 +1063,6 @@ function stateHeadersController() {
 
 const secondaryChatbotContainer = document.querySelector(".secondary-chatbot")
 let isSecondaryChatClosed = true
-const secondaryChatStateHeaders = secondaryChatStateHeadersController()
-
 
 
 addSecondaryChatInputListener()
@@ -1256,28 +1261,6 @@ function renderSecondaryChatResult(allResponses) {
 
 }
 
-function secondaryChatStateHeadersController() {
-  let state = originalHeaderState
-
-  const updateStateObject = (newStatebject) => {
-    state = newStatebject
-  }
-
-  const getStateObject = () => {
-    return state
-  }
-
-  const reset = () => {
-    state = originalHeaderState
-  }
-
-  return {
-    updateStateObject,
-    getStateObject,
-    reset
-  }
-
-}
 
 
 function renderSecondaryChatChoices(choices) {
@@ -1399,17 +1382,31 @@ function addSecondaryChatInputListener() {
 
 
 
-async function handleUserInteraction(text, type = "text") {
-  const inputElement = secondaryChatbotContainer.querySelector("input")
+async function handleUserInteraction(text, type="text") {
+  /** 
+   * Add this text to the hero chatbot too 
+  */
+ const chats = mainChatWrapper.querySelector(".chats")
+ // remove the first-question box if there's only one chat item
+ const existingChatItems = chats.querySelectorAll(".chat-item")
+ if (existingChatItems.length === 1 && existingChatItems[0].classList.contains("first-question")) 
+ {
+  existingChatItems[0].remove()
+ }
+ 
+  const elementToAdd = `<div class="chat-item question-box user-input">
+    <h4 class="question-box-question">${text}</h4>
+  </div>`
+  
+  chats.innerHTML += elementToAdd
+  gsap.set(chats.querySelectorAll(".chat-item"), { opacity : 1 })
 
+  const inputElement = secondaryChatbotContainer.querySelector("input")
   inputElement.disabled = true
 
   addHideClass(secondaryChatbotContainer.querySelector(".choices"))
 
-
   appendUserInputToChatScreen(text)
-
-
 
   await repositionSecondaryChatBot()
   showSecondaryChatBotLoader()
@@ -1417,12 +1414,10 @@ async function handleUserInteraction(text, type = "text") {
   const scrollValue = getSecondaryChatBotIconNewPosition()
   scrollSecondaryChatPartially(scrollValue)
 
-
-  const resp = await makeAPIRequest(text, type, true)
+  const resp = await makeAPIRequest(text, type)
 
   await handleAPIResponse(resp)
 }
-
 
 function addCloseSecondaryChatClickListener() {
   const closeIcon = secondaryChatbotContainer.querySelector(".close-chat")
@@ -1454,11 +1449,16 @@ function handleCloseSecondaryChat() {
   secondaryChatbotContainer.classList.remove("is-open")
 
   isSecondaryChatClosed = true
-  secondaryChatStateHeaders.reset()
 
-  gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
+  gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
+    opacity : 0
+  })
+  gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     top: "-8px",
-    duration: 0.3
+  })
+  gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
+    duration : 0.3,
+    opacity : 1
   })
 
 }
