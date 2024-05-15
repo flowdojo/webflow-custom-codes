@@ -132,7 +132,6 @@ const originalHeaderState = {
     "Skill_Marketingops": "0",
     "sessions": 1,
     "user_id": UNIQUE_USER_ID,
-    "timestamp": new Date().getTime(),
     "platform": "0",
     "locale": "0",
     "counter": "0",
