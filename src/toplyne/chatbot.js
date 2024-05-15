@@ -842,7 +842,9 @@ async function makeAPIRequest(text, type) {
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/interact/65df5123b93dbe8b0c12a50c`;
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
-
+  await fetch(API_ENDPOINT, {
+    method : "OPTIONS"
+  })
 
   const stateObject = stateHeaders.getStateObject()
 
