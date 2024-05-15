@@ -1,5 +1,5 @@
 
-
+const UNIQUE_USER_ID = generateGuid()
 
 
 const originalHeaderState = {
@@ -131,7 +131,7 @@ const originalHeaderState = {
     "Skill_Growth": "0",
     "Skill_Marketingops": "0",
     "sessions": 1,
-    "user_id": "0",
+    "user_id": UNIQUE_USER_ID,
     "timestamp": 1715016823,
     "platform": "0",
     "locale": "0",
@@ -484,23 +484,23 @@ function handleCloseChat() {
 async function initMainChatScreen(lastClickedQuestion) {
   const existingChatItems = mainChatWrapper.querySelectorAll(".chat-item")
   const questionText = lastClickedQuestion.querySelector('h4').innerText
-  
+
   /**
    * Check if there are existing chat itesms present
   */
- if (existingChatItems.length > 1) {
-   
-   
-   await addUserInputToChatScreen(questionText)
-   const scrollValue = getTopValueForBot()
-   scrollChatPartially(scrollValue)
-   await makeAPIRequestAndShowResult(questionText)
-   return
+  if (existingChatItems.length > 1) {
+
+
+    await addUserInputToChatScreen(questionText)
+    const scrollValue = getTopValueForBot()
+    scrollChatPartially(scrollValue)
+    await makeAPIRequestAndShowResult(questionText)
+    return
   }
-  
+
   const { left, top, right } = getPositionOfElement(lastClickedQuestion)
-  
-  
+
+
   const firstQuestion = mainChatWrapper.querySelector(".first-question")
   const type = lastClickedQuestion.getAttribute("fd-choice-type")
   firstQuestion.querySelector("h4").innerText = `${questionText}`;
@@ -523,7 +523,7 @@ async function initMainChatScreen(lastClickedQuestion) {
 
 }
 
-async function makeAPIRequestAndShowResult(text, type="text") {
+async function makeAPIRequestAndShowResult(text, type = "text") {
 
   /** Append this selected question to the secondary chatbot too and disable the input field */
   appendUserInputToChatScreen(text)
@@ -542,10 +542,10 @@ async function makeAPIRequestAndShowResult(text, type="text") {
 
     await hideLoader()
     renderSuccessOutput(responsesToShow)
-    
+
     await renderChoices(choices)
     addClickListenerToMainChatChoices()
-    
+
     /** Append this reponse and choices to the secondary chatbot too */
     renderSecondaryChatResult(responsesToShow)
     if (Array.isArray(choices) && choices.length) {
@@ -848,19 +848,19 @@ async function makeAPIRequest(text, type) {
   const stateObject = stateHeaders.getStateObject()
 
   const request = type !== "text" ? {
-    type : type,
-    payload : {
-      label : `${text}`
+    type: type,
+    payload: {
+      label: `${text}`
     }
   } : {
-    type : "text",
-    payload : `${text}`
+    type: "text",
+    payload: `${text}`
   }
   const options = {
     method: 'POST',
     headers: {
       accept: 'application/json',
-      versionID: 'development',
+      versionID: 'production',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
@@ -873,12 +873,12 @@ async function makeAPIRequest(text, type) {
         ],
         "tts": true
       },
-      
-      state : {
+
+      state: {
         ...stateObject
       }
 
-      
+
     })
   };
 
@@ -889,7 +889,7 @@ async function makeAPIRequest(text, type) {
 
     const newHeadersState = extractNewHeadersState(data)
     stateHeaders.updateStateObject(newHeadersState)
-    
+
     return {
       error: false,
       data
@@ -1184,7 +1184,12 @@ async function handleAPIResponse(resp) {
   if (Array.isArray(choices) && choices.length) {
     renderSecondaryChatChoices(choices)
   }
-
+  /**
+    * Append this response and choices to hero chatbot 
+    */
+  renderSuccessOutput(responsesToShow)
+  renderChoices(choices)
+  addClickListenerToMainChatChoices()
 }
 
 
@@ -1382,24 +1387,23 @@ function addSecondaryChatInputListener() {
 
 
 
-async function handleUserInteraction(text, type="text") {
+async function handleUserInteraction(text, type = "text") {
   /** 
    * Add this text to the hero chatbot too 
   */
- const chats = mainChatWrapper.querySelector(".chats")
- // remove the first-question box if there's only one chat item
- const existingChatItems = chats.querySelectorAll(".chat-item")
- if (existingChatItems.length === 1 && existingChatItems[0].classList.contains("first-question")) 
- {
-  existingChatItems[0].remove()
- }
- 
+  const chats = mainChatWrapper.querySelector(".chats")
+  // remove the first-question box if there's only one chat item
+  const existingChatItems = chats.querySelectorAll(".chat-item")
+  if (existingChatItems.length === 1 && existingChatItems[0].classList.contains("first-question")) {
+    existingChatItems[0].remove()
+  }
+
   const elementToAdd = `<div class="chat-item question-box user-input">
     <h4 class="question-box-question">${text}</h4>
   </div>`
-  
+
   chats.innerHTML += elementToAdd
-  gsap.set(chats.querySelectorAll(".chat-item"), { opacity : 1 })
+  gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 })
 
   const inputElement = secondaryChatbotContainer.querySelector("input")
   inputElement.disabled = true
@@ -1427,20 +1431,20 @@ function addCloseSecondaryChatClickListener() {
 }
 
 function addInputFocusListener() {
-	const mainBotInput = document.querySelector(".chat-input-wrap input")
-	const secondaryChatInput = document.querySelector(".secondary-chatbot-wrapper input");
+  const mainBotInput = document.querySelector(".chat-input-wrap input")
+  const secondaryChatInput = document.querySelector(".secondary-chatbot-wrapper input");
 
-	[mainBotInput, secondaryChatInput].forEach(input => {
-		input.addEventListener("focus", () => {
-			input.parentNode.style.borderColor = "#1553F0";
-			input.parentElement.querySelector("svg path").style.fill = "#1553F0"
-		})
+  [mainBotInput, secondaryChatInput].forEach(input => {
+    input.addEventListener("focus", () => {
+      input.parentNode.style.borderColor = "#1553F0";
+      input.parentElement.querySelector("svg path").style.fill = "#1553F0"
+    })
 
-		input.addEventListener("blur", () => {
-			input.parentNode.style.borderColor = "#DAE3E8";
-			input.parentElement.querySelector("svg path").style.fill = "#666D80"
-		})
-	})
+    input.addEventListener("blur", () => {
+      input.parentNode.style.borderColor = "#DAE3E8";
+      input.parentElement.querySelector("svg path").style.fill = "#666D80"
+    })
+  })
 
 }
 
@@ -1451,14 +1455,14 @@ function handleCloseSecondaryChat() {
   isSecondaryChatClosed = true
 
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    opacity : 0
+    opacity: 0
   })
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     top: "-8px",
   })
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    duration : 0.3,
-    opacity : 1
+    duration: 0.3,
+    opacity: 1
   })
 
 }
@@ -1472,4 +1476,10 @@ function appendUserInputToChatScreen(text) {
   responseDiv.innerHTML = `<h4 class='question-box-question'>${text}</h4>`
 
   allChatsDiv.append(responseDiv)
+}
+
+
+function generateGuid() {
+  return Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
 }
