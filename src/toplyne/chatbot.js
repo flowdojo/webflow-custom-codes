@@ -160,7 +160,6 @@ const botMovementControl = createBotIconMovement();
 const counter = counterController()
 const allQuestionsWrapper = document.querySelector(".all-questions-wrapper")
 const mainChatWrapper = document.querySelector(".main-chat")
-const stateHeaders = stateHeadersController()
 const reverseController = shouldReverseController()
 let isChatScreenVisible; // for the herosection chat screen
 
@@ -173,6 +172,7 @@ const init = async () => {
   questionClickListener()
   addChatInputListener()
   addInputFocusListener()
+  await makeAPIRequest("nothing", "launch")
 }
 
 
@@ -840,13 +840,12 @@ function handleError(errMessage) {
 
 async function makeAPIRequest(text, type) {
 
-  const API_ENDPOINT = `https://general-runtime.voiceflow.com/interact/65df5123b93dbe8b0c12a50c`;
+
+
+  const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/${UNIQUE_USER_ID}/interact`;
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
 
-
-  const stateObject = stateHeaders.getStateObject()
-
-  const request = type !== "text" ? {
+  const action = type !== "text" ? {
     type: type,
     payload: {
       label: `${text}`
@@ -855,27 +854,33 @@ async function makeAPIRequest(text, type) {
     type: "text",
     payload: `${text}`
   }
+
+  console.log("action ", action);
   const options = {
     method: 'POST',
     headers: {
       accept: 'application/json',
-      versionID: 'production',
+      versionID: 'development',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
     body: JSON.stringify({
-      request,
+      action,
 
-      config: {
+      "config": {
+        "tts": false,
+        "stripSSML": true,
+        "stopAll": true,
         "excludeTypes": [
-          "speak"
-        ],
-        "tts": true
-      },
-
-      state: {
-        ...stateObject
+          "block",
+          "debug",
+          "flow"
+        ]
       }
+
+      // state : {
+      //   ...stateObject
+      // }
 
 
     })
@@ -885,10 +890,7 @@ async function makeAPIRequest(text, type) {
     const resp = await fetch(API_ENDPOINT, options)
 
     const data = await resp.json()
-
-    const newHeadersState = extractNewHeadersState(data)
-    stateHeaders.updateStateObject(newHeadersState)
-
+    console.log({ data })
     return {
       error: false,
       data
@@ -902,7 +904,6 @@ async function makeAPIRequest(text, type) {
   }
 
 }
-
 
 function getLastChatItem() {
   const allChatItems = [...mainChatWrapper.querySelectorAll(".chat-wrapper .chats>div.chat-item")]
@@ -1027,32 +1028,6 @@ function isMovingLeft(lastElementIndex, targetElementIndex) {
 
 }
 
-
-
-
-
-function stateHeadersController() {
-  let state = originalHeaderState
-
-  const updateStateObject = (newStatebject) => {
-    state = newStatebject
-  }
-
-  const getStateObject = () => {
-    return state
-  }
-
-  const reset = () => {
-    state = originalHeaderState
-  }
-
-  return {
-    updateStateObject,
-    getStateObject,
-    reset
-  }
-
-}
 
 
 
