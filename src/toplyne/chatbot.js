@@ -912,17 +912,18 @@ function getLastChatItem() {
 }
 
 function extractDataFromResponse(data) {
-  const responsesToShow = data.trace.filter(item => item.type === "text" || item.type === "visual")
+  // const responsesToShow = data.trace.filter(item => item.type === "text" || item.type === "visual")
+
+  const responsesToShow = data.filter(item => item.type === "text" || item.type === "visual")
 
   // const textsToShow = messagePayloads.map(item => item.payload.message)
 
-  const choices = data.trace.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
+  const choices = data.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
     return {
       name: btn.name,
       type: btn.request.type
     }
   })
-
   return {
     responsesToShow,
     choices
