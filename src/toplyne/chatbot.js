@@ -840,8 +840,6 @@ function handleError(errMessage) {
 
 async function makeAPIRequest(text, type) {
 
-
-
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/${UNIQUE_USER_ID}/interact`;
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
 
@@ -855,12 +853,12 @@ async function makeAPIRequest(text, type) {
     payload: `${text}`
   }
 
-  console.log("action ", action);
+  
   const options = {
     method: 'POST',
     headers: {
       accept: 'application/json',
-      versionID: 'development',
+      versionID: 'production',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
@@ -890,7 +888,9 @@ async function makeAPIRequest(text, type) {
     const resp = await fetch(API_ENDPOINT, options)
 
     const data = await resp.json()
-    console.log({ data })
+
+    await makeTranscriptRequest()
+    
     return {
       error: false,
       data
@@ -904,6 +904,36 @@ async function makeAPIRequest(text, type) {
   }
 
 }
+
+
+async function makeTranscriptRequest() {
+  const url = 'https://api.voiceflow.com/v2/transcripts';
+  const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
+  const options = {
+    method : "PUT",
+    headers: {
+      accept: 'application/json',
+      versionID: 'production',
+      'content-type': 'application/json',
+      Authorization: API_KEY
+    },
+    body : JSON.stringify(
+      { sessionID : UNIQUE_USER_ID }
+    )
+
+  }
+
+  try {
+    const resp = await fetch(url, options)
+    const data = await resp.json()
+    console.log({ transript : data });
+
+  } catch (error) {
+    console.log("Error making transcript request ", error );
+  }
+
+}
+
 
 function getLastChatItem() {
   const allChatItems = [...mainChatWrapper.querySelectorAll(".chat-wrapper .chats>div.chat-item")]
