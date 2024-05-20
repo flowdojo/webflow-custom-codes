@@ -858,7 +858,8 @@ async function makeAPIRequest(text, type) {
     method: 'POST',
     headers: {
       accept: 'application/json',
-      versionID: 'production',
+      versionID: '65df5123b93dbe8b0c12a50c',
+      projectID: '65df5123b93dbe8b0c12a50b',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
@@ -896,6 +897,7 @@ async function makeAPIRequest(text, type) {
       data
     }
   } catch (error) {
+    console.log("ERROR Intreaction request ", error)
     return {
       error: true,
       message: error?.response?.data?.message || error.message
@@ -913,7 +915,8 @@ async function makeTranscriptRequest() {
     method : "PUT",
     headers: {
       accept: 'application/json',
-      versionID: 'production',
+      versionID: '65df5123b93dbe8b0c12a50c',
+      projectID: '65df5123b93dbe8b0c12a50b',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
