@@ -865,7 +865,10 @@ async function makeAPIRequest(text, type) {
     },
     body: JSON.stringify({
       action,
-
+      sessionID : UNIQUE_USER_ID,
+      versionID: '65df5123b93dbe8b0c12a50c',
+      projectID: '65df5123b93dbe8b0c12a50b',
+      
       "config": {
         "tts": false,
         "stripSSML": true,
@@ -915,13 +918,15 @@ async function makeTranscriptRequest() {
     method : "PUT",
     headers: {
       accept: 'application/json',
-      versionID: '65df5123b93dbe8b0c12a50c',
-      projectID: '65df5123b93dbe8b0c12a50b',
       'content-type': 'application/json',
       Authorization: API_KEY
     },
     body : JSON.stringify(
-      { sessionID : UNIQUE_USER_ID }
+      {
+        sessionID : UNIQUE_USER_ID,
+        versionID: '65df5123b93dbe8b0c12a50c',
+        projectID: '65df5123b93dbe8b0c12a50b',
+      }
     )
 
   }
