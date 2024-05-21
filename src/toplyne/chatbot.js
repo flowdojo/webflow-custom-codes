@@ -51,10 +51,7 @@ function questionClickListener() {
         }
       })
 
-
-
       /** Init Main Chat screen */
-
       initMainChatScreen(box)
 
     })
@@ -774,6 +771,8 @@ async function makeTranscriptRequest() {
         sessionID : UNIQUE_USER_ID,
         versionID: '65df5123b93dbe8b0c12a50c',
         projectID: '65df5123b93dbe8b0c12a50b',
+        timestamp : `${new Date().getTime()}`,
+        platform : "webchat",
       }
     )
 
