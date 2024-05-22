@@ -1,7 +1,8 @@
 
 const secondaryChatbotContainer = document.querySelector(".secondary-chatbot")
 let isSecondaryChatClosed = true
-
+const UNIQUE_USER_ID = sessionStorage.getItem("UNIQUE_USER_ID") ? sessionStorage.getItem("UNIQUE_USER_ID") : generateGuid()
+sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
 
 addSecondaryChatInputListener()
 
@@ -490,4 +491,113 @@ function saveToSessionStorage(container) {
 
   function removeHideClass(element) {
     element.classList.remove("hide")
+  }
+
+
+
+  async function makeAPIRequest(text, type) {
+
+    const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/${UNIQUE_USER_ID}/interact`;
+    const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
+  
+    const action = type !== "text" ? {
+      type: type,
+      payload: {
+        label: `${text}`
+      }
+    } : {
+      type: "text",
+      payload: `${text}`
+    }
+  
+    
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        versionID: '65df5123b93dbe8b0c12a50c',
+        projectID: '65df5123b93dbe8b0c12a50b',
+        'content-type': 'application/json',
+        Authorization: API_KEY
+      },
+      body: JSON.stringify({
+        action,
+        sessionID : UNIQUE_USER_ID,
+        versionID: '65df5123b93dbe8b0c12a50c',
+        projectID: '65df5123b93dbe8b0c12a50b',
+  
+        "config": {
+          "tts": false,
+          "stripSSML": true,
+          "stopAll": true,
+          "excludeTypes": [
+            "block",
+            "debug",
+            "flow"
+          ]
+        }
+  
+        // state : {
+        //   ...stateObject
+        // }
+  
+  
+      })
+    };
+  
+    try {
+      const resp = await fetch(API_ENDPOINT, options)
+  
+      const data = await resp.json()
+  
+      await makeTranscriptRequest()
+      
+      return {
+        error: false,
+        data
+      }
+    } catch (error) {
+      console.log("ERROR Intreaction request ", error)
+      return {
+        error: true,
+        message: error?.response?.data?.message || error.message
+      }
+  
+    }
+  
+  }
+
+
+
+  async function makeTranscriptRequest() {
+    const url = 'https://api.voiceflow.com/v2/transcripts';
+    const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
+    const options = {
+      method : "PUT",
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        Authorization: API_KEY
+      },
+      body : JSON.stringify(
+        {
+          sessionID : UNIQUE_USER_ID,
+          versionID: '65df5123b93dbe8b0c12a50c',
+          projectID: '65df5123b93dbe8b0c12a50b',
+          timestamp : `${new Date().getTime()}`,
+          platform : "webchat",
+        }
+      )
+  
+    }
+  
+    try {
+      const resp = await fetch(url, options)
+      const data = await resp.json()
+      console.log({ transript : data });
+  
+    } catch (error) {
+      console.log("Error making transcript request ", error );
+    }
+  
   }
