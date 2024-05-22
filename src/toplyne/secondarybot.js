@@ -32,19 +32,19 @@ function addScrollListener() {
     }
   })
 
-
 }
 
 function loadChatsFromSessionStorage() {
     const chats = JSON.parse(sessionStorage.getItem("bot-chats"))
     
-    chats.forEach(chatItem => {
-      const div = document.createElement("div")
-      div.innerHTML = chatItem
-      secondaryChatbotContainer.querySelector(".chats").append(div)
-    })
-  
-  }
+    if (chats && chats.length > 0) {
+        chats.forEach(chatItem => {
+            const div = document.createElement("div")
+            div.innerHTML = chatItem
+            secondaryChatbotContainer.querySelector(".chats").append(div)
+        })
+    }
+}
 
 
 let timeoutId;
