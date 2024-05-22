@@ -27,14 +27,14 @@ const init = async () => {
   questionClickListener()
   addChatInputListener()
   addInputFocusListener()
-  await makeAPIRequest("nothing", "launch")
 
+  await makeAPIRequest("nothing", "launch")
 
   /**
    * load previous chats from session storage
   */
 
-  loadChatsFromSessionStorage()
+  // loadChatsFromSessionStorage()
 }
 
 
@@ -455,7 +455,7 @@ function renderSuccessOutput(allResponses) {
 
   scrollChatPartially(scrollValue)
 
-  saveToSessionStorage(mainChatWrapper)
+  // saveToSessionStorage(mainChatWrapper)
 
 
 }
@@ -801,12 +801,8 @@ async function makeAPIRequest(text, type) {
         ]
       }
 
-      // state : {
-      //   ...stateObject
-      // }
-
-
     })
+
   };
 
   try {
@@ -1234,7 +1230,7 @@ function renderSecondaryChatResult(allResponses) {
 
   inputElement.disabled = false
 
-  saveToSessionStorage(secondaryChatbotContainer)
+  // saveToSessionStorage(secondaryChatbotContainer)
 }
 
 
