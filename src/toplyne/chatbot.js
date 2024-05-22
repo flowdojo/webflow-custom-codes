@@ -1,5 +1,7 @@
 
-const UNIQUE_USER_ID = generateGuid()
+const UNIQUE_USER_ID = sessionStorage.getItem("UNIQUE_USER_ID") ? sessionStorage.getItem("UNIQUE_USER_ID") : generateGuid()
+sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
+
 
 
 let gsapJumpingAnim;
@@ -438,6 +440,9 @@ function renderSuccessOutput(allResponses) {
   addMainChatCloseListener()
 
   scrollChatPartially(scrollValue)
+
+  saveToSessionStorage(mainChatWrapper)
+
 
 }
 
@@ -1003,7 +1008,7 @@ async function showSecondaryChatInput() {
   secondaryChatbotContainer.style.visibility = "visible"
 
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    top: "-8px",
+    top: window.innerWidth > 992 ? "-8px" : "0px",
   })
 
 
@@ -1049,10 +1054,32 @@ async function handleAPIResponse(resp) {
   }
   /**
     * Append this response and choices to hero chatbot 
-    */
+  */
   renderSuccessOutput(responsesToShow)
   renderChoices(choices)
   addClickListenerToMainChatChoices()
+}
+
+
+function saveToSessionStorage(container) {
+  const chatItems = container.querySelectorAll(".chat-item");
+
+  // Convert NodeList to an array for easier manipulation
+  const chatItemsArray = Array.from(chatItems);
+  
+  // Define an array to store the HTML content of each chat item
+  const chatItemsContent = [];
+  
+  // Loop through each chat item and store its HTML content
+  chatItemsArray.forEach(chatItem => {
+      chatItemsContent.push(chatItem.outerHTML);
+  });
+  
+  // Convert the array of chat item HTML content to a JSON string
+  const chatItemsJson = JSON.stringify(chatItemsContent);
+  
+  // Store the JSON string in session storage
+  sessionStorage.setItem("bot-chats", chatItemsJson);
 }
 
 
@@ -1127,6 +1154,7 @@ function renderSecondaryChatResult(allResponses) {
 
   inputElement.disabled = false
 
+  saveToSessionStorage(secondaryChatbotContainer)
 }
 
 
@@ -1327,7 +1355,7 @@ function handleCloseSecondaryChat() {
 
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     opacity : 0,
-    top : "-8px"
+    top : window.innerWidth > 992 ? "-8px" : "0px"
   })
 
   
