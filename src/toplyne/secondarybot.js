@@ -157,11 +157,21 @@ function extractDataFromResponse(data) {
     // const textsToShow = messagePayloads.map(item => item.payload.message)
   
     const choices = data.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
-      return {
-        name: btn.name,
-        type: btn.request.type
-      }
+        
+        const actionWithUrl = btn?.request?.payload?.actions?.find(action => action.type === "open_url")
+        let url = undefined;
+    
+        if (actionWithUrl) {
+          url = actionWithUrl.payload.url
+        
+        }
+        return {
+          name: btn.name,
+          type: btn.request.type,
+          url
+        }
     })
+
     return {
       responsesToShow,
       choices
@@ -279,7 +289,7 @@ function renderSecondaryChatChoices(choices) {
   }
 
   choices.forEach(choice => {
-    choicesDiv.innerHTML += `<div class='choice'  fd-choice-type='${choice.type}'>${choice.name}</div>`
+    choicesDiv.innerHTML += `<div class='choice' fd-redirect="${choice.url}"  fd-choice-type='${choice.type}'>${choice.name}</div>`
   })
 
 
@@ -344,6 +354,12 @@ function addClickListenerToSecondaryChatBotChoices() {
   const choices = secondaryChatbotContainer.querySelectorAll(".choices .choice")
   choices.forEach(choice => {
     choice.addEventListener("click", async function () {
+        if (choice.getAttribute("fd-redirect")) {
+            const redirectUrl = choice.getAttribute("fd-redirect")
+            window.location.href = redirectUrl
+            return
+          }
+          
       const text = choice.innerText;
       const type = choice.getAttribute("fd-choice-type")
       await handleUserInteraction(text, type)
