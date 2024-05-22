@@ -13,6 +13,11 @@ const mainChatWrapper = document.querySelector(".main-chat")
 const reverseController = shouldReverseController()
 let isChatScreenVisible; // for the herosection chat screen
 
+
+/** API request controller */
+let controller = null;
+
+
 const init = async () => {
   // set first question as active initially
   // setActiveClass([...allQuestionsWrapper.querySelectorAll(".question-box")][0])
@@ -711,6 +716,16 @@ function handleError(errMessage) {
 }
 
 async function makeAPIRequest(text, type) {
+ // Cancel previous request if it exists
+  if (controller) {
+    controller.abort();
+  }
+
+  // Create a new AbortController
+  controller = new AbortController();
+  const { signal } = controller;
+
+
 
   const API_ENDPOINT = `https://general-runtime.voiceflow.com/state/user/${UNIQUE_USER_ID}/interact`;
   const API_KEY = `VF.DM.65df5409684f33402629843c.CLK9k8XYwRxE7pbz`
@@ -761,11 +776,13 @@ async function makeAPIRequest(text, type) {
   };
 
   try {
-    const resp = await fetch(API_ENDPOINT, options)
+    const resp = await fetch(API_ENDPOINT, {...options, signal })
 
     const data = await resp.json()
 
     await makeTranscriptRequest()
+
+    controller = null
     
     return {
       error: false,
