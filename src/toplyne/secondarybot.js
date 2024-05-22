@@ -354,12 +354,12 @@ function addClickListenerToSecondaryChatBotChoices() {
   const choices = secondaryChatbotContainer.querySelectorAll(".choices .choice")
   choices.forEach(choice => {
     choice.addEventListener("click", async function () {
-        if (choice.getAttribute("fd-redirect")) {
+        if (choice.getAttribute("fd-redirect" && choice.getAttribute("fd-redirect") !== "undefined") ) {
             const redirectUrl = choice.getAttribute("fd-redirect")
             window.location.href = redirectUrl
             return
           }
-          
+
       const text = choice.innerText;
       const type = choice.getAttribute("fd-choice-type")
       await handleUserInteraction(text, type)
