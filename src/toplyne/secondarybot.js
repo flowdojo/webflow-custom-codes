@@ -40,13 +40,26 @@ function addScrollListener() {
 function loadChatsFromSessionStorage() {
     const chats = JSON.parse(sessionStorage.getItem("bot-chats"))
     
-    if (chats && chats.length > 0) {
-        chats.forEach(chatItem => {
-            const div = document.createElement("div")
-            div.innerHTML = chatItem
-            secondaryChatbotContainer.querySelector(".chats").append(div)
+    if (chats && chats.length) {
+
+        /** Remove existing chats */
+        secondaryChatbotContainer.querySelectorAll(".chat-item").forEach(item => {
+          item.remove()
         })
-    }
+    
+        chats.forEach(chatItem => {
+          const div = document.createElement("div")
+          div.innerHTML = chatItem
+          const chatElementToAdd = div.querySelector("div");
+          if (chatElementToAdd.classList.contains("question-box")) {
+            chatElementToAdd.classList.add("user-input")
+          }
+    
+          gsap.set(chatElementToAdd, { opacity : 1})
+          secondaryChatbotContainer.querySelector(".chats").append(chatElementToAdd)
+      
+        })
+      }
 }
 
 

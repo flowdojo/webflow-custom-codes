@@ -410,6 +410,8 @@ async function makeAPIRequestAndShowResult(text, type = "text") {
       renderSecondaryChatChoices(choices)
     }
     inputElement.disabled = false
+
+    showInputBox()
   }
 
 }
@@ -462,12 +464,27 @@ function loadChatsFromSessionStorage() {
   const chats = JSON.parse(sessionStorage.getItem("bot-chats"))
   
   if (chats && chats.length) {
+
+    /** Remove existing chats */
+    secondaryChatbotContainer.querySelectorAll(".chat-item").forEach(item => {
+      item.remove()
+    })
+    mainChatWrapper.querySelectorAll(".chat-item").forEach(item => {
+      item.remove()
+    })
+
     chats.forEach(chatItem => {
       const div = document.createElement("div")
       div.innerHTML = chatItem
-      secondaryChatbotContainer.querySelector(".chats").append(div)
+      const chatElementToAdd = div.querySelector("div");
+      if (chatElementToAdd.classList.contains("question-box")) {
+        chatElementToAdd.classList.add("user-input")
+      }
+
+      gsap.set(chatElementToAdd, { opacity : 1})
+      secondaryChatbotContainer.querySelector(".chats").append(chatElementToAdd)
   
-      mainChatWrapper.querySelector(".chats").append(div)
+      mainChatWrapper.querySelector(".chats").append(chatElementToAdd)
     })
   }
 
@@ -562,6 +579,17 @@ function showChoicesAndInputBox() {
     opacity: 1,
     y: 0,
     stagger: 0.1,
+  })
+}
+
+function showInputBox() {
+  const chatInput = mainChatWrapper.querySelector(".chat-input-wrap")
+  gsap.fromTo(chatInput, {
+    opacity: 0,
+    y: 10
+  }, {
+    opacity: 1,
+    y: 0,
   })
 }
 
