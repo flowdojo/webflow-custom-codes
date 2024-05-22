@@ -153,6 +153,25 @@ async function handleAPIResponse(resp) {
   addClickListenerToMainChatChoices()
 }
 
+function extractDataFromResponse(data) {
+    // const responsesToShow = data.trace.filter(item => item.type === "text" || item.type === "visual")
+  
+    const responsesToShow = data.filter(item => item.type === "text" || item.type === "visual")
+  
+    // const textsToShow = messagePayloads.map(item => item.payload.message)
+  
+    const choices = data.find(item => item.type === "choice")?.payload?.buttons?.map(btn => {
+      return {
+        name: btn.name,
+        type: btn.request.type
+      }
+    })
+    return {
+      responsesToShow,
+      choices
+    }
+  }
+  
 
 function saveToSessionStorage(container) {
   const chatItems = container.querySelectorAll(".chat-item");
