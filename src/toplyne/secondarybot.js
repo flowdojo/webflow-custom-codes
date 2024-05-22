@@ -372,16 +372,12 @@ function addSecondaryChatInputListener() {
 
 async function handleUserInteraction(text, type = "text") {
 
-  const elementToAdd = `<div class="chat-item question-box user-input">
-    <h4 class="question-box-question">${text}</h4>
-  </div>`
 
   gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
     width : window.innerWidth > 992 ? 500 : 'calc(100vw - 70px)'
   })
 
 
-  chats.innerHTML += elementToAdd
   gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 })
 
   const inputElement = secondaryChatbotContainer.querySelector("input")
