@@ -23,6 +23,13 @@ const init = async () => {
   addChatInputListener()
   addInputFocusListener()
   await makeAPIRequest("nothing", "launch")
+
+
+  /**
+   * load previous chats from session storage
+  */
+
+  loadChatsFromSessionStorage()
 }
 
 
@@ -443,6 +450,21 @@ function renderSuccessOutput(allResponses) {
 
   saveToSessionStorage(mainChatWrapper)
 
+
+}
+
+function loadChatsFromSessionStorage() {
+  const chats = JSON.parse(sessionStorage.getItem("bot-chats"))
+  
+  console.log({ chats });
+
+  chats.forEach(chatItem => {
+    const div = document.createElement("div")
+    div.innerHTML = chatItem
+    secondaryChatbotContainer.querySelector(".chats").append(div)
+
+    mainChatWrapper.querySelector(".chats").append(div)
+  })
 
 }
 

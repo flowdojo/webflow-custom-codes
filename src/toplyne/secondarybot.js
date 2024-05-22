@@ -9,6 +9,12 @@ addCloseSecondaryChatClickListener()
 
 addScrollListener()
 
+/**
+   * load previous chats from session storage
+*/
+
+loadChatsFromSessionStorage()
+
 function addScrollListener() {
   let isSecondaryChatVisible = false;
 
@@ -28,6 +34,17 @@ function addScrollListener() {
 
 
 }
+
+function loadChatsFromSessionStorage() {
+    const chats = JSON.parse(sessionStorage.getItem("bot-chats"))
+    
+    chats.forEach(chatItem => {
+      const div = document.createElement("div")
+      div.innerHTML = chatItem
+      secondaryChatbotContainer.querySelector(".chats").append(div)
+    })
+  
+  }
 
 
 let timeoutId;
@@ -469,4 +486,14 @@ function saveToSessionStorage(container) {
     
     // Store the JSON string in session storage
     sessionStorage.setItem("bot-chats", chatItemsJson);
+  }
+
+
+  function addHideClass(element) {
+    element.classList.add("hide")
+  }
+
+
+  function removeHideClass(element) {
+    element.classList.remove("hide")
   }
