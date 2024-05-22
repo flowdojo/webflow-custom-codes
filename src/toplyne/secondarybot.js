@@ -378,8 +378,6 @@ async function handleUserInteraction(text, type = "text") {
   })
 
 
-  gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 })
-
   const inputElement = secondaryChatbotContainer.querySelector("input")
   inputElement.disabled = true
 
