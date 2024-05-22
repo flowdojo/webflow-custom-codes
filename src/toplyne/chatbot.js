@@ -1014,7 +1014,7 @@ async function showSecondaryChatInput() {
   tl.to(inputWrapper, {
     scale: 1,
     duration: 0.5,
-    width: 500,
+    width: 225,
   }, 'start')
   tl.to(inputWrapper.querySelector("input"), {
     opacity: 1,
@@ -1262,6 +1262,14 @@ async function handleUserInteraction(text, type = "text") {
     <h4 class="question-box-question">${text}</h4>
   </div>`
 
+  gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
+    width : 500
+  })
+
+
+
+
+
   chats.innerHTML += elementToAdd
   gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 })
 
@@ -1315,10 +1323,13 @@ function handleCloseSecondaryChat() {
   isSecondaryChatClosed = true
 
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    opacity: 0
+    opacity : 0,
+    top : "-8px"
   })
-  gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
-    top: "-8px",
+
+  
+  gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
+    width : 225
   })
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     duration: 0.3,
