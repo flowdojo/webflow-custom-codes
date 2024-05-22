@@ -145,12 +145,6 @@ async function handleAPIResponse(resp) {
   if (Array.isArray(choices) && choices.length) {
     renderSecondaryChatChoices(choices)
   }
-  /**
-    * Append this response and choices to hero chatbot 
-  */
-  renderSuccessOutput(responsesToShow)
-  renderChoices(choices)
-  addClickListenerToMainChatChoices()
 }
 
 function extractDataFromResponse(data) {

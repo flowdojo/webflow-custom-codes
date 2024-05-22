@@ -577,3 +577,62 @@ span.choice {
 
 }
 
+
+ /* TYPING LOADER */
+ .bot-loader {
+  padding: 5px;
+}
+
+.bot-loader span {
+  width: 10px;
+  height: 10px;
+  background-color: #000000;
+  display: inline-block;
+  margin: 1px;
+  border-radius: 50%;
+}
+
+.bot-loader span:nth-child(1) {
+  -webkit-animation: bounce 1s infinite;
+  animation: bounce 1s infinite;
+}
+
+.bot-loader span:nth-child(2) {
+  -webkit-animation: bounce 1s infinite 0.2s;
+  animation: bounce 1s infinite 0.2s;
+  background-color : #4b4b4b;
+}
+
+.bot-loader span:nth-child(3) {
+  -webkit-animation: bounce 1s infinite 0.4s;
+  animation: bounce 1s infinite 0.4s;
+  background-color : #6a6a6a;
+}
+
+@-webkit-keyframes bounce {
+  0% {
+      transform: translateY(0px);
+  }
+
+  50% {
+      transform: translateY(8px);
+  }
+
+  100% {
+      transform: translateY(0px);
+  }
+}
+
+@keyframes bounce {
+  0% {
+      transform: translateY(0px);
+  }
+
+  50% {
+      transform: translateY(8px);
+  }
+
+  100% {
+      transform: translateY(0px);
+  }
+}
