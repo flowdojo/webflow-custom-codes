@@ -1001,9 +1001,12 @@ async function showSecondaryChatInput() {
   secondaryChatbotContainer.querySelector(".input-container").style.width = "auto"
   secondaryChatbotContainer.querySelector(".input-container").style.visibility = "visible"
   secondaryChatbotContainer.style.visibility = "visible"
+
   gsap.set(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     top: "-8px",
   })
+
+
   tl.to(chatbotIconWrapper, {
     opacity: 1,
     duration: 0.3,
@@ -1263,7 +1266,7 @@ async function handleUserInteraction(text, type = "text") {
   </div>`
 
   gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width : 500
+    width : window.innerWidth > 992 ? 500 : 'calc(100vw - 70px)'
   })
 
 
