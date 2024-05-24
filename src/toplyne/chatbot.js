@@ -1,6 +1,7 @@
 
 const UNIQUE_USER_ID = localStorage.getItem("toplyne-anonymous-id");
 console.log(UNIQUE_USER_ID)
+const toplyneSessionID = sessionStorage.getItem("toplyne-session-id")
 // sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
 
 
@@ -789,9 +790,10 @@ async function makeAPIRequest(text, type) {
     body: JSON.stringify({
       action,
       sessionID : UNIQUE_USER_ID,
-      userID : UNIQUE_USER_ID,
+      Toplyne_userID : UNIQUE_USER_ID,
       versionID: '65df5123b93dbe8b0c12a50c',
       projectID: '65df5123b93dbe8b0c12a50b',
+      Toplyne_web_sessionID : toplyneSessionID,
 
       "config": {
         "tts": false,
@@ -846,9 +848,10 @@ async function makeTranscriptRequest() {
     body : JSON.stringify(
       {
         sessionID : UNIQUE_USER_ID,
-        userID : UNIQUE_USER_ID,
+        Toplyne_userID : UNIQUE_USER_ID,
         versionID: '65df5123b93dbe8b0c12a50c',
         projectID: '65df5123b93dbe8b0c12a50b',
+        Toplyne_web_sessionID : toplyneSessionID,
         timestamp : `${new Date().getTime()}`,
         platform : "webchat",
       }
