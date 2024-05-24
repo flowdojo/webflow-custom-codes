@@ -1,7 +1,7 @@
 
-const UNIQUE_USER_ID = sessionStorage.getItem("toplyne-anonymous-id");
+const UNIQUE_USER_ID = localStorage.getItem("toplyne-anonymous-id");
 console.log(UNIQUE_USER_ID)
-sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
+// sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
 
 
 
