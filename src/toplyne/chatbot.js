@@ -1,5 +1,6 @@
 
-const UNIQUE_USER_ID = sessionStorage.getItem("UNIQUE_USER_ID") ? sessionStorage.getItem("UNIQUE_USER_ID") : generateGuid()
+const UNIQUE_USER_ID = sessionStorage.getItem("toplyne-anonymous-id");
+console.log(UNIQUE_USER_ID)
 sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
 
 
@@ -11,6 +12,7 @@ const counter = counterController()
 const allQuestionsWrapper = document.querySelector(".all-questions-wrapper")
 const mainChatWrapper = document.querySelector(".main-chat")
 const reverseController = shouldReverseController()
+
 let isChatScreenVisible; // for the herosection chat screen
 
 
@@ -787,6 +789,7 @@ async function makeAPIRequest(text, type) {
     body: JSON.stringify({
       action,
       sessionID : UNIQUE_USER_ID,
+      userID : UNIQUE_USER_ID,
       versionID: '65df5123b93dbe8b0c12a50c',
       projectID: '65df5123b93dbe8b0c12a50b',
 
@@ -843,6 +846,7 @@ async function makeTranscriptRequest() {
     body : JSON.stringify(
       {
         sessionID : UNIQUE_USER_ID,
+        userID : UNIQUE_USER_ID,
         versionID: '65df5123b93dbe8b0c12a50c',
         projectID: '65df5123b93dbe8b0c12a50b',
         timestamp : `${new Date().getTime()}`,
