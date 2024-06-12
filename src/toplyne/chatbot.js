@@ -405,7 +405,7 @@ async function initMainChatScreen(lastClickedQuestion) {
 async function makeAPIRequestAndShowResult(text, type = "text") {
   /** Append this selected question to the secondary chatbot too and disable the input field */
   appendUserInputToChatScreen(text);
-  const inputElement = secondaryChatbotContainer.querySelector("input");
+  const inputElement = secondaryChatbotContainer.querySelector("textarea");
 
   inputElement.disabled = true;
 
@@ -1126,12 +1126,12 @@ async function showSecondaryChatInput() {
     {
       scale: 1,
       duration: 0.5,
-      width: 225,
+      width: 380,
     },
     "start",
   );
   tl.to(
-    inputWrapper.querySelector("input"),
+    inputWrapper.querySelector("textarea"),
     {
       opacity: 1,
       duration: 0.3,
@@ -1264,7 +1264,7 @@ function renderSecondaryChatResult(allResponses) {
   scrollSecondaryChatPartially(scrollValue);
 
   // enable the input
-  const inputElement = secondaryChatbotContainer.querySelector("input");
+  const inputElement = secondaryChatbotContainer.querySelector("textarea");
 
   inputElement.disabled = false;
 
@@ -1364,7 +1364,7 @@ function addClickListenerToSecondaryChatBotChoices() {
 }
 
 function addSecondaryChatInputListener() {
-  const inputElement = secondaryChatbotContainer.querySelector("input");
+  const inputElement = secondaryChatbotContainer.querySelector("textarea");
   const inputArrowSubmitBtn = secondaryChatbotContainer.querySelector(
     ".input-wrapper span>svg",
   );
@@ -1415,7 +1415,7 @@ async function handleUserInteraction(text, type = "text") {
   chats.innerHTML += elementToAdd;
   gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 });
 
-  const inputElement = secondaryChatbotContainer.querySelector("input");
+  const inputElement = secondaryChatbotContainer.querySelector("textarea");
   inputElement.disabled = true;
 
   addHideClass(secondaryChatbotContainer.querySelector(".choices"));
@@ -1440,9 +1440,9 @@ function addCloseSecondaryChatClickListener() {
 }
 
 function addInputFocusListener() {
-  const mainBotInput = document.querySelector(".chat-input-wrap input");
+  const mainBotInput = document.querySelector(".chat-input-wrap textarea");
   const secondaryChatInput = document.querySelector(
-    ".secondary-chatbot-wrapper input",
+    ".secondary-chatbot-wrapper textarea",
   );
 
   [mainBotInput, secondaryChatInput].forEach((input) => {
@@ -1469,7 +1469,7 @@ function handleCloseSecondaryChat() {
   });
 
   gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width: 225,
+    width: 380,
   });
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     duration: 0.3,
