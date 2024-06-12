@@ -405,7 +405,7 @@ async function initMainChatScreen(lastClickedQuestion) {
 async function makeAPIRequestAndShowResult(text, type = "text") {
   /** Append this selected question to the secondary chatbot too and disable the input field */
   appendUserInputToChatScreen(text);
-  const inputElement = secondaryChatbotContainer.querySelector("textarea");
+  const inputElement = secondaryChatbotContainer.querySelector("input");
 
   inputElement.disabled = true;
 
@@ -1131,7 +1131,7 @@ async function showSecondaryChatInput() {
     "start",
   );
   tl.to(
-    inputWrapper.querySelector("textarea"),
+    inputWrapper.querySelector("input"),
     {
       opacity: 1,
       duration: 0.3,
@@ -1264,7 +1264,7 @@ function renderSecondaryChatResult(allResponses) {
   scrollSecondaryChatPartially(scrollValue);
 
   // enable the input
-  const inputElement = secondaryChatbotContainer.querySelector("textarea");
+  const inputElement = secondaryChatbotContainer.querySelector("input");
 
   inputElement.disabled = false;
 
@@ -1364,7 +1364,7 @@ function addClickListenerToSecondaryChatBotChoices() {
 }
 
 function addSecondaryChatInputListener() {
-  const inputElement = secondaryChatbotContainer.querySelector("textarea");
+  const inputElement = secondaryChatbotContainer.querySelector("input");
   const inputArrowSubmitBtn = secondaryChatbotContainer.querySelector(
     ".input-wrapper span>svg",
   );
@@ -1415,7 +1415,7 @@ async function handleUserInteraction(text, type = "text") {
   chats.innerHTML += elementToAdd;
   gsap.set(chats.querySelectorAll(".chat-item"), { opacity: 1 });
 
-  const inputElement = secondaryChatbotContainer.querySelector("textarea");
+  const inputElement = secondaryChatbotContainer.querySelector("input");
   inputElement.disabled = true;
 
   addHideClass(secondaryChatbotContainer.querySelector(".choices"));
@@ -1440,9 +1440,9 @@ function addCloseSecondaryChatClickListener() {
 }
 
 function addInputFocusListener() {
-  const mainBotInput = document.querySelector(".chat-input-wrap textarea");
+  const mainBotInput = document.querySelector(".chat-input-wrap input");
   const secondaryChatInput = document.querySelector(
-    ".secondary-chatbot-wrapper textarea",
+    ".secondary-chatbot-wrapper input",
   );
 
   [mainBotInput, secondaryChatInput].forEach((input) => {
@@ -1456,10 +1456,6 @@ function addInputFocusListener() {
       input.parentElement.querySelector("svg path").style.fill = "#666D80";
     });
 
-    input.addEventListener("input", () => {
-      textarea.style.height = 'auto'; // Reset height to auto to correctly calculate scroll height
-      textarea.style.height = (textarea.scrollHeight) + 'px'; 
-    });
   });
 }
 
