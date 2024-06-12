@@ -1455,6 +1455,11 @@ function addInputFocusListener() {
       input.parentNode.style.borderColor = "#DAE3E8";
       input.parentElement.querySelector("svg path").style.fill = "#666D80";
     });
+
+    input.addEventListener("input", () => {
+      textarea.style.height = 'auto'; // Reset height to auto to correctly calculate scroll height
+      textarea.style.height = (textarea.scrollHeight) + 'px'; 
+    });
   });
 }
 
