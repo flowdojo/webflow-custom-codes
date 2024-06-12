@@ -403,7 +403,7 @@ span.choice {
 .secondary-chatbot .input-wrapper input {
   border: none;
   outline: none;
-  padding: 18.5px 0 18.5px 18px;
+  padding: 18.5px 38px 18.5px 18px;
   font-family: "Space Grotesk", sans-serif;
   font-optical-sizing: auto;
   width: 100%;
@@ -424,6 +424,7 @@ span.choice {
 .secondary-chatbot .input-wrapper span {
   position: absolute;
   right: 0;
+  padding-top: 8px;
 }
 
 /* initial view */

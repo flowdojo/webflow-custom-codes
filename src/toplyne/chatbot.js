@@ -1,10 +1,10 @@
 
 const UNIQUE_USER_ID = localStorage.getItem("toplyne-anonymous-id");
-console.log(UNIQUE_USER_ID)
+
 const toplyneSessionID = sessionStorage.getItem("toplyne-session-id")
 // sessionStorage.setItem("UNIQUE_USER_ID", UNIQUE_USER_ID)
 
-
+console.log({ tabLoop : tabLoop })
 
 let gsapJumpingAnim;
 
@@ -394,6 +394,7 @@ async function makeAPIRequestAndShowResult(text, type = "text") {
 
   await setBotPositionAndShowLoader()
   addHideClass(mainChatWrapper.querySelector(".choices"))
+
   const { error, data, message } = await makeAPIRequest(text, type)
 
   if (error) {
@@ -814,6 +815,7 @@ async function makeAPIRequest(text, type) {
     const resp = await fetch(API_ENDPOINT, {...options, signal })
 
     const data = await resp.json()
+    console.log({data })
 
     await makeTranscriptRequest()
 
