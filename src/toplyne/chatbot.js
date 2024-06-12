@@ -1126,7 +1126,7 @@ async function showSecondaryChatInput() {
     {
       scale: 1,
       duration: 0.5,
-      width: 380,
+      width: window.innerWidth > 992 ? 380 : 280,
     },
     "start",
   );
@@ -1470,7 +1470,7 @@ function handleCloseSecondaryChat() {
   });
 
   gsap.set(secondaryChatbotContainer.querySelector(".input-wrapper"), {
-    width: 380,
+    width: window.innerWidth > 992 ? 380 : 280,
   });
   gsap.to(secondaryChatbotContainer.querySelector(".chatbot-icon-wrapper"), {
     duration: 0.3,

@@ -507,6 +507,11 @@ span.choice {
    .secondary-chatbot.is-open .input-container {
      width : calc(100% - 21px) !important;
    }
+   
+   .secondary-chatbot {
+    right: -185px;
+
+   }
 
   .secondary-chatbot.is-open {
    right : 21px;
