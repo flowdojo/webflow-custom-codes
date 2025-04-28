@@ -38,7 +38,7 @@ if (window.innerWidth > 767) {
   stackCards.forEach((card, index) => {
     stackTimeline.fromTo(
       card,
-      { top: index === 0 ? "120px" : "120%" },
+      { top: index === 0 ? "30px" : "120%" },
       { top: basePosition },
       `label-${index}`
     );
