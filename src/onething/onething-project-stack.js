@@ -10,12 +10,12 @@ const stackCards = [...stackWrapper.querySelectorAll(".project-stack-card")];
 let baseScaling = 1 - stackCards.length;
 
 if (window.innerWidth > 767) {
-  let basePosition = 110;
+  let basePosition = 48;
   let baseScale = 0.92;
   stackCards.forEach((card, index) => {
     stackTimeline.fromTo(
       card,
-      { top: index === 0 ? "48px" : "100%" },
+      { top: index === 0 ? "48px" : "120%" },
       { top: basePosition },
       `label-${index}`
     );
@@ -38,7 +38,7 @@ if (window.innerWidth > 767) {
   stackCards.forEach((card, index) => {
     stackTimeline.fromTo(
       card,
-      { top: index === 0 ? "30px" : "100%" },
+      { top: index === 0 ? "30px" : "120%" },
       { top: basePosition },
       `label-${index}`
     );
