@@ -8,22 +8,25 @@ const noItemsFound = document.querySelector("[fd-code='no-items-found']");
 
 let filterTimeoutId;
 
+// Attach click events to filter buttons
 filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
     updateSlug(btnText);
     applyFilter(btnText);
+    scrollToProjects();
   });
 });
 
+// Updates the browser URL
 function updateSlug(filterName) {
-  const currentPath = window.location.pathname.split("/")[1]; // "projects"
-  const basePath = `/${currentPath}`;
+  const basePath = "/projects";
   const newSlug = filterName === "all" ? basePath : `${basePath}/${filterName}`;
   history.pushState(null, "", newSlug);
 }
 
+// Applies the filtering and active button state
 function applyFilter(filterName) {
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
@@ -36,12 +39,14 @@ function applyFilter(filterName) {
   });
 }
 
+// Filters the projects
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
   Webflow.require("ix2").init();
 }
 
+// Renders filtered projects
 function renderProjects(projects) {
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
@@ -76,6 +81,7 @@ function renderProjects(projects) {
   }
 }
 
+// Filter matching logic
 function getFilteredProject(filterName) {
   if (filterName === "all") return allProjects;
 
@@ -97,16 +103,42 @@ function removeHideClass(el) {
 }
 
 function getInnerText(node) {
-  return sanitizeText(node.innerText);
+  return sanitizeText(node?.innerText || "");
 }
 
 function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-// ✅ AUTO APPLY FILTER FROM URL ON LOAD
+// ✅ Scroll to project section smoothly
+function scrollToProjects() {
+  const section = document.querySelector("[fd-code='projects-wrapper']");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+// ✅ Auto-apply filter + scroll + redirect fallback
 document.addEventListener("DOMContentLoaded", () => {
   const urlParts = window.location.pathname.split("/").filter(Boolean);
-  const filterFromSlug = urlParts[1] || "all"; // default to 'all' if no filter present
-  applyFilter(sanitizeText(filterFromSlug));
+
+  if (urlParts[0] === "projects") {
+    const filterFromSlug = sanitizeText(urlParts[1] || "all");
+
+    const matchingBtn = Array.from(filterButtons).find((btn) => {
+      const btnText = getInnerText(btn.querySelector("div"));
+      return btnText === filterFromSlug;
+    });
+
+    if (matchingBtn) {
+      applyFilter(filterFromSlug);
+      scrollToProjects();
+    } else if (urlParts[1]) {
+      // Invalid filter, redirect to /projects
+      window.location.href = "/projects";
+    } else {
+      applyFilter("all");
+      scrollToProjects();
+    }
+  }
 });
