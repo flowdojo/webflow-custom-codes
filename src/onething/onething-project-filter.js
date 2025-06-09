@@ -13,27 +13,32 @@ filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
-    updateSlug(btnText); // ✅ Add slug to URL when button clicked
+    console.log("[Click] Button clicked:", btnText);
+    updateSlug(btnText); // Add slug to URL when button clicked
     applyFilter(btnText);
   });
 });
 
-// ✅ Adds or removes query param in URL
+// Adds or removes query param in URL
 function updateSlug(filterName) {
   const slug = sanitizeText(filterName).replace(/\s+/g, "-");
   const url = new URL(window.location.href);
 
   if (slug === "all") {
     url.searchParams.delete("filter");
+    console.log("[updateSlug] Removing filter param from URL");
   } else {
     url.searchParams.set("filter", slug);
+    console.log("[updateSlug] Setting filter param in URL:", slug);
   }
 
   history.pushState(null, "", url.toString());
+  console.log("[updateSlug] URL after update:", window.location.href);
 }
 
 // Applies the filtering and active button state
 function applyFilter(filterName) {
+  console.log("[applyFilter] Applying filter:", filterName);
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     btn.classList.toggle("is-active", btnText === filterName);
@@ -47,6 +52,7 @@ function applyFilter(filterName) {
 
 // Filters the projects
 function filterProjects(filterName) {
+  console.log("[filterProjects] Filtering projects with:", filterName);
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
   Webflow.require("ix2").init();
@@ -54,6 +60,7 @@ function filterProjects(filterName) {
 
 // Renders filtered projects
 function renderProjects(projects) {
+  console.log("[renderProjects] Number of projects to render:", projects.length);
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
 
@@ -87,7 +94,7 @@ function renderProjects(projects) {
   }
 }
 
-// ✅ Filter matching logic (supports slug + multi-word)
+// Filter matching logic
 function getFilteredProject(filterName) {
   if (filterName === "all") return allProjects;
 
@@ -121,12 +128,12 @@ function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-// ✅ Auto-apply filter based on ?filter param (slug supported)
-// ✅ Also ensures slug is added to URL if not already
-// ✅ Prevents scroll on load
+// Auto-apply filter based on ?filter param and keep slug in URL
 document.addEventListener("DOMContentLoaded", () => {
   const url = new URL(window.location.href);
   const rawParam = url.searchParams.get("filter") || "all";
+  console.log("[DOMContentLoaded] URL filter param:", rawParam);
+  
   const filterParam = sanitizeText(rawParam);
   const textFromSlug = filterParam.replace(/-/g, " ");
 
@@ -136,20 +143,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (matchingBtn || filterParam === "all") {
+    console.log("[DOMContentLoaded] Found matching button or 'all', applying filter:", textFromSlug);
     applyFilter(textFromSlug);
 
-    // ✅ If not "all", add filter param to URL
+    // If not "all", add filter param to URL to keep slug visible
     if (textFromSlug !== "all") {
+      console.log("[DOMContentLoaded] Updating URL slug to keep filter param");
       updateSlug(textFromSlug);
     }
 
   } else {
     // Invalid filter — remove from URL and apply "all"
+    console.log("[DOMContentLoaded] Invalid filter param, removing filter from URL");
     url.searchParams.delete("filter");
     history.replaceState(null, "", url.toString());
     applyFilter("all");
   }
 
-  // ✅ Prevent auto scroll
+  // Prevent auto scroll on load
   window.scrollTo({ top: 0, behavior: "auto" });
 });
