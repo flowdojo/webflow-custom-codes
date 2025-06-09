@@ -122,6 +122,8 @@ function sanitizeText(text) {
 }
 
 // ✅ Auto-apply filter based on ?filter param (slug supported)
+// ✅ Also ensures slug is added to URL if not already
+// ✅ Prevents scroll on load
 document.addEventListener("DOMContentLoaded", () => {
   const url = new URL(window.location.href);
   const rawParam = url.searchParams.get("filter") || "all";
@@ -135,12 +137,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (matchingBtn || filterParam === "all") {
     applyFilter(textFromSlug);
+
+    // ✅ If not "all", add filter param to URL
+    if (textFromSlug !== "all") {
+      updateSlug(textFromSlug);
+    }
+
   } else {
+    // Invalid filter — remove from URL and apply "all"
     url.searchParams.delete("filter");
     history.replaceState(null, "", url.toString());
     applyFilter("all");
   }
 
-  // ✅ Optional: prevent scroll to anchor or jump on load
+  // ✅ Prevent auto scroll
   window.scrollTo({ top: 0, behavior: "auto" });
 });
