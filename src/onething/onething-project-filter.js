@@ -152,13 +152,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return btnText === normalizedParam || btnText === textFromSlug;
   });
 
-  if (matchingBtn) {
-    const btnText = getInnerText(matchingBtn.querySelector("div"));
-    applyFilter(btnText);
-  } else if (normalizedParam === "all") {
-    applyFilter("all");
-  } else {
-    // Try applying the filter even if button not found (might match project categories)
-    applyFilter(textFromSlug);
-  }
+if (matchingBtn) {
+  const btnText = getInnerText(matchingBtn.querySelector("div"));
+  applyFilter(btnText, false); // ✅ don't update URL on initial load
+} else if (normalizedParam === "all") {
+  applyFilter("all", false); // ✅ don't update URL
+} else {
+  applyFilter(textFromSlug, false); // ✅ don't update URL
+}
+
 });
