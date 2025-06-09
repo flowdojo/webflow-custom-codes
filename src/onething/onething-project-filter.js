@@ -3,9 +3,7 @@ const allProjects = [
 ];
 
 const ctaSection = document.querySelector(".projects-wrap .cta-section-2");
-
 const filterButtons = document.querySelectorAll("[fd-filter-btn]");
-
 const noItemsFound = document.querySelector("[fd-code='no-items-found']");
 
 let filterTimeoutId;
@@ -14,21 +12,29 @@ filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
-    // Update URL slug
-    const currentPath = window.location.pathname.split("/")[1]; // "projects"
-    const basePath = `/${currentPath}`;
-    const newSlug = btnText === "all" ? basePath : `${basePath}/${btnText}`;
-    history.pushState(null, "", newSlug);
-
-    // Active class toggle
-    filterButtons.forEach((btn) => btn.classList.remove("is-active"));
-    btn.classList.add("is-active");
-
-    // Debounce filter call
-    clearTimeout(filterTimeoutId);
-    filterTimeoutId = setTimeout(filterProjects.bind(null, btnText));
+    updateSlug(btnText);
+    applyFilter(btnText);
   });
 });
+
+function updateSlug(filterName) {
+  const currentPath = window.location.pathname.split("/")[1]; // "projects"
+  const basePath = `/${currentPath}`;
+  const newSlug = filterName === "all" ? basePath : `${basePath}/${filterName}`;
+  history.pushState(null, "", newSlug);
+}
+
+function applyFilter(filterName) {
+  filterButtons.forEach((btn) => {
+    const btnText = getInnerText(btn.querySelector("div"));
+    btn.classList.toggle("is-active", btnText === filterName);
+  });
+
+  clearTimeout(filterTimeoutId);
+  filterTimeoutId = setTimeout(() => {
+    filterProjects(filterName);
+  });
+}
 
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
@@ -37,10 +43,7 @@ function filterProjects(filterName) {
 }
 
 function renderProjects(projects) {
-  const projectsWrapper = document.querySelector(
-    "[fd-code='projects-wrapper']"
-  );
-
+  const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
 
   if (!projects.length) {
@@ -100,3 +103,10 @@ function getInnerText(node) {
 function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
+
+// ✅ AUTO APPLY FILTER FROM URL ON LOAD
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParts = window.location.pathname.split("/").filter(Boolean);
+  const filterFromSlug = urlParts[1] || "all"; // default to 'all' if no filter present
+  applyFilter(sanitizeText(filterFromSlug));
+});
