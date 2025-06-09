@@ -7,7 +7,8 @@ let filterTimeoutId;
 // Attach click events to filter buttons
 filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault(); // Prevent any default behavior
     updateSlug(btnText);
     applyFilter(btnText);
   });
@@ -22,44 +23,68 @@ function updateSlug(filterName) {
   } else {
     url.searchParams.set("filter", slug);
   }
-  history.pushState(null, "", url.toString());
+  
+  // Use replaceState instead of pushState to avoid scroll issues
+  history.replaceState(null, "", url.toString());
 }
 
 // Applies the filtering and active button state
 function applyFilter(filterName) {
+  // Store current scroll position
+  const currentScrollY = window.scrollY;
+  
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     btn.classList.toggle("is-active", btnText === filterName);
   });
+  
   clearTimeout(filterTimeoutId);
   filterTimeoutId = setTimeout(() => {
     filterProjects(filterName);
-  });
+    
+    // Restore scroll position after filtering
+    setTimeout(() => {
+      window.scrollTo(0, currentScrollY);
+    }, 10);
+  }, 50);
 }
 
 // Filters the projects
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
-  Webflow.require("ix2").init();
+  
+  // Initialize Webflow animations without scroll
+  if (typeof Webflow !== 'undefined' && Webflow.require) {
+    try {
+      Webflow.require("ix2").init();
+    } catch (e) {
+      console.log("Webflow ix2 not available");
+    }
+  }
 }
 
 // Renders filtered projects
 function renderProjects(projects) {
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
+  
   if (!projects.length) {
     removeHideClass(noItemsFound);
     return;
   }
+  
   addHideClass(noItemsFound);
+  
   if (projects.length <= 2) {
     createGridAndAddProjects(projects);
     return;
   }
+  
   const OFFSET = projects.length <= 4 ? 2 : 4;
   const projectsToShowBeforeCTA = projects.slice(0, OFFSET);
   const projectsToShowAfterCTA = projects.slice(OFFSET);
+  
   createGridAndAddProjects(projectsToShowBeforeCTA);
   createGridAndAddProjects(projectsToShowAfterCTA);
   
@@ -73,7 +98,7 @@ function renderProjects(projects) {
   }
 }
 
-// Filter matching logic - FIXED for multi-word filters
+// Filter matching logic
 function getFilteredProject(filterName) {
   if (filterName === "all") return allProjects;
   
@@ -90,11 +115,11 @@ function getFilteredProject(filterName) {
 }
 
 function addHideClass(el) {
-  el.classList.add("hide");
+  if (el) el.classList.add("hide");
 }
 
 function removeHideClass(el) {
-  el.classList.remove("hide");
+  if (el) el.classList.remove("hide");
 }
 
 function getInnerText(node) {
@@ -119,42 +144,59 @@ function findMatchingButton(filterParam) {
   });
 }
 
-// Auto-apply filter based on URL param
+// Auto-apply filter based on URL param - IMPROVED
 document.addEventListener("DOMContentLoaded", () => {
-  const filterParam = new URL(window.location.href).searchParams.get("filter");
+  // Prevent initial scroll animations
+  document.body.style.overflow = 'hidden';
   
-  if (!filterParam) {
-    applyFilter("all");
-    return;
-  }
-  
-  const matchingBtn = findMatchingButton(sanitizeText(filterParam));
-  
-  if (matchingBtn) {
-    const btnText = getInnerText(matchingBtn.querySelector("div"));
-    applyFilter(btnText);
-  } else {
-    // Try applying as slug-to-text format
-    const filterText = slugToText(sanitizeText(filterParam));
-    applyFilter(filterText);
-  }
+  setTimeout(() => {
+    const filterParam = new URL(window.location.href).searchParams.get("filter");
+    
+    if (!filterParam) {
+      applyFilter("all");
+    } else {
+      const matchingBtn = findMatchingButton(sanitizeText(filterParam));
+      
+      if (matchingBtn) {
+        const btnText = getInnerText(matchingBtn.querySelector("div"));
+        applyFilter(btnText);
+        // Update URL to ensure it's there
+        updateSlug(btnText);
+      } else {
+        const filterText = slugToText(sanitizeText(filterParam));
+        applyFilter(filterText);
+        // Update URL to ensure it's there
+        updateSlug(filterText);
+      }
+    }
+    
+    // Re-enable scrolling after filter is applied
+    setTimeout(() => {
+      document.body.style.overflow = '';
+    }, 100);
+  }, 50);
 });
 
 // Handle browser navigation
 window.addEventListener('popstate', () => {
+  const currentScrollY = window.scrollY;
   const filterParam = new URL(window.location.href).searchParams.get("filter");
   
   if (!filterParam) {
     applyFilter("all");
-    return;
-  }
-  
-  const matchingBtn = findMatchingButton(sanitizeText(filterParam));
-  
-  if (matchingBtn) {
-    const btnText = getInnerText(matchingBtn.querySelector("div"));
-    applyFilter(btnText);
   } else {
-    applyFilter(slugToText(sanitizeText(filterParam)));
+    const matchingBtn = findMatchingButton(sanitizeText(filterParam));
+    
+    if (matchingBtn) {
+      const btnText = getInnerText(matchingBtn.querySelector("div"));
+      applyFilter(btnText);
+    } else {
+      applyFilter(slugToText(sanitizeText(filterParam)));
+    }
   }
+  
+  // Maintain scroll position
+  setTimeout(() => {
+    window.scrollTo(0, currentScrollY);
+  }, 50);
 });
