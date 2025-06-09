@@ -193,6 +193,12 @@ function sanitizeText(text) {
 
 // Apply filter on DOM ready with enhanced scroll control
 document.addEventListener("DOMContentLoaded", () => {
+  const element = document.querySelector('.projects-wrapper'); // ya ID ho to '#your-id'
+
+element.style.display = 'flex';
+element.style.flexDirection = 'column';
+element.style.gap = '80px';
+
   // Force scroll to top immediately
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   
