@@ -14,7 +14,7 @@ filterButtons.forEach((btn) => {
 
   btn.addEventListener("click", () => {
     console.log("[Click] Button clicked:", btnText);
-    updateSlug(btnText); // Add slug to URL when button clicked
+    updateSlug(btnText);
     applyFilter(btnText);
   });
 });
@@ -50,18 +50,49 @@ function applyFilter(filterName) {
   });
 }
 
-// Filters the projects
+// Filters the projects with scroll position preservation
 function filterProjects(filterName) {
   console.log("[filterProjects] Filtering projects with:", filterName);
+  
+  // Save current scroll position
+  const currentScrollY = window.scrollY;
+  const currentScrollX = window.scrollX;
+  
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
-  Webflow.require("ix2").init();
+  
+  // Restore scroll position after DOM manipulation
+  requestAnimationFrame(() => {
+    window.scrollTo({
+      top: currentScrollY,
+      left: currentScrollX,
+      behavior: 'instant' // Use 'instant' instead of 'auto' for immediate positioning
+    });
+    
+    // Initialize Webflow animations after scroll restoration
+    setTimeout(() => {
+      if (window.Webflow && window.Webflow.require) {
+        Webflow.require("ix2").init();
+        
+        // Double-check scroll position after Webflow init
+        setTimeout(() => {
+          window.scrollTo({
+            top: currentScrollY,
+            left: currentScrollX,
+            behavior: 'instant'
+          });
+        }, 50);
+      }
+    }, 10);
+  });
 }
 
 // Renders filtered projects
 function renderProjects(projects) {
   console.log("[renderProjects] Number of projects to render:", projects.length);
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
+  
+  // Clear content without affecting scroll
   projectsWrapper.innerHTML = "";
 
   if (!projects.length) {
@@ -160,8 +191,11 @@ function sanitizeText(text) {
   }
 })();
 
-// Apply filter on DOM ready (no URL change here)
+// Apply filter on DOM ready with enhanced scroll control
 document.addEventListener("DOMContentLoaded", () => {
+  // Force scroll to top immediately
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  
   const url = new URL(window.location.href);
   const rawParam = url.searchParams.get("filter") || "all";
   console.log("[DOMContentLoaded] Applying filter on DOMContentLoaded:", rawParam);
@@ -169,10 +203,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterParam = sanitizeText(rawParam);
   const textFromSlug = filterParam.replace(/-/g, " ");
 
+  // Apply filter without allowing scroll
+  const originalScrollY = 0; // We want to stay at top
   applyFilter(textFromSlug);
 
-  // Prevent auto scroll on load
-  window.scrollTo({ top: 0, behavior: "auto" });
+  // Multiple scroll preventions to ensure page stays at top
+  const preventScroll = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  };
+
+  // Immediate prevention
+  preventScroll();
+  
+  // Prevent scroll during and after filter application
+  setTimeout(preventScroll, 50);
+  setTimeout(preventScroll, 100);
+  setTimeout(preventScroll, 200);
 
   // After short delay, check active filter and sync URL if needed
   setTimeout(() => {
@@ -195,5 +241,25 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       console.log("[DelayedURLSync] URL filter param already correct or active is 'all'");
     }
-  }, 300); // 300ms delay after DOMContentLoaded
+    
+    // Final scroll prevention
+    preventScroll();
+  }, 300);
+
+  // Add scroll event listener to prevent unwanted scrolling during initial load
+  let initialLoadComplete = false;
+  const scrollHandler = (e) => {
+    if (!initialLoadComplete) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  };
+
+  window.addEventListener('scroll', scrollHandler, { passive: false });
+  
+  // Remove scroll handler after initial load is complete
+  setTimeout(() => {
+    initialLoadComplete = true;
+    window.removeEventListener('scroll', scrollHandler);
+  }, 1000);
 });
