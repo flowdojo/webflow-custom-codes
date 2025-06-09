@@ -13,12 +13,12 @@ filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
-    updateSlug(btnText);
+    updateSlug(btnText); // ✅ Updates the URL when user clicks
     applyFilter(btnText, true);
   });
 });
 
-// Adds query param to current URL
+// Adds or removes query param in URL
 function updateSlug(filterName) {
   const slug = sanitizeText(filterName).replace(/\s+/g, "-");
   const url = new URL(window.location.href);
@@ -29,17 +29,17 @@ function updateSlug(filterName) {
     url.searchParams.set("filter", slug);
   }
 
-  history.pushState(null, "", url.toString());
+  history.pushState(null, "", url.toString()); // ✅ Updates browser URL without reloading
 }
 
-// Applies the filtering and active button state
+// Applies the filtering and sets active button state
 function applyFilter(filterName, updateUrl = false) {
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     btn.classList.toggle("is-active", btnText === filterName);
   });
 
-  // Update URL only if not from initial page load
+  // ✅ Don't update URL if called on page load
   if (updateUrl) {
     updateSlug(filterName);
   }
@@ -50,14 +50,14 @@ function applyFilter(filterName, updateUrl = false) {
   });
 }
 
-// Filters the projects
+// Filters the projects based on category
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
   Webflow.require("ix2").init();
 }
 
-// Renders filtered projects
+// Renders filtered projects with/without CTA section
 function renderProjects(projects) {
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
@@ -92,7 +92,7 @@ function renderProjects(projects) {
   }
 }
 
-// Filter matching logic - FIXED for multi-word filters
+// Filtering logic based on slug or plain text
 function getFilteredProject(filterName) {
   if (filterName === "all") return allProjects;
 
@@ -101,17 +101,17 @@ function getFilteredProject(filterName) {
       ...project.querySelectorAll("[fd-code='project-category']"),
     ].map(getInnerText);
 
-    // Handle both normal text and slug format
     const normalizedFilter = sanitizeText(filterName);
     const slugFilter = normalizedFilter.replace(/\s+/g, "-");
-    
-    return projectCategories.some(category => {
+
+    return projectCategories.some((category) => {
       const categorySlug = category.replace(/\s+/g, "-");
       return category === normalizedFilter || categorySlug === slugFilter;
     });
   });
 }
 
+// Utility functions
 function addHideClass(el) {
   el.classList.add("hide");
 }
@@ -128,37 +128,38 @@ function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-// Convert slug back to text for button matching
 function slugToText(slug) {
   return slug.replace(/-/g, " ");
 }
 
-// Auto-apply filter based on URL param - FIXED for multi-word
+// ✅ On page load: apply filter from URL but DO NOT update the URL or scroll
 document.addEventListener("DOMContentLoaded", () => {
   const url = new URL(window.location.href);
   const filterParam = url.searchParams.get("filter");
 
   if (!filterParam) {
-    applyFilter("all");
+    applyFilter("all", false); // Do not update URL
     return;
   }
 
   const normalizedParam = sanitizeText(filterParam);
   const textFromSlug = slugToText(normalizedParam);
 
-  // Try to find matching button
   const matchingBtn = Array.from(filterButtons).find((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     return btnText === normalizedParam || btnText === textFromSlug;
   });
 
-if (matchingBtn) {
-  const btnText = getInnerText(matchingBtn.querySelector("div"));
-  applyFilter(btnText, false); // ✅ don't update URL on initial load
-} else if (normalizedParam === "all") {
-  applyFilter("all", false); // ✅ don't update URL
-} else {
-  applyFilter(textFromSlug, false); // ✅ don't update URL
-}
+  if (matchingBtn) {
+    const btnText = getInnerText(matchingBtn.querySelector("div"));
+    applyFilter(btnText, false); // ✅ Apply filter, but keep slug intact
+  } else if (normalizedParam === "all") {
+    applyFilter("all", false);
+  } else {
+    applyFilter(textFromSlug, false);
+  }
 
+  // ✅ Prevent scroll on page load (especially if URL has anchor/params)
+  // Optional: Scroll to top
+  window.scrollTo({ top: 0, behavior: "auto" });
 });
