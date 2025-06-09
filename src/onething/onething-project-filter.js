@@ -146,7 +146,6 @@ function sanitizeText(text) {
   });
 
   if (matchingBtn || filterParam === "all") {
-    // Keep slug in URL if not all
     if (textFromSlug !== "all") {
       console.log("[earlyFilterParamCheck] Keeping slug in URL:", textFromSlug);
       const slug = sanitizeText(textFromSlug).replace(/\s+/g, "-");
@@ -161,7 +160,7 @@ function sanitizeText(text) {
   }
 })();
 
-// Now apply filter and init UI on DOM ready, without touching URL again
+// Apply filter on DOM ready (no URL change here)
 document.addEventListener("DOMContentLoaded", () => {
   const url = new URL(window.location.href);
   const rawParam = url.searchParams.get("filter") || "all";
@@ -174,4 +173,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Prevent auto scroll on load
   window.scrollTo({ top: 0, behavior: "auto" });
+
+  // After short delay, check active filter and sync URL if needed
+  setTimeout(() => {
+    const activeBtn = Array.from(filterButtons).find((btn) =>
+      btn.classList.contains("is-active")
+    );
+    if (!activeBtn) return;
+
+    const activeText = getInnerText(activeBtn.querySelector("div"));
+    const activeSlug = activeText.replace(/\s+/g, "-");
+
+    const currentUrl = new URL(window.location.href);
+    const urlFilter = currentUrl.searchParams.get("filter");
+
+    // If active filter is NOT 'all' and URL doesn't have matching filter param, add it
+    if (activeText !== "all" && urlFilter !== activeSlug) {
+      console.log("[DelayedURLSync] URL missing slug for active filter. Updating URL to:", activeSlug);
+      currentUrl.searchParams.set("filter", activeSlug);
+      history.replaceState(null, "", currentUrl.toString());
+    } else {
+      console.log("[DelayedURLSync] URL filter param already correct or active is 'all'");
+    }
+  }, 300); // 300ms delay after DOMContentLoaded
 });
