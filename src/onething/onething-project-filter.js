@@ -8,28 +8,31 @@ const filterButtons = document.querySelectorAll("[fd-filter-btn]");
 
 const noItemsFound = document.querySelector("[fd-code='no-items-found']");
 
-// filterProjects("all");
-
 let filterTimeoutId;
 
 filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
+    // Update URL slug
+    const currentPath = window.location.pathname.split("/")[1]; // "projects"
+    const basePath = `/${currentPath}`;
+    const newSlug = btnText === "all" ? basePath : `${basePath}/${btnText}`;
+    history.pushState(null, "", newSlug);
+
+    // Active class toggle
     filterButtons.forEach((btn) => btn.classList.remove("is-active"));
     btn.classList.add("is-active");
 
+    // Debounce filter call
     clearTimeout(filterTimeoutId);
-
     filterTimeoutId = setTimeout(filterProjects.bind(null, btnText));
   });
 });
 
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
-
   renderProjects(filteredProjects);
-
   Webflow.require("ix2").init();
 }
 
@@ -42,7 +45,6 @@ function renderProjects(projects) {
 
   if (!projects.length) {
     removeHideClass(noItemsFound);
-    // appendCTASection();
     return;
   }
 
@@ -50,16 +52,14 @@ function renderProjects(projects) {
 
   if (projects.length <= 2) {
     createGridAndAddProjects(projects);
-    // appendCTASection();
     return;
   }
+
   const OFFSET = projects.length <= 4 ? 2 : 4;
   const projectsToShowBeforeCTA = projects.slice(0, OFFSET);
   const projectsToShowAfterCTA = projects.slice(OFFSET);
+
   createGridAndAddProjects(projectsToShowBeforeCTA);
-
-  // appendCTASection();
-
   createGridAndAddProjects(projectsToShowAfterCTA);
 
   function createGridAndAddProjects(projects) {
@@ -74,9 +74,7 @@ function renderProjects(projects) {
 }
 
 function getFilteredProject(filterName) {
-  if (filterName === "all") {
-    return allProjects;
-  }
+  if (filterName === "all") return allProjects;
 
   return allProjects.filter((project) => {
     const projectCategories = [
@@ -85,14 +83,6 @@ function getFilteredProject(filterName) {
 
     return projectCategories.includes(sanitizeText(filterName));
   });
-}
-
-function appendCTASection() {
-  const projectsWrapper = document.querySelector(
-    "[fd-code='projects-wrapper']"
-  );
-
-  projectsWrapper.append(ctaSection);
 }
 
 function addHideClass(el) {
