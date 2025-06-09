@@ -149,11 +149,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (matchingBtn) {
     const btnText = getInnerText(matchingBtn.querySelector("div"));
+    updateSlug(btnText); // Add URL update when applying filter from URL param
     applyFilter(btnText);
   } else if (normalizedParam === "all") {
     applyFilter("all");
   } else {
     // Try applying the filter even if button not found (might match project categories)
+    updateSlug(textFromSlug); // Add URL update when applying filter from URL param
     applyFilter(textFromSlug);
   }
 });
