@@ -14,7 +14,7 @@ filterButtons.forEach((btn) => {
 
   btn.addEventListener("click", () => {
     updateSlug(btnText);
-    applyFilter(btnText);
+    applyFilter(btnText, true);
   });
 });
 
@@ -33,11 +33,16 @@ function updateSlug(filterName) {
 }
 
 // Applies the filtering and active button state
-function applyFilter(filterName) {
+function applyFilter(filterName, updateUrl = false) {
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     btn.classList.toggle("is-active", btnText === filterName);
   });
+
+  // Update URL only if not from initial page load
+  if (updateUrl) {
+    updateSlug(filterName);
+  }
 
   clearTimeout(filterTimeoutId);
   filterTimeoutId = setTimeout(() => {
@@ -149,13 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (matchingBtn) {
     const btnText = getInnerText(matchingBtn.querySelector("div"));
-    updateSlug(btnText); // Add URL update when applying filter from URL param
     applyFilter(btnText);
   } else if (normalizedParam === "all") {
     applyFilter("all");
   } else {
     // Try applying the filter even if button not found (might match project categories)
-    updateSlug(textFromSlug); // Add URL update when applying filter from URL param
     applyFilter(textFromSlug);
   }
 });
