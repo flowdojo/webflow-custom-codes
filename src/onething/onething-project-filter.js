@@ -128,12 +128,15 @@ function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-// Auto-apply filter based on ?filter param and keep slug in URL
-document.addEventListener("DOMContentLoaded", () => {
+/* 
+  === RUN FILTER PARAM CHECK AND URL UPDATE EARLY === 
+  This runs immediately as script loads, before DOMContentLoaded 
+*/
+(function earlyFilterParamCheck() {
   const url = new URL(window.location.href);
   const rawParam = url.searchParams.get("filter") || "all";
-  console.log("[DOMContentLoaded] URL filter param:", rawParam);
-  
+  console.log("[earlyFilterParamCheck] URL filter param:", rawParam);
+
   const filterParam = sanitizeText(rawParam);
   const textFromSlug = filterParam.replace(/-/g, " ");
 
@@ -143,22 +146,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (matchingBtn || filterParam === "all") {
-    console.log("[DOMContentLoaded] Found matching button or 'all', applying filter:", textFromSlug);
-    applyFilter(textFromSlug);
-
-    // If not "all", add filter param to URL to keep slug visible
+    // Keep slug in URL if not all
     if (textFromSlug !== "all") {
-      console.log("[DOMContentLoaded] Updating URL slug to keep filter param");
-      updateSlug(textFromSlug);
+      console.log("[earlyFilterParamCheck] Keeping slug in URL:", textFromSlug);
+      const slug = sanitizeText(textFromSlug).replace(/\s+/g, "-");
+      url.searchParams.set("filter", slug);
+      history.replaceState(null, "", url.toString());
+      console.log("[earlyFilterParamCheck] URL after replaceState:", window.location.href);
     }
-
   } else {
-    // Invalid filter — remove from URL and apply "all"
-    console.log("[DOMContentLoaded] Invalid filter param, removing filter from URL");
+    console.log("[earlyFilterParamCheck] Invalid filter param, removing from URL");
     url.searchParams.delete("filter");
     history.replaceState(null, "", url.toString());
-    applyFilter("all");
   }
+})();
+
+// Now apply filter and init UI on DOM ready, without touching URL again
+document.addEventListener("DOMContentLoaded", () => {
+  const url = new URL(window.location.href);
+  const rawParam = url.searchParams.get("filter") || "all";
+  console.log("[DOMContentLoaded] Applying filter on DOMContentLoaded:", rawParam);
+
+  const filterParam = sanitizeText(rawParam);
+  const textFromSlug = filterParam.replace(/-/g, " ");
+
+  applyFilter(textFromSlug);
 
   // Prevent auto scroll on load
   window.scrollTo({ top: 0, behavior: "auto" });
