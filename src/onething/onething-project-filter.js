@@ -13,12 +13,12 @@ filterButtons.forEach((btn) => {
   const btnText = getInnerText(btn.querySelector("div"));
 
   btn.addEventListener("click", () => {
-    updateSlug(btnText); // ✅ Updates the URL when user clicks
-    applyFilter(btnText, true);
+    updateSlug(btnText); // ✅ Add slug to URL when button clicked
+    applyFilter(btnText);
   });
 });
 
-// Adds or removes query param in URL
+// ✅ Adds or removes query param in URL
 function updateSlug(filterName) {
   const slug = sanitizeText(filterName).replace(/\s+/g, "-");
   const url = new URL(window.location.href);
@@ -29,20 +29,15 @@ function updateSlug(filterName) {
     url.searchParams.set("filter", slug);
   }
 
-  history.pushState(null, "", url.toString()); // ✅ Updates browser URL without reloading
+  history.pushState(null, "", url.toString());
 }
 
-// Applies the filtering and sets active button state
-function applyFilter(filterName, updateUrl = false) {
+// Applies the filtering and active button state
+function applyFilter(filterName) {
   filterButtons.forEach((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
     btn.classList.toggle("is-active", btnText === filterName);
   });
-
-  // ✅ Don't update URL if called on page load
-  if (updateUrl) {
-    updateSlug(filterName);
-  }
 
   clearTimeout(filterTimeoutId);
   filterTimeoutId = setTimeout(() => {
@@ -50,14 +45,14 @@ function applyFilter(filterName, updateUrl = false) {
   });
 }
 
-// Filters the projects based on category
+// Filters the projects
 function filterProjects(filterName) {
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
   Webflow.require("ix2").init();
 }
 
-// Renders filtered projects with/without CTA section
+// Renders filtered projects
 function renderProjects(projects) {
   const projectsWrapper = document.querySelector("[fd-code='projects-wrapper']");
   projectsWrapper.innerHTML = "";
@@ -92,22 +87,20 @@ function renderProjects(projects) {
   }
 }
 
-// Filtering logic based on slug or plain text
+// ✅ Filter matching logic (supports slug + multi-word)
 function getFilteredProject(filterName) {
   if (filterName === "all") return allProjects;
+
+  const normalizedFilter = sanitizeText(filterName).replace(/-/g, " ");
 
   return allProjects.filter((project) => {
     const projectCategories = [
       ...project.querySelectorAll("[fd-code='project-category']"),
     ].map(getInnerText);
 
-    const normalizedFilter = sanitizeText(filterName);
-    const slugFilter = normalizedFilter.replace(/\s+/g, "-");
-
-    return projectCategories.some((category) => {
-      const categorySlug = category.replace(/\s+/g, "-");
-      return category === normalizedFilter || categorySlug === slugFilter;
-    });
+    return projectCategories.some(
+      (category) => category === normalizedFilter
+    );
   });
 }
 
@@ -128,38 +121,26 @@ function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-function slugToText(slug) {
-  return slug.replace(/-/g, " ");
-}
-
-// ✅ On page load: apply filter from URL but DO NOT update the URL or scroll
+// ✅ Auto-apply filter based on ?filter param (slug supported)
 document.addEventListener("DOMContentLoaded", () => {
   const url = new URL(window.location.href);
-  const filterParam = url.searchParams.get("filter");
-
-  if (!filterParam) {
-    applyFilter("all", false); // Do not update URL
-    return;
-  }
-
-  const normalizedParam = sanitizeText(filterParam);
-  const textFromSlug = slugToText(normalizedParam);
+  const rawParam = url.searchParams.get("filter") || "all";
+  const filterParam = sanitizeText(rawParam);
+  const textFromSlug = filterParam.replace(/-/g, " ");
 
   const matchingBtn = Array.from(filterButtons).find((btn) => {
     const btnText = getInnerText(btn.querySelector("div"));
-    return btnText === normalizedParam || btnText === textFromSlug;
+    return btnText === textFromSlug;
   });
 
-  if (matchingBtn) {
-    const btnText = getInnerText(matchingBtn.querySelector("div"));
-    applyFilter(btnText, false); // ✅ Apply filter, but keep slug intact
-  } else if (normalizedParam === "all") {
-    applyFilter("all", false);
+  if (matchingBtn || filterParam === "all") {
+    applyFilter(textFromSlug);
   } else {
-    applyFilter(textFromSlug, false);
+    url.searchParams.delete("filter");
+    history.replaceState(null, "", url.toString());
+    applyFilter("all");
   }
 
-  // ✅ Prevent scroll on page load (especially if URL has anchor/params)
-  // Optional: Scroll to top
+  // ✅ Optional: prevent scroll to anchor or jump on load
   window.scrollTo({ top: 0, behavior: "auto" });
 });
