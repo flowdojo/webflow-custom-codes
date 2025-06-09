@@ -15,15 +15,21 @@ filterButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     updateSlug(btnText);
     applyFilter(btnText);
-    scrollToProjects();
   });
 });
 
-// Updates the browser URL
+// :white_check_mark: Updated: Adds query param to current URL
 function updateSlug(filterName) {
-  const basePath = "/projects";
-  const newSlug = filterName === "all" ? basePath : `${basePath}/${filterName}`;
-  history.pushState(null, "", newSlug);
+  const slug = sanitizeText(filterName).replace(/\s+/g, "-");
+  const url = new URL(window.location.href);
+
+  if (slug === "all") {
+    url.searchParams.delete("filter");
+  } else {
+    url.searchParams.set("filter", slug);
+  }
+
+  history.pushState(null, "", url.toString());
 }
 
 // Applies the filtering and active button state
@@ -110,35 +116,22 @@ function sanitizeText(text) {
   return text.toLowerCase().trim();
 }
 
-// ✅ Scroll to project section smoothly
-function scrollToProjects() {
-  const section = document.querySelector("[fd-code='projects-wrapper']");
-  if (section) {
-    section.scrollIntoView({ behavior: "smooth" });
-  }
-}
-
-// ✅ Auto-apply filter + scroll + redirect fallback
+// :white_check_mark: Auto-apply filter based on ?filter param
 document.addEventListener("DOMContentLoaded", () => {
-  const urlParts = window.location.pathname.split("/").filter(Boolean);
+  const url = new URL(window.location.href);
+  const filterParam = sanitizeText(url.searchParams.get("filter") || "all");
 
-  if (urlParts[0] === "projects") {
-    const filterFromSlug = sanitizeText(urlParts[1] || "all");
+  const matchingBtn = Array.from(filterButtons).find((btn) => {
+    const btnText = getInnerText(btn.querySelector("div"));
+    return btnText === filterParam;
+  });
 
-    const matchingBtn = Array.from(filterButtons).find((btn) => {
-      const btnText = getInnerText(btn.querySelector("div"));
-      return btnText === filterFromSlug;
-    });
-
-    if (matchingBtn) {
-      applyFilter(filterFromSlug);
-      scrollToProjects();
-    } else if (urlParts[1]) {
-      // Invalid filter, redirect to /projects
-      window.location.href = "/projects";
-    } else {
-      applyFilter("all");
-      scrollToProjects();
-    }
+  if (matchingBtn || filterParam === "all") {
+    applyFilter(filterParam);
+  } else {
+    // Invalid filter, remove it
+    url.searchParams.delete("filter");
+    history.replaceState(null, "", url.toString());
+    applyFilter("all");
   }
 });
