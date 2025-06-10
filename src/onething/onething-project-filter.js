@@ -171,10 +171,15 @@ function sanitizeText(text) {
 // Apply filter on DOM ready with enhanced scroll control
 document.addEventListener("DOMContentLoaded", () => {
   const element = document.querySelector('.projects-wrapper'); // ya ID ho to '#your-id'
-
-  element.style.display = 'flex';
-  element.style.flexDirection = 'column';
-  element.style.gap = '80px';
+  
+  // Check if element exists before applying styles
+  if (element) {
+    element.style.display = 'flex';
+    element.style.flexDirection = 'column';
+    element.style.gap = '80px';
+  } else {
+    console.warn("[DOMContentLoaded] Element with class '.projects-wrapper' not found");
+  }
 
   // Force scroll to top immediately
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
