@@ -170,7 +170,7 @@ function sanitizeText(text) {
 
 // Apply filter on DOM ready with enhanced scroll control
 document.addEventListener("DOMContentLoaded", () => {
-  const element = document.querySelector('.projects-wrapper'); // ya ID ho to '#your-id'
+  const element = document.querySelector('.collection-list-wrapper-4'); // ya ID ho to '#your-id'
   
   // Check if element exists before applying styles
   if (element) {
