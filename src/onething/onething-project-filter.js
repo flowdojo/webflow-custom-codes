@@ -50,38 +50,18 @@ function applyFilter(filterName) {
   });
 }
 
-// Filters the projects with scroll position preservation
+// Filters the projects with normal behavior
 function filterProjects(filterName) {
   console.log("[filterProjects] Filtering projects with:", filterName);
-  
-  // Save current scroll position
-  const currentScrollY = window.scrollY;
-  const currentScrollX = window.scrollX;
   
   const filteredProjects = getFilteredProject(filterName);
   renderProjects(filteredProjects);
   
-  // Restore scroll position after DOM manipulation
+  // Just initialize Webflow animations without affecting scroll
   requestAnimationFrame(() => {
-    window.scrollTo({
-      top: currentScrollY,
-      left: currentScrollX,
-      behavior: 'instant' // Use 'instant' instead of 'auto' for immediate positioning
-    });
-    
-    // Initialize Webflow animations after scroll restoration
     setTimeout(() => {
       if (window.Webflow && window.Webflow.require) {
         Webflow.require("ix2").init();
-        
-        // Double-check scroll position after Webflow init
-        setTimeout(() => {
-          window.scrollTo({
-            top: currentScrollY,
-            left: currentScrollX,
-            behavior: 'instant'
-          });
-        }, 50);
       }
     }, 10);
   });
@@ -183,8 +163,14 @@ function sanitizeText(text) {
       url.searchParams.set("filter", slug);
       history.replaceState(null, "", url.toString());
       console.log("[earlyFilterParamCheck] URL after replaceState:", window.location.href);
+    } else {
+      // Only remove filter param when it's "all"
+      console.log("[earlyFilterParamCheck] Filter is 'all', removing from URL");
+      url.searchParams.delete("filter");
+      history.replaceState(null, "", url.toString());
     }
   } else {
+    // Only remove filter param when it's invalid
     console.log("[earlyFilterParamCheck] Invalid filter param, removing from URL");
     url.searchParams.delete("filter");
     history.replaceState(null, "", url.toString());
