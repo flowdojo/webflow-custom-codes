@@ -145,35 +145,26 @@ function sanitizeText(text) {
 */
 (function earlyFilterParamCheck() {
   const url = new URL(window.location.href);
-  const rawParam = url.searchParams.get("filter") || "all";
+  const rawParam = url.searchParams.get("filter");
+  
+  // If no filter param exists, do nothing
+  if (!rawParam) {
+    console.log("[earlyFilterParamCheck] No filter param found in URL");
+    return;
+  }
+
   console.log("[earlyFilterParamCheck] URL filter param:", rawParam);
 
   const filterParam = sanitizeText(rawParam);
-  const textFromSlug = filterParam.replace(/-/g, " ");
-
-  const matchingBtn = Array.from(filterButtons).find((btn) => {
-    const btnText = getInnerText(btn.querySelector("div"));
-    return btnText === textFromSlug;
-  });
-
-  if (matchingBtn || filterParam === "all") {
-    if (textFromSlug !== "all") {
-      console.log("[earlyFilterParamCheck] Keeping slug in URL:", textFromSlug);
-      const slug = sanitizeText(textFromSlug).replace(/\s+/g, "-");
-      url.searchParams.set("filter", slug);
-      history.replaceState(null, "", url.toString());
-      console.log("[earlyFilterParamCheck] URL after replaceState:", window.location.href);
-    } else {
-      // Only remove filter param when it's "all"
-      console.log("[earlyFilterParamCheck] Filter is 'all', removing from URL");
-      url.searchParams.delete("filter");
-      history.replaceState(null, "", url.toString());
-    }
-  } else {
-    // Only remove filter param when it's invalid
-    console.log("[earlyFilterParamCheck] Invalid filter param, removing from URL");
+  
+  // Only remove if filter param is explicitly "all"
+  if (filterParam === "all") {
+    console.log("[earlyFilterParamCheck] Filter is 'all', removing from URL");
     url.searchParams.delete("filter");
     history.replaceState(null, "", url.toString());
+  } else {
+    // Keep the filter param as is for now, validation will happen in DOMContentLoaded
+    console.log("[earlyFilterParamCheck] Keeping filter param for validation:", filterParam);
   }
 })();
 
@@ -181,9 +172,9 @@ function sanitizeText(text) {
 document.addEventListener("DOMContentLoaded", () => {
   const element = document.querySelector('.projects-wrapper'); // ya ID ho to '#your-id'
 
-element.style.display = 'flex';
-element.style.flexDirection = 'column';
-element.style.gap = '80px';
+  element.style.display = 'flex';
+  element.style.flexDirection = 'column';
+  element.style.gap = '80px';
 
   // Force scroll to top immediately
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -195,9 +186,23 @@ element.style.gap = '80px';
   const filterParam = sanitizeText(rawParam);
   const textFromSlug = filterParam.replace(/-/g, " ");
 
-  // Apply filter without allowing scroll
-  const originalScrollY = 0; // We want to stay at top
-  applyFilter(textFromSlug);
+  // Validate filter parameter against available buttons
+  const matchingBtn = Array.from(filterButtons).find((btn) => {
+    const btnText = getInnerText(btn.querySelector("div"));
+    return btnText === textFromSlug;
+  });
+
+  // If filter param is invalid (no matching button found), remove it
+  if (!matchingBtn && textFromSlug !== "all") {
+    console.log("[DOMContentLoaded] Invalid filter param, removing from URL:", textFromSlug);
+    url.searchParams.delete("filter");
+    history.replaceState(null, "", url.toString());
+    // Apply "all" filter as fallback
+    applyFilter("all");
+  } else {
+    // Apply the valid filter
+    applyFilter(textFromSlug);
+  }
 
   // Multiple scroll preventions to ensure page stays at top
   const preventScroll = () => {
