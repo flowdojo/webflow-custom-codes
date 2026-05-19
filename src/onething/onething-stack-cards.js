@@ -4,7 +4,7 @@ const stackWrapper =
     : document.querySelector("[fd-code='work-stack-wrapper-mobile']");
 
 const stackTimeline = gsap.timeline();
-
+console.log("new stack js)
 const stackCards = [...stackWrapper.querySelectorAll(".project-stack-card")];
 
 let baseScaling = 1 - stackCards.length;
