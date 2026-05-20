@@ -87,12 +87,21 @@ function initBodyColorChange(wasPageTransition) {
         trigger: element,
         start: `clamp(top ${offsetSetting})`, // Trigger when the top of the section reaches the middle of the viewport
         onEnter: () => {
+          
+          //add class to body
+          document.body.classList.forEach((cls) => {
+            if (cls.startsWith("body-theme-")) {document.body.classList.remove(cls);}
+          });
+          document.body.classList.add(`body-theme-${themeIndex}`);
+          
           // Update body styles using GSAP
           gsap.to(document.body, {
             backgroundColor: bgColor,
             color: textColor,
             duration: 0.5, // Duration of the color change
           });
+          
+           
         },
         onLeaveBack: () => {
           if (index > 0) {
@@ -106,7 +115,13 @@ function initBodyColorChange(wasPageTransition) {
 
             const textColor =
               colorThemes[prevAnimateValue - 1]["--color--text"] || "#121212";
-
+            
+            //add class to body
+            document.body.classList.forEach((cls) => {
+              if (cls.startsWith("body-theme-")) {document.body.classList.remove(cls);}
+            });
+            document.body.classList.add(`body-theme-${prevAnimateValue}`);
+            
             // Apply the previous section's color
             gsap.to(document.body, {
               backgroundColor: bgColor,
